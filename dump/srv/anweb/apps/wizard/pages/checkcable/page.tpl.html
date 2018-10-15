@@ -1,0 +1,534 @@
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="page defstyle">
+	<div class="wrap">
+		
+		<div class="caption">
+			<div class="caption_logo"></div>
+		</div>
+		
+		<div ng-if="!gIsDSL">
+			<div class="content_block center">
+				<div nw-ports
+					nw-box-info="rootBoxInfo"
+					nw-avail-ports="rootAvailPorts"
+					nw-wan-status="true"
+				></div>
+			</div>
+			<div class="content_block center">
+
+				<div ng-show="gWANStatus">{{ 'wizard_cable_connected_gen' | translate }}</div>
+				<div ng-show="!gWANStatus">{{ 'wizard_do_calble_connect_gen' | translate }}</div>
+
+			</div>
+			<div class="content_block center" ng-show="!gDeviceAvail">
+				<div>{{ 'wizard_notavail_base' | translate }}</div>
+				<div>{{ 'wizard_notavail_wifi' | translate }}</div>
+				<div>{{ 'wizard_notavail_lan' | translate }}</div>
+			</div>
+		</div>
+		
+		<div ng-if="gIsDSL">
+			<div style="content_block center">
+				<div class="content_block center">
+					{{ 'wizard_do_dsl_cable_connect_rst' | translate }}
+				</div>
+				<!--
+				<div class="content_block center" ng-show="!gDeviceAvail">
+					<div>{{ 'wizard_notavail_base' | translate }}</div>
+					<div>{{ 'wizard_notavail_wifi' | translate }}</div>
+					<div>{{ 'wizard_notavail_lan' | translate }}</div>
+				</div>
+				-->
+				<img class="noselect dsl_schema" src="img/dsl_schema.png">
+			</div>
+		</div>
+
+
+		<div class="content_block" ng-if="stepData.btn_extend">
+			<div class="next"> 
+				<button class="width_auto" ng-click="exitFromWizard(true);">{{ 'wizard_trouble_extended' | translate }}</button> 
+			</div>
+		</div>
+
+
+
+		
+		<div class="navs">
+			<a class="prev" ng-if="stepData.btn_prev" ng-click="prev()">
+				{{ 'wizard_prev' | translate }}
+			</a>
+			<a class="next" ng-if="stepData.btn_next" ng-click="next()" ng-class="{'disabled': (!gWANStatus || !gDeviceAvail) && stepData.btn_next_noblock !== true }">
+				{{ 'wizard_next' | translate }}
+			</a>
+		</div>
+		
+	</div>
+</div>

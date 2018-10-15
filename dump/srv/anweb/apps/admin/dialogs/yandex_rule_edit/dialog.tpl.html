@@ -1,0 +1,49 @@
+<div class="dialog_top_line">
+    <div class="dialog_close_mobile" ng-click="closeThisDialog()"></div>
+    <div class="dialog_title_text" ng-bind="(model.isNew ? 'yandex_dns_create_rule_header' : 'yandex_dns_edit_rule_header') | translate"></div>
+    <div class="dialog_close" ng-click="closeThisDialog()">
+        <svg svg-icon="cross-medium"></svg>
+    </div>
+</div>
+<form name="yandex_rule_edit" id="yandex_rule_edit" 
+    nw-form
+    ng-submit="saveRule()"
+    class="dialog_content_wrapper"
+>
+	<div class="dialog_content">
+         <div nw-field
+             nw-label="MACaddress"
+             nw-required
+             nw-disabled="!model.isNew"
+        >
+            <input type="text" ng-model="model.mac" nw-type="mac"/>
+        </div>
+        <div nw-field
+             nw-label="IPAddress"
+             nw-required
+        >
+            <input type="text" ng-model="model.ip" nw-type="ip"/>
+        </div>
+         <div nw-field
+             nw-label="name"
+        >
+			<input type="text"
+				   ng-model="model.hostname"
+				   nw-custom-valid="validateHostname(model.hostname)"
+			/>
+        </div>
+        <div 
+            nw-radio-group 
+            nw-options="ydModesAvailable"
+            nw-model="model.mode">
+        </div>
+	</div>
+    <div class="dialog_button_panel button_block right">
+        <button class="flat" ng-if="!model.isNew" ng-click="removeRule()"
+                ng-bind="'removeButton'|translate"
+        ></button>
+        <button type="submit" class="colored flat"
+                ng-bind="'save'|translate"
+        ></button>
+    </div>
+</form>

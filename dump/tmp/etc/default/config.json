@@ -1,0 +1,690 @@
+{
+ "add_sets": {
+  "device_mode": "router"
+ },
+ "default_pass": false,
+ "default_ssid": {
+  "default_ssid_2.4": false
+ },
+ "ifaces": {
+  "auto": {
+   "is_wan": true,
+   "services": {},
+   "type": "auto"
+  },
+  "br0": {
+   "enable": true,
+   "mac": "18:0f:76:95:3f:75",
+   "members": [
+    "eth1"
+   ],
+   "services": {
+    "br0": {
+     "type": "ip",
+     "enable": true,
+     "iface": "br0",
+     "ifname": "br0",
+     "name": "LAN",
+     "dhcp": false,
+     "ip": "192.168.1.1",
+     "mask": "255.255.255.0",
+     "alias_ipv6": "fd00::1/8",
+     "dhcpd": {
+      "addn_hostname": "dir-615-s.local",
+      "dhcp6_pd": true,
+      "enable": true,
+      "dns_relay": true,
+      "end_ip": "192.168.1.100",
+      "lease": 86400,
+      "start_ip": "192.168.1.2",
+      "dns_relay6": true,
+      "enablev6": true,
+      "end_ipv6": "fd01::ffff:ffff:ffff:ffff",
+      "leasev6": 300,
+      "modev6": "0",
+      "radvd": false,
+      "reserved": [],
+      "start_ipv6": "fd01::2"
+     },
+     "dhcpv6": false,
+     "ipv6": "fd01::1/64",
+     "useipv6": true,
+     "connection_status": "Connected"
+    }
+   },
+   "type": "bridge"
+  },
+  "eth1": {
+   "enable": true,
+   "is_wan": true,
+   "mac": "18:0f:76:95:3f:74",
+   "max_count": 2,
+   "mtu": 1500,
+   "port": "Internet",
+   "services": {
+    "eth1_1": {
+     "auto": true,
+     "contag": 1,
+     "dhcp": true,
+     "dns_from_dhcp": true,
+     "enable": true,
+     "firewall": true,
+     "gwif": true,
+     "gwip": "",
+     "iface": "eth1",
+     "igmp": true,
+     "ip": "",
+     "mask": "",
+     "name": "WAN",
+     "nat": true,
+     "tunnels": {},
+     "type": "ip",
+     "vendor_id": "dslforum.org",
+     "connection_status": "Disconnected",
+     "domain": ""
+    }
+   },
+   "type": "ethernet",
+   "default_mac": "18:0f:76:95:3f:74"
+  }
+ },
+ "igmp": {
+  "enable": true,
+  "version": 2,
+  "zeroSrcAddr": false
+ },
+ "lan": [
+  "br0"
+ ],
+ "ntpclient": {
+  "enable": true,
+  "hour": "-3",
+  "servers": [
+   "pool.ntp.org"
+  ],
+  "use_dhcp": false,
+  "synced": false
+ },
+ "phys_ifaces": {
+  "wifi": "wlan0"
+ },
+ "redirect": {
+  "enable": true,
+  "modules": {
+   "cable": {
+    "enable": true
+   },
+   "connections": {
+    "enable": true
+   },
+   "factory": {
+    "enable": true
+   },
+   "flashing": {
+    "enable": true
+   }
+  }
+ },
+ "telnet": {
+  "enable": true,
+  "port": 23
+ },
+ "tr069": {
+  "DeviceInfo": {
+   "ProvisioningCode": ""
+  },
+  "authenticate": "0",
+  "debug_mode": "3",
+  "diagnostic": {
+   "averageresponsetime": "",
+   "datablocksize": "",
+   "dscp": "",
+   "failurecount": "",
+   "interface": "",
+   "maximumresponsetime": "",
+   "minimumresponsetime": "",
+   "numberofrepetitions": "",
+   "pingip": "",
+   "pingresult": "",
+   "successcount": "",
+   "timeout": ""
+  },
+  "enable": true,
+  "end_port": "9999",
+  "file_trans": [],
+  "getrpcmethodsenable": "0",
+  "managementserver": {
+   "connectionrequestpassword": "",
+   "connectionrequesturl": "http://192.168.0.1:8999/",
+   "connectionrequestusername": "",
+   "password": "",
+   "periodicinformenable": "1",
+   "periodicinforminterval": "120",
+   "periodicinformtime": "0",
+   "url": "",
+   "username": "",
+   "write_counter": 7
+  },
+  "max_envs": "",
+  "misc": {
+   "previousurl": "",
+   "rebootcmdkey": "",
+   "schedulecmdkey": "",
+   "landevice": {
+    "max_instance": 1,
+    "1": {
+     "iface": "br0",
+     "WLANConfiguration": {
+      "max_instance": 2,
+      "1": {
+       "BeaconTypeHere": 0,
+       "BeaconTypevalue": "None",
+       "BasicAuthenticationMode": "None",
+       "BasicEncryptionModes": "None",
+       "WPAAuthenticationMode": "PSKAuthentication",
+       "WPAEncryptionModes": "TKIPEncryption",
+       "IEEE11iEncryptionModes": "AESEncryption",
+       "IEEE11iAuthenticationMode": "PSKAuthentication",
+       "mbssid_index": 0
+      },
+      "2": {
+       "BeaconTypeHere": 0,
+       "BeaconTypevalue": "None",
+       "BasicAuthenticationMode": "None",
+       "BasicEncryptionModes": "None",
+       "WPAAuthenticationMode": "PSKAuthentication",
+       "WPAEncryptionModes": "TKIPEncryption",
+       "IEEE11iEncryptionModes": "AESEncryption",
+       "IEEE11iAuthenticationMode": "PSKAuthentication",
+       "mbssid_index": 3
+      }
+     }
+    }
+   },
+   "wandevice": {
+    "max_instance": 1,
+    "1": {
+     "iface": "eth1",
+     "pos": 0,
+     "ipconn": {
+      "max_instance": 1,
+      "1": {
+       "mio_id": "eth1_1",
+       "PortMapping": {
+        "max_instance": 0
+       },
+       "SentDHCPOption": {
+        "max_instance": 1,
+        "1": {
+         "Value": "dslforum.org",
+         "Enable": true,
+         "Tag": 60
+        }
+       }
+      }
+     },
+     "pppconn": {
+      "max_instance": 0
+     },
+     "ipv6conn": {
+      "max_instance": 0
+     },
+     "pppv6conn": {
+      "max_instance": 0
+     }
+    }
+   },
+   "route_17_33": {
+    "max_instance": 15,
+    "8": {
+     "dest": "224.0.0.252",
+     "mask": "255.255.255.255",
+     "metric": 0,
+     "gw": "192.168.1.1",
+     "iface": "br0",
+     "static": false,
+     "notavail": false
+    },
+    "9": {
+     "dest": "224.0.0.251",
+     "mask": "255.255.255.255",
+     "metric": 0,
+     "gw": "192.168.1.1",
+     "iface": "br0",
+     "static": false,
+     "notavail": false
+    },
+    "10": {
+     "dest": "192.168.1.0",
+     "mask": "255.255.255.0",
+     "metric": 0,
+     "gw": "192.168.1.1",
+     "iface": "br0",
+     "static": false,
+     "notavail": false
+    },
+    "15": {
+     "dest": "fd01::f4f3:d250:34de:8dd2/128",
+     "mask": "",
+     "metric": 0,
+     "gw": "fd01::f4f3:d250:34de:8dd2",
+     "iface": "br0",
+     "static": false,
+     "notavail": false
+    },
+    "4": {
+     "dest": "fd01::/64",
+     "mask": "",
+     "metric": 256,
+     "gw": "fd01::1/64",
+     "iface": "br0",
+     "static": false,
+     "notavail": false
+    },
+    "5": {
+     "dest": "fd00::/8",
+     "mask": "",
+     "metric": 256,
+     "gw": "fd01::1/64",
+     "iface": "br0",
+     "static": false,
+     "notavail": false
+    },
+    "14": {
+     "dest": "fe80::c4f:89ca:2471:bde8/128",
+     "mask": "",
+     "metric": 0,
+     "gw": "fe80::c4f:89ca:2471:bde8",
+     "iface": "br0",
+     "static": false,
+     "notavail": false
+    }
+   },
+   "AvailableInterface": {
+    "max_instance": 10,
+    "1": {
+     "InterfaceReference": "InternetGatewayDevice.LANDevice.1.LANEthernetInterfaceConfig.1",
+     "InterfaceType": "LANInterface",
+     "mio_id": "port1",
+     "AvailableInterfaceKey": 1
+    },
+    "2": {
+     "InterfaceReference": "InternetGatewayDevice.LANDevice.1.LANEthernetInterfaceConfig.2",
+     "InterfaceType": "LANInterface",
+     "mio_id": "port2",
+     "AvailableInterfaceKey": 2
+    },
+    "3": {
+     "InterfaceReference": "InternetGatewayDevice.LANDevice.1.LANEthernetInterfaceConfig.3",
+     "InterfaceType": "LANInterface",
+     "mio_id": "port3",
+     "AvailableInterfaceKey": 3
+    },
+    "4": {
+     "InterfaceReference": "InternetGatewayDevice.LANDevice.1.LANEthernetInterfaceConfig.4",
+     "InterfaceType": "LANInterface",
+     "mio_id": "port4",
+     "AvailableInterfaceKey": 4
+    },
+    "5": {
+     "InterfaceReference": "InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1",
+     "InterfaceType": "WANInterface",
+     "mio_id": "internet",
+     "AvailableInterfaceKey": 5
+    },
+    "6": {
+     "InterfaceReference": "InternetGatewayDevice.LANDevice.1.WLANConfiguration.1",
+     "InterfaceType": "LANInterface",
+     "mio_id": "wifi1",
+     "AvailableInterfaceKey": 6
+    },
+    "7": {
+     "InterfaceReference": "InternetGatewayDevice.LANDevice.1.WLANConfiguration.2",
+     "InterfaceType": "LANInterface",
+     "mio_id": "wifi2-na",
+     "AvailableInterfaceKey": 7
+    },
+    "8": {
+     "InterfaceReference": "InternetGatewayDevice.LANDevice.1.LANHostConfigManagement.IPInterface.1.",
+     "InterfaceType": "LANRouterConnection",
+     "mio_id": "br0_iface",
+     "AvailableInterfaceKey": 8
+    },
+    "9": {
+     "InterfaceType": "LANRouterConnection",
+     "InterfaceReference": "InternetGatewayDevice.LANDevice.1",
+     "mio_id": "br0",
+     "AvailableInterfaceKey": 9
+    },
+    "10": {
+     "InterfaceType": "WANRouterConnection",
+     "InterfaceReference": "InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANIPConnection.1",
+     "mio_id": "eth1_1",
+     "AvailableInterfaceKey": 10
+    }
+   },
+   "bridge": {
+    "max_instance": 1,
+    "1": {
+     "BridgeEnable": true,
+     "BridgeStatus": "Enabled",
+     "BridgeStandard": "802.1D",
+     "VLANID": null,
+     "BridgeName": "wan",
+     "BridgeKey": 1,
+     "mio_id": "wan_0"
+    }
+   },
+   "Marking": {
+    "max_instance": 1,
+    "1": {
+     "MarkingInterface": "5",
+     "MarkingBridgeReference": 1,
+     "VLANIDMark": -1,
+     "VLANIDUntag": true,
+     "VLANIDMarkOverride": false,
+     "EthernetPriorityMark": 0,
+     "MarkingEnable": true,
+     "MarkingStatus": "Enabled",
+     "mio_id": "5_1_-1",
+     "MarkingKey": 1
+    }
+   },
+   "Filter": {
+    "max_instance": 2,
+    "1": {
+     "FilterInterface": "5",
+     "FilterBridgeReference": 1,
+     "VLANIDFilter": -1,
+     "AdmitOnlyVLANTagged": false,
+     "FilterEnable": true,
+     "FilterStatus": "Enabled",
+     "mio_id": "5_1_-1",
+     "FilterKey": 1
+    },
+    "2": {
+     "FilterInterface": "10",
+     "FilterBridgeReference": 1,
+     "VLANIDFilter": -1,
+     "AdmitOnlyVLANTagged": false,
+     "FilterEnable": true,
+     "FilterStatus": "Enabled",
+     "mio_id": "10_1_-1",
+     "FilterKey": 2
+    }
+   },
+   "arp": {
+    "max_instance": 3,
+    "3": {
+     "flags": "delay",
+     "iface": "br0",
+     "ip": "192.168.1.56",
+     "mac": "98:de:d0:13:23:2d",
+     "name": "WLAN",
+     "hostname": "MBP",
+     "AddressSource": "DHCP"
+    }
+   },
+   "static_hosts": {
+    "max_instance": 0
+   },
+   "wc": {
+    "max_instance": 1
+   }
+  },
+  "notify": [],
+  "schedule_inform_time": "0",
+  "start_port": "9000"
+ },
+ "upnp": {
+  "enable": true,
+  "iface": "eth1"
+ },
+ "vlan": {
+  "avail_ports": [
+   "internet",
+   "port1",
+   "port2",
+   "port3",
+   "port4",
+   "wifi1",
+   "wifi2-na"
+  ],
+  "vlans": [
+   {
+    "dest": "lan",
+    "en": true,
+    "name": "lan",
+    "permanent": true,
+    "ports": {
+     "port1": {
+      "qos": 0,
+      "tag": false
+     },
+     "port2": {
+      "qos": 0,
+      "tag": false
+     },
+     "port3": {
+      "qos": 0,
+      "tag": false
+     },
+     "port4": {
+      "qos": 0,
+      "tag": false
+     },
+     "wifi1": {
+      "qos": 0,
+      "tag": false
+     }
+    },
+    "vid": null,
+    "ifname": "br0"
+   },
+   {
+    "dest": "wan",
+    "en": true,
+    "name": "wan",
+    "ports": {
+     "internet": {
+      "qos": 0,
+      "tag": false
+     }
+    },
+    "vid": null,
+    "ifname": "eth1"
+   }
+  ]
+ },
+ "wifi": {
+  "APACM": "0;0;0;0",
+  "APAifsn": "3;7;1;1",
+  "APCwmax": "6;10;4;3",
+  "APCwmin": "4;5;3;2",
+  "APTxop": "0;0;94;47",
+  "AckPolicy": "0;0;0;0",
+  "ApCliAuthMode": "OPEN",
+  "ApCliBssid": "",
+  "ApCliDefaultKeyId": "",
+  "ApCliEnable": false,
+  "ApCliEncrypType": "",
+  "ApCliKey1Str": "",
+  "ApCliKey1Type": "",
+  "ApCliKey2Str": "",
+  "ApCliKey2Type": "",
+  "ApCliKey3Str": "",
+  "ApCliKey3Type": "",
+  "ApCliKey4Str": "",
+  "ApCliKey4Type": "",
+  "ApCliSsid": "",
+  "ApCliWPAPSK": "",
+  "BGProtection": "0",
+  "BSSACM": "0;0;0;0",
+  "BSSAifsn": "3;7;2;2",
+  "BSSCwmax": "10;10;4;3",
+  "BSSCwmin": "4;4;3;2",
+  "BSSTxop": "0;0;94;47",
+  "BandWidth": "3",
+  "BeaconPeriod": "100",
+  "Channel": "auto",
+  "CountryCode": "UA",
+  "DtimPeriod": "1",
+  "FragThreshold": "2346",
+  "HTGI": "enable",
+  "HideSSID": false,
+  "MaxStaNum": "0",
+  "RADIUS_Key": "dlink",
+  "RADIUS_Port": "1812",
+  "RADIUS_Server": "192.168.0.254",
+  "RTSThreshold": "2347",
+  "RadioOff": false,
+  "RekeyInterval": "3600",
+  "RekeyMethod": "TIME",
+  "StationKeepAlive": "0",
+  "TxPower": "100",
+  "TxPreamble": "long",
+  "Wds1EncrypType": "NONE",
+  "Wds1Key": "",
+  "Wds1Mac": "",
+  "Wds2EncrypType": "NONE",
+  "Wds2Key": "",
+  "Wds2Mac": "",
+  "Wds3EncrypType": "NONE",
+  "Wds3Key": "",
+  "Wds3Mac": "",
+  "Wds4EncrypType": "NONE",
+  "Wds4Key": "",
+  "Wds4Mac": "",
+  "WdsEnable": "0",
+  "WdsPhyMode": "",
+  "WifiBroadcast": true,
+  "WirelessMode": "9",
+  "WscConfMode": "7",
+  "WscConfigured": true,
+  "mbssid": [
+   {
+    "AccessControlList": [],
+    "AccessPolicy": "0",
+    "AuthMode": "WPA2PSK",
+    "DefaultKeyID": "2",
+    "EncrypType": "AES",
+    "IEEE8021X": "0",
+    "Key1Str": "",
+    "Key1Type": "1",
+    "Key2Str": "",
+    "Key2Type": "1",
+    "Key3Str": "",
+    "Key3Type": "1",
+    "Key4Str": "",
+    "Key4Type": "1",
+    "MacFilterList": {
+     "max_instance": 0
+    },
+    "NoForwarding": "0",
+    "NoForwardingBTNBSSID": "0",
+    "PreAuth": "0",
+    "SSID": "DIR-615-Metnew",
+    "TxRate": "0",
+    "WPAPSK": "mypentest98",
+    "WmmCapable": true,
+    "RekeyMethod": "TIME",
+    "RekeyInterval": "3600",
+    "HideSSID": false,
+    "MaxStaNum": "0",
+    "Isolation": false,
+    "WifiBroadcast": true,
+    "BwRestrict": 0
+   }
+  ],
+  "session_timeout_interval": "0",
+  "Width": "40MHz",
+  "HTCoexistance": false,
+  "ExtensionChannel": "auto",
+  "mbssidCurrent": 1
+ },
+ "passwd": [
+  {
+   "login_cr": "96f6e6cab3c87a5c5c419aa7208711f6",
+   "pass_cr": "b23f285f80224871123a2b09d0f12a96"
+  }
+ ],
+ "dns": {
+  "manual": false,
+  "servers": "",
+  "defroute": true
+ },
+ "dns6": {
+  "manual": false,
+  "servers": "",
+  "defroute": true
+ },
+ "autoupdate": {
+  "enable": true,
+  "server": "fwupdate.dlink.ru",
+  "check_updates": false,
+  "need_update": false,
+  "status": "failure_at_data_check"
+ },
+ "roaming": {
+  "enable": false,
+  "quality_limit": 50,
+  "quality_limit_5g": 50,
+  "quality_width": 15,
+  "quality_width_5g": 15,
+  "max_timeout": 60,
+  "max_timeout_5g": 60,
+  "portno": 7890,
+  "mc_switch": false,
+  "mc_groupaddr": "239.255.0.0",
+  "mc_ttl": 32
+ },
+ "netfilter": {
+  "sip": false,
+  "rtsp": true
+ },
+ "vserver": [],
+ "httpaccess": [],
+ "dmz": {
+  "enable": false,
+  "ip": "192.168.0.56",
+  "enable_snat": true
+ },
+ "syslog": {
+  "enable": true,
+  "type": "local",
+  "level": 6,
+  "server": "",
+  "port": 514
+ },
+ "route": [],
+ "lang": "rus",
+ "dos_filter": {
+  "ipFloodSYN": false,
+  "ipFloodFIN": false,
+  "ipFloodUDP": false,
+  "ipFloodICMP": false,
+  "TCPUDPPortScan": false,
+  "TCPUDPPortScanHighSens": false,
+  "IPLand": false,
+  "IPSpoof": false,
+  "IPTearDrop": false,
+  "TCPScan": false,
+  "TCPSynWithData": false,
+  "UDPBomb": false,
+  "sourceIpBlock": false,
+  "wholeSYNThres": 0,
+  "wholeFINThres": 0,
+  "wholeUDPThres": 0,
+  "wholeICMPThres": 0,
+  "perSourceSYNThres": 0,
+  "perSourceFINThres": 0,
+  "perSourceUDPThres": 0,
+  "perSourceICMPThres": 0,
+  "blockTime": 0
+ },
+ "rlx_qos": {
+  "iptv_enable": false,
+  "http_telnet_enable": false,
+  "dhcp_lcp_echo_enable": false
+ }
+}

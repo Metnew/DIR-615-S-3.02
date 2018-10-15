@@ -1,0 +1,27 @@
+<form name="form" class="css-form"
+	novalidate
+	nw-form
+	unsaved-warning-form
+	unsaved-backup-status="{{!lanForm.isChange()}}" 
+	ng-submit="lanForm.prepareApply()"
+	ng-controller="lanFormCtrl"
+>
+	<div ng-include="'pages/lan/header/page.tpl.html'"
+		 ng-controller="lanHeaderCtrl"
+		 ng-if="lanForm.isPageLoad"
+	></div>
+	<div class="card no_padding">
+		<div ng-include="'pages/lan/ipv4/page.tpl.html'"
+			 ng-controller="lanIPv4Ctrl"
+			 ng-if="lanForm.has('IPv4')"
+		></div>
+		<div ng-include="'pages/lan/ipv6/page.tpl.html'"
+			 ng-controller="lanIPv6Ctrl"
+			 ng-if="lanForm.has('IPv6')"
+		></div>
+		<div class="button_block left">
+			<button type="submit" class="colored" ng-disabled="!lanForm.isChange()" ng-bind="'apply'|translate"></button>
+			<button type="submit" ng-if="lanForm.isNeedRemove()" ng-click="lanForm.removeInterface()" ng-bind="'delete'|translate"></button>
+		</div>
+	</div>
+</form>

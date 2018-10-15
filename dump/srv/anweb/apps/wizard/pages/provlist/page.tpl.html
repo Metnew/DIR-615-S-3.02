@@ -1,0 +1,29 @@
+
+<div class="page provlist">
+	
+	<div class="wrap">
+		
+		<div class="caption">
+			{{'wizard_providers' | translate}}
+		</div>
+		
+		<div class="provline">
+			
+			<div class="provbox" ng-repeat="(provider, services) in providers" ng-click="selectProvider(services)">
+				<div class="icon">
+					<img src="img/prov/<PROVIDER_ICON>.png" onerror="this.src='img/prov/unknown.png'">
+				</div>
+				<div class="name">{{provider}}</div>
+			</div>
+			
+		</div>
+		
+		<div class="navs">
+			<a href class="prev" ng-click="prevStep()">{{'wizard_prev' | translate}}</a>
+			<!-- <a href class="next" ng-click="nextStep()">{{'wizard_next' | translate}}</a> -->
+		</div>
+		
+	</div>
+	
+</div>
+

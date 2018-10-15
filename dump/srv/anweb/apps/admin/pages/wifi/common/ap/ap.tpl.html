@@ -1,0 +1,293 @@
+<div ng-controller="WifiAPSettings">
+            <div class="card flat">
+                <div class="title_card" ng-bind="'wifiNetwork' | translate"></div>
+
+                <div nw-field
+                     nw-label="wifiSSID"
+                     nw-required
+                     ng-if="wifi.ap.supportedParam('SSID')"
+                >
+                    <input type="text" nw-type="notCyrillicChar" ng-model="wifi.ap.data.SSID" nw-max="32" maxlength="33" ng-maxlength="32">
+                </div>
+
+                <div nw-labeled-switch
+                     nw-label="wifiHideSSID"
+                     nw-model="wifi.ap.data.SSIDAdvertisementEnabled"
+                     ng-if="wifi.ap.supportedParam('SSIDAdvertisementEnabled')"
+                ></div>
+                <div class="note" ng-bind="'wifi_hide_SSID_note' | translate"  ng-if="wifi.ap.supportedParam('SSIDAdvertisementEnabled')"></div>
+
+                <div nw-field
+                     nw-label="wifiBSSID"
+                     ng-show="wifi.ap.isEdit()"
+                     ng-if="wifi.ap.supportedParam('BSSID')"
+                >
+                    <input disabled value="{{wifi.ap.data.BSSID}}">
+                </div>
+
+                <div nw-field
+                     nw-label="wifiMaxClients"
+                     nw-required
+                     ng-if="wifi.ap.supportedParam('MaxAssociatedDevices')"
+                >
+                    <input nw-number
+                           nw-min="0"
+                           nw-max="20"
+                           ng-model="wifi.ap.data.MaxAssociatedDevices"
+                    >
+                </div>
+
+                <div ng-if="wifi.ap.supportedParam('BandwidthRestricted')">
+                    <div nw-labeled-switch
+                         nw-label="wifiBandwidthRestrictedEnable"
+                         nw-model="wifi.advancedAp.bandwidthRestrictedEnable"
+                    ></div>
+
+                    <div nw-field
+                         nw-label="wifiBandwidthRestricted"
+                         nw-required
+                         ng-if="wifi.advancedAp.bandwidthRestrictedEnable"
+                    >
+                        <input nw-number
+                               ng-model="wifi.ap.data.BandwidthRestricted"
+                               nw-min="{{BandwidthRestricted.min}}"
+                               nw-max="{{BandwidthRestricted.max}}"
+                        >
+                    </div>
+
+                </div>
+
+
+
+                <div nw-labeled-switch
+                     nw-label="wifiBroadcast"
+                     nw-model="wifi.ap.data.Broadcast"
+                     ng-if="wifi.ap.supportedParam('Broadcast')"
+                ></div>
+                <div class="note" ng-bind="'wifi_broadcast_note' | translate"  ng-if="wifi.ap.supportedParam('Broadcast')"></div>
+
+
+                <div nw-labeled-switch
+                     nw-label="wifiCPEBlock"
+                     nw-model="wifi.ap.data.CPEBlock"
+                     ng-if="wifi.ap.supportedParam('CPEBlock')"
+                ></div>
+
+                <div nw-labeled-switch
+                     nw-label="wifiClientIsolation"
+                     nw-model="wifi.ap.data.ClientIsolation"
+                     ng-if="wifi.ap.supportedParam('ClientIsolation')"
+                ></div>
+                <div class="note" ng-bind="'wifi_client_isolation_note' | translate" ng-if="wifi.ap.supportedParam('ClientIsolation')"></div>
+
+                <div nw-labeled-switch
+                     nw-label="wifiGuestAccess"
+                     nw-model="wifi.ap.data.GuestAccess"
+                     ng-if="wifi.ap.isShowGuestAccess()"
+                ></div>
+                <div class="note" ng-bind="'wifi_guest_network_note' | translate"  ng-if="wifi.ap.isShowGuestAccess()"></div>
+
+            </div>
+
+            <div class="card flat">
+                <div class="title_card" ng-bind="'wifiSecurityCapt' | translate"></div>
+
+                <div nw-field
+                     nw-label="wifiMode"
+                     ng-if="wifi.ap.supportedParam('ModeEnabled', 'Security')"
+                >
+                    <div class="custom-select">
+                        <select ng-model="wifi.ap.data.Security.ModeEnabled"
+                                ng-options="option.value as option.name | translate for option in wifi.ap.supportedModes()"
+                        >
+                        </select>
+                    </div>
+                </div>
+
+                <div nw-labeled-switch
+                     nw-label="wifiPreAuthentication"
+                     nw-model="wifi.ap.data.Security.PreAuthentication"
+                     ng-if="wifi.ap.showPreAuth(wifi.ap.data.Security.ModeEnabled) && wifi.ap.supportedParam('PreAuthentication', 'Security')"
+                ></div>
+
+                <div ng-if="wifi.ap.showSecurity('enableWEP')">
+
+                    <div nw-labeled-switch
+                         nw-label="wifiOpenWEP"
+                         nw-model="wifi.ap.data.Security.OpenWEP"
+                    ></div>
+
+                    <div nw-field
+                         nw-label="wifiWEPType"
+                         ng-if="wifi.ap.data.Security.OpenWEP"
+                    >
+                        <div class="custom-select">
+                            <select ng-model="wifi.ap.data.Security.OpenWEPType"
+                                    ng-options="opt for opt in wifi.ap.getWEPTypes()"
+                            ></select>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div ng-if="wifi.ap.showSecurity('WEP')">
+
+                    <div nw-field
+                         nw-label="wifiWEPKeyID"
+                         ng-if="wifi.ap.supportedParam('DefaultKeyID', 'Security')"
+                    >
+                        <div class="custom-select">
+                            <select ng-model="wifi.ap.data.Security.DefaultKeyID"
+                                    ng-options="opt for opt in wifi.ap.getDefaultKeysID()"
+                            ></select>
+                        </div>
+                    </div>
+
+                    <div nw-labeled-switch
+                         nw-label="wifiWEPasHEX"
+                         nw-model="wifi.ap.data.Security.WEPasHEX"
+                         ng-if="wifi.ap.supportedParam('WEPasHEX', 'Security')"
+                    ></div>
+                    <div class="note">
+                        {{wifi.ap.getWEPKeyLenMessage() | translate}}
+                    </div>
+
+                    <div nw-field
+                         nw-label="wifiWEPKey1"
+                         nw-required
+                         ng-if="wifi.ap.supportedParam('WEPKey1', 'Security')"
+                    >
+                        <input type="password"
+                            ng-model="wifi.ap.data.Security.WEPKey1"
+                            nw-custom-valid="wifi.ap.validWEPKey(wepKey)"
+                            nw-eye
+                        >
+                    </div>
+
+                    <div nw-field
+                        nw-label="wifiWEPKey2"
+                        nw-required
+                        ng-if="wifi.ap.supportedParam('WEPKey2', 'Security')"
+                    >
+                        <input type="password"
+                            ng-model="wifi.ap.data.Security.WEPKey2"
+                            nw-custom-valid="wifi.ap.validWEPKey(wepKey)"
+                            nw-eye
+                        >
+                    </div>
+
+                    <div nw-field
+                         nw-label="wifiWEPKey3"
+                         nw-required
+                         ng-if="wifi.ap.supportedParam('WEPKey3', 'Security')"
+                    >
+                        <input type="password"
+                            ng-model="wifi.ap.data.Security.WEPKey3"
+                            nw-custom-valid="wifi.ap.validWEPKey(wepKey)"
+                            nw-eye
+                        >
+                    </div>
+
+                    <div nw-field
+                         nw-label="wifiWEPKey4"
+                         nw-required
+                         ng-if="wifi.ap.supportedParam('WEPKey4', 'Security')"
+                    >
+                        <input type="password"
+                            ng-model="wifi.ap.data.Security.WEPKey4"
+                            nw-custom-valid="wifi.ap.validWEPKey(wepKey)"
+                            nw-eye
+                        >
+                    </div>
+
+                </div>
+
+                <div ng-if="wifi.ap.showSecurity('PSK')">
+                    <div nw-field
+                         nw-label="wifiPSKKey"
+                         nw-required
+                         ng-if="wifi.ap.supportedParam('PreSharedKey', 'Security')"
+                    >
+                        <input type="password"
+                            nw-type="psk"
+                            ng-model="wifi.ap.data.Security.PreSharedKey"
+                            nw-custom-valid="wifi.ap.validPSKKey(pskKey)"
+                            nw-eye
+                        >
+                    </div>
+                    <div class="note">
+                        {{'invalid_psk' | translate}}
+                    </div>
+
+                </div>
+
+                <div ng-if="wifi.ap.showSecurity('Enterprise')">
+
+                    <div nw-field
+                         nw-label="wifiWPARadiusIP"
+                         nw-required
+                         ng-if="wifi.ap.supportedParam('RadiusServerIPAddr', 'Security')"
+                    >
+                        <input type="text"
+                            nw-type="ipv4"
+                            ng-model="wifi.ap.data.Security.RadiusServerIPAddr"
+                        >
+                    </div>
+                    <div nw-field
+                         nw-label="wifiWPARadiusPort"
+                         nw-required
+                         ng-if="wifi.ap.supportedParam('RadiusServerPort', 'Security')"
+                    >
+                        <input nw-number nw-min="1" nw-max="65535"
+                            ng-model="wifi.ap.data.Security.RadiusServerPort"
+                        >
+                    </div>
+                    <div nw-field
+                         nw-label="wifiWPARadiusSecret"
+                         nw-required
+                         ng-if="wifi.ap.supportedParam('RadiusSecret', 'Security')"
+                    >
+                        <input type="text"
+                            ng-model="wifi.ap.data.Security.RadiusSecret"
+                        >
+                    </div>
+
+                </div>
+
+                <div ng-if="wifi.ap.showSecurity('PSK') || wifi.ap.showSecurity('Enterprise')">
+
+                    <div nw-field
+                         nw-label="wifiWPAEncryption"
+                         nw-required
+                         ng-if="wifi.ap.supportedParam('EncryptionType', 'Security')"
+                    >
+                        <div class="custom-select">
+                            <select ng-model="wifi.ap.data.Security.EncryptionType"
+                                ng-options="opt for opt in wifi.ap.getEncrypTypes()"
+                            ></select>
+                        </div>
+                    </div>
+
+                    <div nw-field
+                         nw-label="wifiWPARekeyingInterval"
+                         nw-required
+                         ng-if="wifi.ap.supportedParam('RekeyingInterval', 'Security')"
+                    >
+                        <input nw-number
+                            nw-min="0"
+                            nw-max="1000000"
+                            ng-model="wifi.ap.data.Security.RekeyingInterval"
+                        >
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card flat"
+                 alert="info"
+                 ng-if="wifi.ap.isOpen()"
+            >
+                 {{'wifi_network_opened_warning' | translate}}
+            </div>
+</div>

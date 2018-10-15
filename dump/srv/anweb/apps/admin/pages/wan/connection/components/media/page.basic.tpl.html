@@ -1,0 +1,13 @@
+<div ng-if="media.type == 'Ethernet'"
+	 ng-include="'/admin/pages/wan/connection/components/media/ethernet/page.basic.tpl.html'"
+></div>
+<div ng-if="media.type == 'WiFi'"
+	 ng-include="'/admin/pages/wan/connection/components/media/wifi/page.basic.tpl.html'"
+></div>
+<div ng-if="media.type == 'DSL.PTM'"
+	 ng-include="'/admin/pages/wan/connection/components/media/ptm/page.basic.tpl.html'"
+></div>
+<div ng-if="media.type == 'DSL.ATM'"
+	 ng-include="'/admin/pages/wan/connection/components/media/atm/page.basic.tpl.html'"
+	 ng-controller="WanMediaATMCtrl"
+></div>

@@ -1,0 +1,171 @@
+<div class="main-card">
+	<form name="form" class="css-form" novalidate
+		  nw-form
+		  ng-submit="vservers.apply()"
+		  unsaved-warning-form
+		  unsaved-backup-status="{{!vservers.wasModified()}}"
+	>
+		<div class="card-content" ng-if="vservers.isActivate">
+			<div class="row-grid bottom-space">
+				<div class="col-md-6 block-left">
+					<div class="card-title" ng-bind="'vserversGeneralSettings' | translate"></div>
+
+					<div nw-field
+						 nw-label="vserversName"
+						 nw-required
+						 ng-if="vservers.isSupported('Name')"
+					>
+						<input type="text"
+							ng-model="vservers.rule.Name"
+							nw-custom-valid="vservers.validation(value, 'name')"
+						>
+					</div>
+
+					<div nw-field
+						 nw-label="vserversType"
+						 ng-if="vservers.isSupported('Type') && (vservers.action == 'add')"
+					>
+						<div class="custom-select">
+							<select ng-model="vservers.rule.Type"
+									ng-options="option.value as option.name|translate for option in vservers.getTypesList()"
+									ng-change="vservers.changeType(vservers.rule.Type)"
+								></select>
+						</div>
+					</div>
+
+					<div nw-field
+						 nw-label="vserversType"
+						 ng-if="vservers.isSupported('Type') && (vservers.action == 'edit')"
+					>
+						<input disabled type="text" value="{{ vservers.rule.Type | translate }}">
+					</div>
+
+					<div nw-field
+		                 nw-label="vserversInterface"
+						 nw-disabled="vservers.isDisabled('Source.Iface')"
+		                 ng-if="vservers.isSupported('Source.Iface')"
+		            >
+		                <select ng-model="vservers.rule.Source.Iface"
+								ng-options="option.Value as option.Name|translate for option in vservers.getInterfaceList()"
+						></select>
+		            </div>
+
+					<div nw-field
+						 nw-label="vserversProtocol"
+						 ng-if="vservers.isSupported('Proto')"
+					>
+						<select ng-model="vservers.rule.Proto"
+								ng-options="option.value as option.name|translate for option in vservers.getProtocolList()"
+						></select>
+					</div>
+
+					<div nw-labeled-switch
+						 nw-label="vserversNATLoopback"
+						 nw-model="vservers.rule.SNAT"
+						 ng-if="vservers.isSupported('SNAT')"
+					></div>
+				</div>
+
+				<div class="col-md-6 block-right">
+					<div class="card-title" ng-bind="'vserversPrivateNetworkSettings' | translate"></div>
+
+					<div nw-field
+						 nw-label="vserversPrivateIP"
+						 nw-required
+						 ng-if="vservers.isSupported('Dest.IP')"
+					>
+						<input type="text"
+							ng-model="vservers.rule.Dest.IP[0]"
+							nw-custom-valid="vservers.validation(value, 'destIp')"
+							nw-client-list
+							nw-client-list-version="ipv4"
+						>
+					</div>
+
+					<div nw-port-range
+						 nw-port-start-label="vserversPrivatePortBegin"
+						 nw-port-start-required="true"
+						 nw-port-start-disabled="vservers.isDisabled('Dest.Ports')"
+						 nw-port-start-model="vservers.rule.Dest.Ports['1'].Start"
+						 nw-port-end-label="vserversPrivatePortEnd"
+						 nw-port-end-disabled="vservers.isDisabled('Dest.Ports')"
+						 nw-port-end-model="vservers.rule.Dest.Ports['1'].End"
+						 nw-port-use-ports="vservers.useSourcePorts"
+						 ng-if="vservers.isSupported('Dest.Ports')"
+					></div>
+				</div>
+			</div>
+
+			<div class="row-grid bottom-space">
+				<div class="col-md-6 block-left">
+					<div class="card-title" ng-bind="'vserversPublicNetworkSettings' | translate"></div>
+					<div class="changing_list">
+						<div class="card-title" ng-bind="'vserversRemoveIP' | translate"></div>
+
+						<div class="input_with_action"
+							ng-repeat="(inx, ip) in vservers.rule.Source.IP track by inx">
+
+							<div nw-field>
+								<input type="text"
+									nw-type="ipv4AddressOrSubnet"
+									ng-model="vservers.rule.Source.IP[inx]"
+									placeholder="{{'vserversRemoveIP' | translate}}"
+									nw-set-focus="{{vservers.sourceIpfocus==true}}"
+								>
+							</div>
+
+							<div class="input_action"
+								 ng-click="vservers.removeSourceIp(ip, inx)"
+							>
+								×
+							</div>
+
+						</div>
+
+						<div class="button_block right">
+							<input type="button"
+								ng-click="vservers.addSourceIp()"
+								value="{{'add_remote_ip' | translate}}"
+								class="colored flat">
+						</div>
+					</div>
+
+					<div nw-port-range
+						 nw-port-start-label="vserversPublicPortBegin"
+						 nw-port-start-required="true"
+						 nw-port-start-disabled="vservers.isDisabled('Source.Ports')"
+						 nw-port-start-model="vservers.rule.Source.Ports['1'].Start"
+						 nw-port-end-label="vserversPublicPortEnd"
+						 nw-port-end-disabled="vservers.isDisabled('Source.Ports')"
+						 nw-port-end-model="vservers.rule.Source.Ports['1'].End"
+						 nw-port-use-ports="vservers.useSourcePorts"
+						 ng-if="vservers.isSupported('Source.Ports')"
+					></div>
+
+				</div>
+
+				<div class="col-md-6 block-right">
+					<div class="card flat"
+						 alert="info"
+						 ng-if="vservers.useSourcePorts.length"
+					>
+						<div> {{'vserversSourceBusyPorts' | translate}}: <span class="selectedInfo"> {{vservers.showUseSourcePorts()}} </span></div>
+						<div>{{'vserversCantUsePorts' | translate}}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="card-action" ng-if="vservers.isActivate">
+			<button type="button"
+				ng-if="vservers.action == 'edit'"
+				ng-click="vservers.remove()"
+				ng-bind="'deleteButton' | translate"
+			></button>
+			<button type="submit" class="colored"
+				ng-disabled="vservers.action == 'edit' && !vservers.wasModified()"
+				ng-bind="'apply' | translate"
+			></button>
+		</div>
+	</form>
+</div>

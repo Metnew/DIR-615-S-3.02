@@ -1,0 +1,27 @@
+<div nw-field 
+	 nw-label="atmVPI" 
+	 nw-required="atm.destinationAddress.isRequired('VPI')" 
+	 nw-disabled="atm.destinationAddress.isDisabled('VPI')"
+>
+	<input nw-number nw-number-type="string"
+		nw-min="0" 
+        nw-max="255"
+        nw-custom-valid="atm.destinationAddress.validation(value, 'vpi')"
+		ng-model="atm.destinationAddress.vpi" 
+		ng-change="atm.destinationAddress.update()"
+	>
+</div>
+
+<div nw-field 
+	 nw-label="atmVCI" 
+	 nw-required="atm.destinationAddress.isRequired('VCI')" 
+	 nw-disabled="atm.destinationAddress.isDisabled('VCI')"
+>
+	<input nw-number nw-number-type="string" 
+		nw-min="32" 
+        nw-max="65535"
+        nw-custom-valid="atm.destinationAddress.validation(value, 'vci')"
+		ng-model="atm.destinationAddress.vci" 
+		ng-change="atm.destinationAddress.update()"
+	>
+</div>

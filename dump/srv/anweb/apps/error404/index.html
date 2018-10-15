@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="error404" ng-controller="Error404Ctrl">
+<head>
+<title ng-bind="'error404Title' | translate"></title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="content-style-type" content="text/css" />
+<meta http-equiv="content-script-type" content="text/javascript" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link type="image/x-icon" rel="shortcut icon" ng-href="{{ '../general/img/favicon.ico' | nocache }}" href />
+
+<link type="text/css" rel="stylesheet" href="/error404/css/concat?type=css&path=error404/css_list&_=756e0c3ae71202c252fb8dc85730b6da">
+<link type="text/css" rel="stylesheet" href="/general/css/concat?type=css&path=error404/general_css_list&_=756e0c3ae71202c252fb8dc85730b6da">
+<script type="text/javascript" src="/concat?type=js&path=error404/js_list&_=756e0c3ae71202c252fb8dc85730b6da"></script>
+
+</head>
+<body>
+<div class="error404__sky"></div>
+
+<div class="error404__container">
+	<div class="error404__logo"></div>
+	<div class="error404__content">
+		<div class="error404__header" ng-bind="'error404Header' | translate"></div>
+		<div class="error404__text" ng-bind="'error404Text' | translate"></div>
+		<div class="error404__button-panel">
+			<button class="colored"
+				ng-click="goToStart()" 
+				ng-bind="('error404Link' | translate) + getTime()"
+			></button>
+		</div>
+	</div>
+</div>
+</body>
+</html>
+

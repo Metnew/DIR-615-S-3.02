@@ -1,0 +1,10 @@
+<div ng-if="lan.isPageLoad">
+
+	<div ng-include="'pages/lan/form/page.tpl.html'"
+		 ng-if="lan.interfaceCount <= 1"
+	></div>
+
+	<div ng-include="'/admin/pages/lan/list/page.tpl.html'"
+		 ng-if="lan.interfaceCount > 1"
+	></div>
+</div>

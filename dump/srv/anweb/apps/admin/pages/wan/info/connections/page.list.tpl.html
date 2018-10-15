@@ -1,0 +1,81 @@
+<div class="card flat" ng-if="wan.info.connections.isEmpty() && wan.info.connections.isMakeList">
+	<div class="row-grid">
+		<div class="col-md-12">
+			<div nw-empty-state
+				 nw-empty-state-title="wanConnectionsListEmpty"
+				 nw-empty-state-subtitle="wanConnectionsListEmptyMessage"
+				 nw-empty-state-button="addButton"
+				 nw-empty-state-button-click="wan.info.connections.add()"
+			>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row-grid" ng-if="!wan.info.connections.isEmpty()">
+	<div class="col-md-12">
+		<div class="table card flat"
+			 nw-table
+			 nw-table-title="wanConnectionsList"
+			 nw-table-on-add="wan.info.connections.add()"
+			 nw-table-on-delete="wan.info.connections.remove(items)"
+			 nw-table-on-edit="wan.info.connections.edit(item)"
+			 nw-table-custom-event-name="restartConn"
+			 nw-table-on-custom-event-on-selected="wan.info.connections.reconnectItems(items)"
+			 nw-table-selected
+			 nw-table-toolbar-disabled="wan.info.connections.isReconnecting()"
+			 ng-if="!wan.info.connections.isEmpty()"
+		>
+			<div class="table-loader">
+				<nw-progress-bar pb-type="'indeter'" pb-hidden="!reconnecting"></nw-progress-bar>
+			</div>
+			<table>
+				<thead>
+					<tr>
+						<th ng-bind="'name' | translate"></th>
+						<th ng-bind="'contype' | translate"></th>
+						<th ng-bind="'iface' | translate"></th>
+						<th ng-bind="'status' | translate"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="item in wan.info.connections.list"
+						nw-mini-table
+						nw-mini-table-caption="item.name"
+						nw-mini-table-short="wan.info.connections.getMiniInfo(item)"
+						nw-mini-table-info="wan.info.connections.getMiniTableStatusInfo(item)"
+					>
+						<td ng-bind="item.name"></td>
+						<td ng-bind="item.actualType|translate"></td>
+						<td ng-bind="item.iface.info|translate"></td>
+						<td>
+							<status-info
+								status="{{item.status().status}}"
+								on="{{item.status().statusText}}"
+								off="{{item.status().statusText}}"
+								pending="{{item.status().statusText}}"
+								>
+							</status-info>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="row-grid" ng-if="wanCore.mode.isSupport() && !wan.info.connections.isEmpty()">
+	<div class="col-md-12" ng-show="!wanCore.mode.isAdvancedConfig()">
+		<div class="button_block left">
+			<button class="colored flat"
+				ng-bind="'wanSimpleMode' | translate"
+				ng-click="wanCore.mode.setAdvanced(false)"
+			></button>
+		</div>
+	</div>
+	<div class="col-md-12" ng-show="wanCore.mode.isAdvancedConfig() && wanCore.mode.isForcedChange()">
+		<div class="card flat" alert="info">
+			{{'wanSimpleModeAlert' | translate}}
+		</div>
+	</div>
+</div>

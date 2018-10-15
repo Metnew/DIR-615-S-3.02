@@ -1,0 +1,106 @@
+
+<div class="page defstyle">
+	<div class="wrap">
+		
+		<div class="caption">
+			<div class="caption_logo"></div>
+		</div>
+		
+		<!-- Полоска применения -->
+		<div ng-show="step == 'wait'">
+			<div class="content_block center title">
+				<div ng-if="action == 'reset'">{{'wizard_act_reset' | translate}}</div>
+				<div ng-if="action == 'reboot'">{{'wizard_reboot' | translate}}</div>
+				<div ng-if="action == 'update'">{{'wizard_update_in_progress' | translate}}</div>
+				<div ng-if="action == 'dongle_autoconn'">{{'wizard_reboot_dongle' | translate}}</div>
+			</div>
+			<div class="content_block center">
+				<div nw-circles="rebootDuration" nw-circles-callback="callback(status)" nw-circles-pause="pause"></div>
+			</div>
+		</div>
+		
+		<!-- Предупреждение о смене wifi-сети -->
+		<div ng-show="step == 'info'">
+			<div class="content_block center title">
+				<div ng-if="action == 'reset'">{{'wizard_reset_finished' | translate}}</div>
+				<div ng-if="action == 'reboot' || action == 'dongle_autoconn'">{{'wizard_reboot_finished' | translate}}</div>
+				<div ng-if="action == 'update'">{{'wizard_update_finished2' | translate}}</div>
+			</div>
+			<div class="content_block center">
+				{{'wizard_wifi_warn4' | translate}}
+				<div ng-if="action != 'update'">{{'wizard_wifi_param' | translate}}</div>
+				<div ng-if="action == 'update'">
+					<div ng-if="isWiFiEnabled()">
+						<div class="inline_field">
+							<div class="group">
+								<div class="name">{{'wizard_smr_ssid' | translate}}:</div>
+								<div class="value">{{nativeData.Config.WiFi.Radio.1.AccessPoint.1.SSID}}</div>
+							</div>
+							<div class="group" ng-if="!isWiFiEncrypted()">
+								<div class="name">{{'wizard_smr_encrypt' | translate}}:</div>
+								<div class="value">{{translateWifiSecurityMode(nativeData.Config.WiFi.Radio.1.AccessPoint.1.Security.ModeEnabled)}}</div>
+							</div>
+							<div class="group" ng-if="isWiFiEncrypted()">
+								<div class="name">{{'wizard_smr_password' | translate}}:</div>
+								<div class="value">{{nativeData.Config.WiFi.Radio.1.AccessPoint.1.Security.PreSharedKey}}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="navs">
+				<a class="next" ng-click="switchStep('check')">
+					{{'wizard_next' | translate}}
+				</a>
+			</div>
+		</div>
+		
+		<!-- Проверка на доступность -->
+		<div ng-show="step == 'check'">
+			<div class="content_block center title">
+				{{'wizard_status_test' | translate}}
+			</div>
+			<div class="content_block center">
+				<div nw-step-circles nw-step-circles-count="checkCountMax" nw-step-circles-value="checkCount"></div>
+			</div>
+		</div>
+		
+		<!-- Ошибка: Девайс недоступен -->
+		<div ng-show="step == 'error'">
+			<div class="content_block center title">
+				{{'wizard_reboot_failed' | translate}}
+			</div>
+			<div class="content_block">
+				{{'wizard_wifi_warn4' | translate}}
+				<div ng-if="action != 'update'">{{'wizard_wifi_param' | translate}}</div>
+				<div ng-if="action == 'update'">
+					<div ng-if="isWiFiEnabled()">
+						<div class="inline_field">
+							<div class="group">
+								<div class="name">{{'wizard_smr_ssid' | translate}}:</div>
+								<div class="value">{{nativeData.Config.WiFi.Radio.1.AccessPoint.1.SSID}}</div>
+							</div>
+							<div class="group" ng-if="!isWiFiEncrypted()">
+								<div class="name">{{'wizard_smr_encrypt' | translate}}:</div>
+								<div class="value">{{translateWifiSecurityMode(nativeData.Config.WiFi.Radio.1.AccessPoint.1.Security.ModeEnabled)}}</div>
+							</div>
+							<div class="group" ng-if="isWiFiEncrypted()">
+								<div class="name">{{'wizard_smr_password' | translate}}:</div>
+								<div class="value">{{nativeData.Config.WiFi.Radio.1.AccessPoint.1.Security.PreSharedKey}}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="content_block">
+				{{'wizard_cable_warn' | translate}}
+			</div>
+			<br />
+			<div class="next">
+				<button class="width_auto" ng-click="switchStep('check')">{{'wizard_trouble_recheck' | translate}}</button>
+			</div>
+		</div>
+		
+	</div>
+</div>

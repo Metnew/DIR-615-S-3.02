@@ -1,0 +1,118 @@
+<form class="ports_wizard" unsaved-warning-form unsaved-backup-status="{{!saveEnabled()}}">
+    <div class="card" nw-bind-html-compile="getNote()"></div>
+    <div class="card">
+<!--
+        <h3>{{'lan_ports' | translate}}</h3>
+-->
+		<h3>LAN</h3>
+
+        <div class="port-block" ng-class="{'port-block--blocked':portIsManagement(item) || portIsBusy(item) || portIsNotEditable(item), 'port-block--selected': portIsSelected(item)}"
+        ng-repeat="(key, item) in ports" ng-if="!showSimpleMode()">
+            <div class="port-block__icon {{getPortIconClass(item)}}">
+            </div>
+            <div class="port-block__info">
+                <div class="port-block__title">
+                    <div class="port-block__name">
+                        <div class="port-block__name-text">
+                            {{getPortTitle(item)}}
+                        </div>
+                        <div class="tooltip top" ng-if="isUnactiveWifi(item)">
+                            {{'ports_wizard_wifi_not_active_note' | translate}}
+                        </div>
+                    </div>
+                    <div class="port-block__managment-icon" ng-if="portIsManagement(item)">
+                        <div class="tooltip">
+                            {{'on_this_port' | translate}}
+                        </div>
+                    </div>
+<!--
+                    <div class="port-block__busy-icon" ng-if="portIsBusy(item)">
+                        <div class="tooltip">
+                            {{'portIsBusy' | translate}}
+                        </div>
+                    </div>
+-->
+                    
+                </div>
+                <div class="port-block__select">
+                    <div nw-field nw-label="ports_wizard_bridged_with_label" nw-disabled="portIsManagement(item) || portIsBusy(item)" ng-show="!portIsNotEditable(item)">
+                        <select ng-model="item.bridge" ng-options="item.value as item.label for item in sourcesList">
+                            <option ng-hide="true"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="port-block port-block-simple" ng-class="{'port-block--blocked':!canTogglePortSimple(item), 'port-block--selected': portIsSelected(item) && canTogglePortSimple(item)}"
+        ng-repeat="(key, item) in ports" ng-if="showSimpleMode()" ng-click="togglePortSimple(item, $event)">
+            <div class="port-block__icon {{getPortIconClass(item)}}">
+            </div>
+            <div class="port-block__info">
+                <div class="port-block__title">
+                    <div class="port-block__name">
+                        <div class="port-block__name-text">
+                            {{getPortTitle(item)}}
+                            <div class="tooltip top" ng-if="isUnactiveWifi(item) && canTogglePortSimple(item)">
+                                {{'ports_wizard_wifi_not_active_note' | translate}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="port-block__managment-icon" ng-if="portIsManagement(item)"></div>
+                </div>
+            </div>
+            <div class="tooltip top" ng-if="!canTogglePortSimple(item)">
+                {{getPortDisabledMessage(item) | translate}}
+            </div>
+        </div>
+        <div class="note" ng-if="needShowNotification">
+			{{ 'not_select_current_lan_port' | translate }}
+        </div>
+        <div class="button_block right">
+            <button class="flat colored" ng-click="toggleMode()" ng-hide="!canShowSimpleMode()">{{(showSimpleMode()? 'ports_wizard_advanced_mode': 'ports_wizard_simple_mode') | translate}}</button>
+        </div>
+    </div>
+    <div class="card" ng-if="!showSimpleMode()">
+<!--
+        <h3>{{'wan_ports' | translate}}</h3>
+-->
+        <h3>WAN</h3>
+
+        <div class="port-block" ng-repeat="(key, item) in sources" ng-click="editSource(key, item)">
+            <div class="port-block__icon {{getSourceIconClass(item, key)}}">
+            </div>
+            <div class="port-block__info">
+                <div class="port-block__name">
+                    {{item.name}}
+                </div>
+
+                <div class="port-block__params">
+                    <div class="port-block__param mb-5" ng-if="!item.enabled">
+                        {{'ports_wizard_source_disabled' | translate}}
+                    </div>
+                    <span class="port-block__param" ng-if="item.vid">
+                        <span class="port-block__param-name">VLAN ID</span>
+                    <span class="port-block__param-value">{{item.vid}}</span>
+                    </span>
+                    <span class="port-block__param" ng-if="item.pvc">
+                        <span class="port-block__param-name">PVC</span>
+                    <span class="port-block__param-value">{{item.pvc}}</span>
+                    </span>
+                    <span class="port-block__param" ng-if="item.ssid">
+                        <span class="port-block__param-name">SSID</span>
+                    <span class="port-block__param-value">{{item.ssid}}</span>
+                    </span>
+                </div>
+            </div>
+            <div class="port-block__action">
+
+            </div>
+        </div>
+        <div class="add-source-btn colored" svg-icon="add-circle-outline" title="{{'ports_wizard_new_source' | translate}}" ng-click="createSource()">
+        </div>
+
+    </div>
+    <div class="button_block center">
+        <button class="colored" ng-click="save()" ng-disabled="!saveEnabled()" ng-bind="'apply' | translate"></button>
+    </div>
+</form>

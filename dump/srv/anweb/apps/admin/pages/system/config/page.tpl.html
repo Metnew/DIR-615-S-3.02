@@ -1,0 +1,100 @@
+<div class="system config"  ng-controller="SysConfigCtrl">
+    <div class="first_col">
+        <form nw-form 
+            name="form_system_password" 
+            ng-submit="config.user.changePassword(config.user.name, config.user.password)"
+        >
+            <div class="card password">
+                <h3>{{'user' | translate}}</h3>
+
+                <div nw-field
+                     nw-label="login"
+                     nw-disabled
+                     class="user"
+                >
+                    <input type="text" disabled ng-model="config.user.name">
+                </div>
+
+                <input type='password' name='autocomplete_off_trick' style='display: none;' />
+
+                <div nw-field 
+                    nw-label="new_password"
+                >
+                    <input type="password"
+                        name="userPassword"
+                        ng-model="config.user.password"
+                        nw-eye
+                        nw-syspass
+                    >
+                </div>
+
+                <div class='note description' ng-bind="'password_description' | translate"></div>
+
+                <input type='password' name='autocomplete_off_trick' style='display: none;' />
+
+                <div nw-field 
+                    nw-label="confirmPassword"
+                >
+                    <input type="password"
+                        name="confirmPassword"
+                        ng-model="config.user.confirm"
+                        nw-syspass
+                        nw-eye
+                        nw-confirm="userPassword"
+                    >
+                </div>
+
+                <button type="submit"
+                        class="colored"
+                        ng-disabled="!(config.user.password.length && config.user.confirm.length)"
+                >
+                    {{'save' | translate}}
+                </button>
+            </div>
+        </form>
+
+        <div class="card language">
+            <div nw-field nw-label="language">
+                <select ng-model="config.lang.value"
+                        ng-change="config.lang.change(config.lang.value)"
+                        ng-options="lang as lang | translate for lang in config.lang.list"
+                >
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <ul class="second_col card clickable actions">
+        <li class="coloring_icon_inside" ng-click="config.reset()">
+            <svg svg-icon="factory"></svg>
+            <h3>{{'factory' | translate}}</h3>
+            <h4>{{config.getConfigResetMessage()}}</h4>
+        </li>
+        <li class="coloring_icon_inside" ng-click="config.backup()">
+            <svg svg-icon="backup"></svg>
+            <h3>{{'configBackupBtn' | translate}}</h3>
+            <div class="title_card">{{'configBackup' | translate}}</div>
+        </li>
+        <li class="coloring_icon_inside">
+            <svg svg-icon="restore"></svg>
+            <h3>{{'configUploadBtn' | translate}}</h3>
+            <div class="title_card">{{'configUpload' | translate}}</div>
+            <div nw-menu-upload
+                nw-upload-url="/config_restore"
+                nw-upload-prepare="config.restore.prepare()"
+                nw-upload-begin="config.restore.begin()"
+                nw-upload-end="config.restore.end(data)"
+                nw-upload-class="config_upload"></div>
+        </li>
+        <li class="coloring_icon_inside" ng-click="config.save()">
+            <svg svg-icon="save"></svg>
+            <h3>{{'configSaveBtn' | translate}}</h3>
+            <h4>{{'configSave' | translate}}</h4>
+        </li>
+        <li class="coloring_icon_inside" ng-click="config.reboot()">
+            <svg svg-icon="reboot"></svg>
+            <h3>{{'reboot' | translate}}</h3>
+            <h4>{{'configReboot' | translate}}</h4>
+        </li>
+    </ul>
+</div>

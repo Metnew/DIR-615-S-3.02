@@ -1,0 +1,39 @@
+<!--
+	Диалог авторизации.
+	Активируется каждый раз когда сервер запрашивает авторизацию.
+-->
+
+<div class="dialog_top_line">
+    <div class="dialog_title_text" ng-bind="'dlgLoginTitle'|translate">
+    </div>
+</div>
+<form nw-form name="form" novalidate ng-submit="login()" class="dialog_content_wrapper">
+	<div class="dialog_content">
+		<div nw-field nw-label="dlgLoginUsername">
+			<input type="text" id="loginDialogUsername" ng-model="fm.username" nw-set-focus>
+		</div>
+		<div nw-password
+			 nw-password-label="dlgLoginPassword"
+			 nw-password-value="fm.password"
+			 nw-password-novalidation
+		></div>
+		<div class="login_error_container">
+			<div class="login_error_message">{{fm.errorMessage|translate}}</div>
+			<div ng-show="!!fm.banTimeRemain" class="ban_try">
+				<div>{{'dlgLoginUnlock'|translate}}</div>
+				<div class="login_numerals">{{fm.banTimeRemainStr}}</div>
+			</div>
+			<div ng-show="!!fm.notAuthorized" class="ban_try">
+				<div>{{'dlgLoginWrongAttempt'|translate}}</div>
+			</div>
+		<!-- 	<div ng-show="!!fm.tryCountRemain" class="ban_try">
+				<div>{{'dlgLoginCount'|translate}}:</div>
+				<div class="login_numerals">{{fm.tryCountRemain}}</div>
+			</div> -->
+		</div>
+	</div>
+    <div class="dialog_button_panel button_block right">
+        <button class="colored flat" type="submit" ng-bind="'btnLogin'|translate"></button>
+        <button type="button" class="flat" ng-click="clear()" ng-bind="'btnClear'|translate"></button>
+    </div>
+</form>

@@ -1,0 +1,35 @@
+<div class="main-card">
+<div class="card-content">
+<div class="table ports"
+     nw-table
+     nw-table-title="portsSettings"
+     nw-table-on-edit="edit(item)"
+>
+    <table>
+        <thead>
+            <tr>
+                <th ng-bind="'port' | translate"></th>
+                <th ng-bind="'status' | translate"></th>
+                <th ng-bind="'autonegotiation' | translate"></th>
+                <th ng-bind="'speed' | translate"></th>
+                <th ng-bind="'flow_control' | translate"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="port in ports"
+                nw-mini-table
+                nw-mini-table-caption="port.name"
+                nw-mini-table-short="getShort(port)"
+                nw-mini-table-info="getSpeed(port) | translate"
+            >
+                <td ng-bind="port.name"></td>
+                <td ng-bind="getPortStatus(port.status)" class="status {{port.status}}"></td>
+                <td ng-bind="port.autonegotiation ? 'on' : 'off' | translate"></td>
+                <td ng-bind="getSpeed(port) | translate"></td>
+                <td ng-bind="getFlowControl(port) | translate"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+</div>

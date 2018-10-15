@@ -1,0 +1,217 @@
+<div class="main-card">
+	<form name="form" class="css-form" novalidate
+		  nw-form
+		  ng-submit="wanreserv.apply()"
+		  unsaved-warning-form
+		  unsaved-backup-status="{{!wanreserv.wasModified()}}"
+	>
+		<div ng-if="wanreserv.isActivate">
+			<div class="row-grid" ng-if="!wanreserv.hasConnections()">
+				<div class="col-md-12">
+					<div class="card flat" alert="info">
+						{{'wanReservConnectsEmptyMessage' | translate}}
+					</div>
+				</div>
+			</div>
+
+			<div class="card-content" ng-if="wanreserv.hasConnections()">
+				<div class="row-grid">
+					<div nw-labeled-switch
+						 nw-label="wanreservEnable"
+						 nw-model="wanreserv.config.Enable"
+					></div>
+
+					<div class="col-md-6 block-left" ng-if="wanreserv.config.Enable">
+						<div nw-field
+							 nw-label="wanreservBasicConn"
+						>
+							<select ng-model="wanreserv.config.Connection.Master"
+									ng-options="conn.Value as conn.Name for conn in wanreserv.config.Connections"
+							>
+							</select>
+						</div>
+
+						<div nw-field
+							 nw-label="wanreservBackupConn"
+							 ng-if="!wanreserv.config.Connection.MultiSlave"
+						>
+							<select ng-model="wanreserv.config.Connection.Slave[0]"
+									nw-custom-valid="wanreserv.checkSlaveValidation(wanreserv.config.Connection.Slave[0], 0)"
+									ng-options="conn.Value as conn.Name for conn in wanreserv.config.Connections"
+							>
+							</select>
+						</div>
+
+						<div nw-field
+							 nw-label="wanreservHost"
+							 nw-required
+							 ng-if="!wanreserv.config.MultiHosts"
+						>
+							<input ng-model="wanreserv.config.Hosts[0]"
+								   nw-custom-valid="wanreserv.checkHost(wanreserv.config.Hosts[0], 0)"
+							>
+						</div>
+					</div>
+
+					<div class="col-md-6 block-right" ng-if="wanreserv.config.Enable">
+						<div nw-field
+							 nw-label="wanreservInterval"
+							 nw-required
+							 ng-if="wanreserv.isSupported('RecheckTimeout')"
+						>
+							<input nw-number
+								   nw-min="{{wanreserv.config.MinMax.RecheckTimeout.min}}"
+								   nw-max="{{wanreserv.config.MinMax.RecheckTimeout.max}}"
+								   ng-model="wanreserv.config.RecheckTimeout"
+							>
+						</div>
+
+						<div nw-field
+							 nw-label="{{wanreserv.getTimeLabel('wanreservTimeout')}}"
+							 nw-required
+							 ng-if="wanreserv.isSupported('PingTimeout')"
+						>
+							<input nw-number
+								   nw-min="{{wanreserv.config.MinMax.PingTimeout.min}}"
+								   nw-max="{{wanreserv.config.MinMax.PingTimeout.max}}"
+								   ng-model="wanreserv.config.PingTimeout"
+							>
+						</div>
+
+						<div nw-field
+							 nw-label="wanreservPingRetries"
+							 nw-required
+							 ng-if="wanreserv.isSupported('PingRetries')"
+						>
+							<input nw-number
+								   nw-min="{{wanreserv.config.MinMax.PingRetries.min}}"
+								   nw-max="{{wanreserv.config.MinMax.PingRetries.max}}"
+								   ng-model="wanreserv.config.PingRetries"
+							>
+						</div>
+
+						<div nw-field
+							 nw-label="wanreservFailoverAtt"
+							 nw-required
+							 ng-if="wanreserv.isSupported('FailoverAttempts')"
+						>
+							<input nw-number
+								   nw-min="{{wanreserv.config.MinMax.FailoverAttempts.min}}"
+								   nw-max="{{wanreserv.config.MinMax.FailoverAttempts.max}}"
+								   ng-model="wanreserv.config.FailoverAttempts"
+							>
+						</div>
+
+						<div nw-field
+							 nw-label="wanreservRecoveryAtt"
+							 nw-required
+							 ng-if="wanreserv.isSupported('RecoveryAttempts')"
+						>
+							<input nw-number
+								   nw-min="{{wanreserv.config.MinMax.RecoveryAttempts.min}}"
+								   nw-max="{{wanreserv.config.MinMax.RecoveryAttempts.max}}"
+								   ng-model="wanreserv.config.RecoveryAttempts"
+							>
+						</div>
+					</div>
+				</div>
+
+				<div class="row-grid" ng-if="wanreserv.config.Enable">
+					<div class="col-md-6 block-left">
+						<div class="changing_list" ng-if="wanreserv.config.Connection.MultiSlave">
+							<div class="card-title" ng-bind="'wanreservBackupConns' | translate"></div>
+
+							<div class="note"
+								 nw-bind-html-compile="wanreserv.getOneConnectionMsg()"
+								 ng-if="wanreserv.isOneConnection()"
+							></div>
+
+							<div ng-if="!wanreserv.isOneConnection()">
+								<div class="note"
+									 ng-bind="'wanreservBackupConnsEmpty' | translate"
+									 ng-if="!wanreserv.config.Connection.Slave.length"
+								></div>
+
+								<div class="input_with_action"
+				                     ng-repeat="slave in wanreserv.config.Connection.Slave track by $index"
+				                >	
+				                    <div nw-field
+				                    	nw-required
+				                    >
+				                        <select ng-model="wanreserv.config.Connection.Slave[$index]"
+											ng-options="conn.Value as conn.Name for conn in wanreserv.config.Connections"
+											nw-custom-valid="wanreserv.checkSlaveValidation(wanreserv.config.Connection.Slave[$index], $index)"
+										>
+										</select>
+				                    </div>
+
+				                    <div class="input_action"
+				                         ng-click="wanreserv.removeSlave($index)"
+				                    >
+				                        ×
+				                    </div>
+				                </div>
+
+				                <div class="button_block right">
+				                    <input type="button"
+				                           ng-click="wanreserv.addSlave()"
+				                           ng-disabled="!wanreserv.hasFreeConnections()"
+				                           value="{{'addBackupConnButton' | translate}}"
+				                           class="colored flat"
+				                    >
+				                </div>
+							</div>
+			                
+						</div>
+					</div>
+
+					<div class="col-md-6 block-right">
+						<div class="changing_list" ng-if="wanreserv.config.MultiHosts">
+							<div class="card-title" ng-bind="'wanreservHosts' | translate"></div>
+
+							<div class="note"
+									 ng-bind="'wanreservHostsEmpty' | translate"
+									 ng-if="!wanreserv.config.Hosts.length"
+								></div>
+
+							<div class="input_with_action"
+			                     ng-repeat="host in wanreserv.config.Hosts"
+			                >
+			                    <div nw-field
+			                    	nw-required
+			                    >
+			                        <input ng-model="host"
+			                               nw-custom-valid="wanreserv.checkHost(host, $index)"
+			                        >
+			                    </div>
+
+			                    <div class="input_action"
+			                         ng-click="wanreserv.removeHost($index)"
+			                    >
+			                        ×
+			                    </div>
+			                </div>
+
+			                <div class="button_block right">
+			                    <input type="button"
+			                           ng-click="wanreserv.addHost()"
+			                           value="{{'addHostButton' | translate}}"
+			                           class="colored flat"
+			                    >
+			                </div>
+						</div>
+					</div>
+				</div>
+
+				<div class="card-action in-block" ng-if="wanreserv.hasConnections()">
+	                <button type="submit"
+	                        class="colored"
+	                        ng-disabled="!wanreserv.wasModified()"
+	                >
+	                    {{'applyButton' | translate}}
+	                </button>
+	            </div>
+			</div>
+		</div>
+	</form>
+</div>

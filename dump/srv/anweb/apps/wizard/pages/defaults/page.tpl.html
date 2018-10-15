@@ -1,0 +1,52 @@
+<div class="page defstyle">
+	<div class="wrap">
+		
+		<div class="caption">
+			<div class="caption_logo"></div>
+		</div>
+		
+		<form nw-form novalidate name="form" autocomplete="off" ng-class="{ 'nw-form-apply': true }" ng-keydown="$event.keyCode === 13 && apply()">
+			
+			<div class="content_block title2">
+				{{ 'wizard_defaults_title' | translate }}
+			</div>
+			
+			<div class="content_block note_custom-icon">
+				{{ 'wizard_defaults_note' | translate }}
+			</div>
+			
+			<div class="content_block" ng-if="needChangePass">
+				<div
+					nw-password 
+					nw-password-label="admin_pass"
+					nw-password-value="profile.$PasswordStep.Password"
+					nw-password-focus
+					nw-password-required
+					nw-password-valid="validatePassword(value)"
+					nw-password-description="password_description"
+				>
+				</div>
+			</div>
+			
+			<div class="content_block" ng-repeat="(key, obj) in profile.$WiFiStep">
+				<div nw-field nw-label="{{ getSSSIDName(key) }}" nw-required>
+					<input type="text" ng-model="obj.SSID" nw-type="text" maxlength="33" ng-maxlength="32" nw-custom-valid="validateSSID(obj.OriginSSID, obj.SSID)"/>
+				</div>
+				<div nw-field nw-label="{{ getPSKName(key) }}" nw-required ng-if="needChangePSK">
+					<input type="password" ng-model="obj.PSK" nw-custom-valid="validatePSK(obj.PSK)" nw-eye />
+				</div>
+			</div>
+			
+		</form>
+		
+		<div class="navs">
+			<a class="prev" ng-click="customPrevStep()">
+				{{'wizard_prev' | translate}}
+			</a>
+			<a class="apply" ng-click="apply()">
+				{{ 'wizard_apply' | translate }}
+			</a>
+		</div>
+		
+	</div>
+</div>

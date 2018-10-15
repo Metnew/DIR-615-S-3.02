@@ -1,0 +1,53 @@
+<div class="nw-empty-page-state-container" ng-if="isActivate && isEmpty">
+	<div class="nw-empty-page-state-image-add"></div>
+	<div class="nw-empty-page-state-title">
+		{{'wifiClientShapingEmptyTitle' | translate}}
+	</div>
+	<div class="nw-empty-page-state-subtitle">
+		{{'wifiClientShapingEmptyDesc' | translate}}
+	</div>
+	<div class="nw-empty-page-state-buttons-panel">
+		<button type="button" class="colored" ng-click="wifiShaping.add()">
+			{{'addButton' | translate}}
+		</button>
+	</div>
+</div>
+
+<div class="main-card" ng-if="isActivate && !isEmpty">
+	<div class="card-content">
+		<div class="table"
+			nw-table
+			nw-table-title="navWIFIClientShaping"
+			nw-table-desc="wifiClientShapingDesc"
+			nw-table-selected
+			nw-table-empty-button="addButton"
+			nw-table-empty-button-click="wifiShaping.add()"
+			nw-table-on-add="wifiShaping.add()"
+            nw-table-on-delete="wifiShaping.remove(items, keys)"
+			nw-table-on-edit="wifiShaping.edit(item, inx)"
+		>
+			<table>
+				<thead>
+					<tr>
+						<th ng-bind="'macaddr' | translate"></th>
+						<th nw-bind-html-compile="'wifiClientShapingUploadRate' | translate"></th>
+						<th nw-bind-html-compile="'wifiClientShapingDownloadRate' | translate"></th>
+						<th ng-bind="'wifiClientShapingEnabled' | translate"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="(key, value) in wifiShaping.data"
+						nw-mini-table
+						nw-mini-table-caption="wifiShaping.getMiniCaption(key, value)"
+						nw-mini-table-short="wifiShaping.getMiniShort(key, value)"
+					>
+						<td ng-bind="key"></td>
+						<td ng-bind="wifiShaping.rateInfo(value.UploadRate)"></td>
+						<td ng-bind="wifiShaping.rateInfo(value.DownloadRate)"></td>
+						<th ng-bind="(value.Enabled ? 'yes' : 'no') | translate"></th>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

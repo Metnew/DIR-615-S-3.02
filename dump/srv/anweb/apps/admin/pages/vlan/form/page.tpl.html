@@ -1,0 +1,165 @@
+<form nw-form
+      unsaved-warning-form
+      unsaved-backup-status="{{isSavingDisabled()}}"
+      ng-submit="save()"
+      name="vlan_form"
+      id="vlan_form"
+      class="vlan-form"
+>
+    <div class="card_columns">
+        <div class="card">
+            <div nw-field
+                 nw-label="vlan_name"
+                 nw-required
+            >
+                <input type="text"
+                       ng-model="vlan.Name"
+                       nw-custom-valid="checkUnique(vlan.Name, 'Name')"
+                >
+            </div>
+
+            <div nw-labeled-switch
+                 ng-if="needShowChechbox()"
+                 nw-label="vlan_enable"
+                 nw-model="vlan.Enable"
+                 nw-change="checkEnable(vlan.Enable)"
+            >
+            </div>
+            <div class="note mb-20" ng-bind="'vlan_enable_help' | translate"></div>
+
+            <div nw-field nw-label="vlan_type" nw-disabled="isEdit()">
+                <select ng-model="vlan.Type"
+                        ng-options="type as type | translate for type in types"
+                >
+                </select>
+            </div>
+
+
+
+			
+
+			<!-- *************************************** -->
+
+			<div nw-labeled-switch
+				 nw-label="vlan_vid_range_enble"
+				 nw-model="vid_range_enable"
+				 ng-show="needShow.vid_range()"
+				 nw-change="checkVidRangeEnable(vid_range_enable)"
+			></div>
+
+
+			<div nw-field
+                 nw-label="{{needShow.vid_range_end() ? 'vlan_vid_start' : 'vlan_vid'}}"
+                 nw-required
+                 ng-show="needShow.vid()"
+            >
+                <input nw-number
+                       nw-min="{{vlanIDmin}}"
+                       nw-max="4094"
+                       ng-model="vlan.Vid"
+                       nw-custom-valid="checkVlanId(vid, 'Vid')"
+                >
+            </div>
+            <div class="note red"
+                 ng-if="defined.bcm47xx && needHWReboot(vlan.Vid)"
+                 ng-bind="'vlan_need_hw_reboot' | translate"
+            ></div>
+
+			<div nw-field
+                 nw-label="vlan_vid_end"
+                 nw-required
+                 ng-show="needShow.vid_range_end()"
+            >
+                <input nw-number
+                       nw-min="{{vlanIDmin}}"
+                       nw-max="4094"
+                       ng-model="vlan.VidRangeEnd"
+                       nw-custom-valid="checkVlanId(vid_range_end, 'VidRangeEnd')"
+                >
+            </div>
+
+			<!-- *************************************** -->
+
+
+
+
+
+
+            <div nw-field
+                 nw-label="vlan_qos"
+                 ng-if="needShow.qos()"
+            >
+                <input nw-number
+                       nw-min="0"
+                       nw-max="7"
+                       ng-model="vlan.Qos">
+            </div>
+        </div>
+
+        <div class="card"
+             ng-if="needShow.untagged()"
+        >
+            <h4 ng-bind="'vlan_ports_u_capt' | translate"></h4>
+            <div ng-if="!existFreePortsU()">
+                {{'vlan_no_free_ports' | translate}}
+            </div>
+
+            <div
+                nw-control-list
+                nw-control-list-selected 
+                nw-control-list-selected-list="selected.untagged"
+            >
+                <div ng-repeat="(name, port) in availUntagged()"
+                     nw-control-list-item
+                     nw-control-list-item-title="port.Alias"
+                     nw-control-list-item-disabled="portIsManagment(name, port)"
+                >
+                    <div class="managment-icon" ng-if="portIsManagment(name, port)">
+                        <div class="tooltip">
+                            {{'on_this_port' | translate}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="note"
+                 ng-if="'bridge' !== vlan.Type && 'wanu' !== vlan.Type"
+                 ng-bind="'vlan_need_choose_untagged' | translate"
+            ></div>
+
+            <div class="note"
+                 ng-if="'wanu' === vlan.Type"
+                 ng-bind="'vlan_need_choose_wan_or_wifi' | translate"
+            ></div>
+        </div>
+
+        <div class="card"
+             ng-if="needShow.tagged()"
+        >
+            <h4 ng-bind="'vlan_ports_t' | translate"></h4>
+
+            <div
+                nw-control-list
+                nw-control-list-selected
+                nw-control-list-selected-list="selected.tagged"
+            >
+                <div ng-repeat="(name, port) in availTagged()"
+                     nw-control-list-item
+                     nw-control-list-item-title="port.Alias"
+                >
+                </div>
+            </div>
+
+            <div class="note"
+                 ng-bind="'vlan_need_choose_tagged' | translate"
+            ></div>
+        </div>
+    </div>
+
+    <div class="button_block center">
+        <button type="submit"
+               class="colored"
+               ng-disabled="isSavingDisabled()"
+        >{{'apply'|translate}}</button>
+    </div>
+</form>

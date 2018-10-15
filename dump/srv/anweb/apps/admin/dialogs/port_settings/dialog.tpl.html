@@ -1,0 +1,45 @@
+<div class="dialog_top_line">
+    <div class="dialog_close_mobile" ng-click="closeThisDialog()"></div>
+    <div class="dialog_title_text"  ng-bind="ngDialogData.port.name">
+    </div>
+    <div class="dialog_close" ng-click="closeThisDialog()">
+        <svg svg-icon="cross-medium"></svg>
+    </div>
+</div>
+<form name="form" novalidate class="dialog_content_wrapper">
+	<div class="dialog_content">
+           <div nw-field
+                nw-label="speed"
+           >
+               <select ng-model="data.speed"
+                       ng-options="speed | translate for speed in getSpeedList()"
+               >
+               </select>
+           </div>
+           <h4 ng-if="data.speed === 'auto'"
+               ng-bind="'lanControlAutoMode' | translate"
+           ></h4>
+          
+           <div ng-repeat="speed in getAdvertisementKeys()"
+                nw-labeled-switch
+                nw-label="{{speed}}"
+                nw-model="ngDialogData.port.advertisement[speed]"
+                ng-if="data.speed === 'auto'"
+           ></div>
+           <h4 ng-if="data.speed === 'auto'"
+               ng-bind="'flow_control_capt' | translate"
+           ></h4>
+           
+           <div nw-labeled-switch
+                nw-label="lanControlFlowSymmetric"
+                nw-model="ngDialogData.port.pause"
+                ng-if="data.speed === 'auto'"
+           ></div>
+	</div>
+    <div class="dialog_button_panel button_block right">
+        <button class="colored flat"
+                ng-click="saveSettings()"
+                ng-bind="'save'|translate"
+        ></button>
+    </div>
+</form>

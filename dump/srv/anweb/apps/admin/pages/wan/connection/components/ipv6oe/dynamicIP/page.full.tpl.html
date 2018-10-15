@@ -1,0 +1,66 @@
+<div class="col-md-6">
+	<div class="card flat minH">
+		<h4>{{'ipv6'|translate}}</h4>
+		<div nw-field 
+			 nw-label="wanIPv6OriginMethod" 
+			 ng-if="dynipv6.supported.Origin"
+		>
+			<div class="custom-select">
+				<select 
+					ng-model="dynipv6.data.Origin" 
+					ng-options="option.value as option.name | translate for option in dynipv6.select.Origin"
+				>
+				</select>
+			</div>
+		</div>
+		
+		<div nw-labeled-switch
+			 nw-label="wanIPv6GatewayIPBySlaac"
+			 nw-model="dynipv6.data.GatewayIPAddressBySlaac"
+			 ng-if="dynipv6.supported.GatewayIPAddressBySlaac"
+		></div>
+
+		<div nw-field 
+			 nw-label="wanIPv6GatewayIP" 
+			 nw-disabled="dynipv6.data.GatewayIPAddressBySlaac"
+			 nw-required="!dynipv6.data.GatewayIPAddressBySlaac"
+			 ng-if="dynipv6.supported.GatewayIPAddress"
+		>
+			<input type="text" 
+				nw-type="ipv6" 
+				ng-model="dynipv6.data.GatewayIPAddress"
+			>
+		</div>
+	
+		<div nw-labeled-switch
+			 nw-label="wanIPv6DNSAutomatically"
+			 nw-model="dynipv6.data.DNSAutomatical"
+			 ng-if="dynipv6.supported.DNSAutomatical"
+		></div>
+		
+		<div nw-field 
+			 nw-label="wanIPv6DNSServer1"
+			 nw-disabled="dynipv6.data.DNSAutomatical"
+			 nw-required
+			 ng-if="dynipv6.supported.DNSServer1"
+		>
+			<input type="text"
+				nw-type="ipv6" 
+				ng-model="dynipv6.data.DNSServer1"
+				nw-custom-valid="dynipv6.validation(value, 'DNSServer1')"
+			>
+		</div>
+
+		<div nw-field 
+			 nw-label="wanIPv6DNSServer2" 
+			 nw-disabled="dynipv6.data.DNSAutomatical"
+			 ng-if="dynipv6.supported.DNSServer2"
+		>
+			<input type="text"
+				nw-type="ipv6"
+				ng-model="dynipv6.data.DNSServer2"
+				nw-custom-valid="dynipv6.validation(value, 'DNSServer2')"
+			>
+		</div>
+	</div>
+</div>

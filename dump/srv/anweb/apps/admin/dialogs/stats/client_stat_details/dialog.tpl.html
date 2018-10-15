@@ -1,0 +1,34 @@
+<div class="dialog_top_line">
+    <div class="dialog_close_mobile" ng-click="closeThisDialog()"></div>
+    <div class="dialog_title_text">
+        {{getHeader()}}
+    </div>
+    <div class="dialog_close" ng-click="closeThisDialog()">
+        <svg svg-icon="cross-medium"></svg>
+    </div>
+</div>
+<div class="dialog_content_wrapper">
+    <div class="dialog_content">
+		<div class="mb-10" ng-if="model.hostname">
+            <div class="light" ng-bind="'statsClientsHostname' | translate"></div>
+            <div ng-bind="model.hostname"></div>
+        </div>
+        <div class="mb-10">
+            <div class="light" ng-bind="'IPAddress' | translate"></div>
+            <div ng-bind="model.ip"></div>
+        </div>
+        <div class="mb-10">
+            <div class="light" ng-bind="'stat_route_flags' | translate"></div>
+            <div ng-bind="model.flags"></div>
+        </div>
+        <div class="mb-10">
+            <div class="light" ng-bind="'MAC' | translate"></div>
+            <div ng-bind="model.mac" class="upper"></div>
+        </div>
+        <div class="mb-10">
+            <div class="light" ng-bind="'iface' | translate"></div>
+            <div ng-bind="model.name"></div>
+        </div>
+    </div>
+</div>
+<div>

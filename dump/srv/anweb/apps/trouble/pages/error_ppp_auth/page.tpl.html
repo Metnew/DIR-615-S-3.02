@@ -1,0 +1,18 @@
+<div class="trouble__header" ng-bind="'wizard_notconn' | translate"></div>
+
+<div class="trouble__text">
+	{{ 'wizard_notconn_warn1' | translate }} <br />
+	{{ 'wizard_notconn_warn2' | translate }} <br />
+	{{ 'wizard_notconn_warn3' | translate }} <br />
+</div>
+
+<div class="trouble__smallform">
+	<form nw-form name="form">
+		<div nw-field nw-label="wizard_auth_login" nw-required>
+			<input ng-model="formData.Username" type="text">
+		</div>
+		<div nw-field nw-label="wizard_auth_password" nw-required>
+			<input ng-model="formData.Password" type="text">
+		</div>
+	</form>
+</div>

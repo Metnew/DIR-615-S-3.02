@@ -1,0 +1,167 @@
+<div class="dialog_top_line">
+    <div class="dialog_close_mobile" ng-click="dialog.cancel()"></div>
+    <div class="dialog_title_text" ng-bind="dialog.data.SSID">
+    </div>
+    <div class="dialog_close" ng-click="dialog.cancel()">
+        <svg svg-icon="cross-medium"></svg>
+    </div>
+</div>
+<form nw-form name="form" novalidate ng-submit="dialog.apply()" class="dialog_content_wrapper">
+	<div class="dialog_content">
+		<div ng-if="dialog.isOpen()">
+			<div class="dialog_notice_text" ng-bind="'wifiClientOpenNetworkNotice' | translate"></div>
+			<br>
+		</div>
+		<div ng-if="dialog.isWPAEnterprice()">
+			<div class="dialog_notice_text" ng-bind="dialog.getIncorrectModeNotice()"></div>
+			<br>
+		</div>
+        <div ng-if="dialog.showSecurity('enableWEP')">
+                <div nw-labeled-switch 
+                     nw-label="wifiOpenWEP" 
+                     nw-model="dialog.data.Security.OpenWEP"
+                ></div>
+                <div nw-field 
+                     nw-label="wifiWEPType" 
+                     ng-if="dialog.data.Security.OpenWEP"
+                >
+                    <div class="custom-select">
+                        <select ng-model="dialog.data.Security.OpenWEPType" 
+                                ng-options="opt for opt in dialog.getWEPTypes()"
+                        ></select>
+                    </div>
+                </div>
+            </div>
+        <div ng-if="dialog.showSecurity('WEP')">
+            <div nw-field 
+                 nw-label="wifiWEPKeyID"
+            >
+                <div class="custom-select">
+                    <select ng-model="dialog.data.Security.DefaultKeyID" 
+                            ng-options="opt for opt in getDefaultKeysID()"
+                    ></select>
+                </div>
+            </div>
+            <div nw-labeled-switch 
+                 nw-label="wifiWEPasHEX" 
+                 nw-model="dialog.data.Security.WEPasHEX"
+            ></div>
+            <div class="note">
+                {{dialog.getWEPKeyLenMessage() | translate}}
+            </div>
+            <div nw-field 
+                 nw-label="wifiWEPKey1" 
+                 nw-required
+            >
+                <input type="password"
+                    ng-model="dialog.data.Security.WEPKey1" 
+                    nw-custom-valid="dialog.validWEPKey(wepKey)"
+                    nw-set-focus
+                    nw-eye
+                >
+            </div>
+            <div nw-field 
+                nw-label="wifiWEPKey2" 
+                nw-required
+            >
+                <input type="password"
+                    ng-model="dialog.data.Security.WEPKey2" 
+                    nw-custom-valid="dialog.validWEPKey(wepKey)"
+                    nw-eye
+                >
+            </div>
+            <div nw-field 
+                 nw-label="wifiWEPKey3" 
+                 nw-required
+            >
+                <input type="password"
+                    ng-model="dialog.data.Security.WEPKey3" 
+                    nw-custom-valid="dialog.validWEPKey(wepKey)"
+                    nw-eye
+                >
+            </div>
+            <div nw-field 
+                 nw-label="wifiWEPKey4" 
+                 nw-required
+            >
+                <input type="password"
+                    ng-model="dialog.data.Security.WEPKey4" 
+                    nw-custom-valid="dialog.validWEPKey(wepKey)"
+                    nw-eye
+                >
+            </div>
+
+        </div>
+        <div ng-if="dialog.showSecurity('PSK')">
+            <div nw-field 
+                 nw-label="wifiPSKKey" 
+                 nw-required 
+            >
+                <input type="password"
+                    ng-model="dialog.data.Security.PreSharedKey"
+                    nw-custom-valid="dialog.validPSKKey(pskKey)"
+                    nw-set-focus
+                    nw-eye
+                >
+            </div>
+            <div class="note">
+                {{'invalid_psk' | translate}}
+            </div>
+        </div>
+        <div nw-labeled-switch
+             nw-label="wifiAdvancedParams"
+             nw-model="dialog.showAdvanced"
+             class="mt-20"
+        ></div>
+		<div ng-if="dialog.showAdvanced">
+
+			<div class="row nw-static" ng-if="dialog.info.SSID">
+				<span class="title">{{"wifiSSID" | translate}}:</span>
+				<span class="info">{{dialog.info.SSID}}</span>
+			</div>
+
+			<div class="row nw-static" ng-if="dialog.info.Band">
+				<span class="title">{{"wifiFrequence" | translate}}:</span>
+				<span class="info">{{getFreq(dialog.info.Band)}}</span>
+			</div>
+
+			<div class="row nw-static" ng-if="dialog.info.SignalStrength">
+				<span class="title">{{"wifiSignalStrength" | translate}}:</span>
+				<span class="info">{{dialog.getSignalStrength(dialog.info.SignalStrength)}}</span>
+			</div>
+
+			<div class="row nw-static" ng-if="dialog.info.BSSID">
+				<span class="title">{{"BSSID" | translate}}:</span>
+				<span class="info">{{dialog.info.BSSID}}</span>
+			</div>
+
+			<div class="row nw-static" ng-if="dialog.info.Mode">
+				<span class="title">{{"wifiStandard" | translate}}:</span>
+				<span class="info">{{dialog.info.Mode}}</span>
+			</div>
+
+			<div class="row nw-static" ng-if="dialog.info.Channel">
+				<span class="title">{{"wifiChannel" | translate}}:</span>
+				<span class="info">{{dialog.info.Channel}}</span>
+			</div>
+
+			<div class="row nw-static" ng-if="dialog.info.ModeEnabled">
+				<span class="title">{{"wifiMode" | translate}}:</span>
+				<span class="info">{{getSecurityInfo(dialog.info)}}</span>
+			</div>
+
+			<div class="row nw-static last" ng-if="dialog.info.EncryptionType">
+				<span class="title">{{"wifiEncrypt" | translate}}:</span>
+				<span class="info">{{dialog.info.EncryptionType}}</span>
+			</div>
+
+		</div>
+	</div>
+    <div class="dialog_button_panel button_block right">
+        <button type="submit" 
+            ng-disabled="dialog.isWPAEnterprice()" 
+            ng-bind="(isCurrent ? 'wifiClientReconnect' : 'wifiClientConnect') | translate"
+            class="colored flat">
+        </button>
+    </div>
+</form>

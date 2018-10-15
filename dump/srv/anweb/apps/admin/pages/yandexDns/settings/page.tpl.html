@@ -1,0 +1,48 @@
+<div ng-show="ydSafeDNSWarning" class="card" alert="info">
+	{{ 'yandex_dns_safe_dns_warning' | translate }}
+</div>
+<form class="yandex settings" 
+	ng-show="!ydSafeDNSWarning"
+    unsaved-warning-form
+    unsaved-backup-status="{{!saveEnabled()}}">
+    <div class="card">
+        <div class="ya_desc mb-10">
+            <div class="ya_logo_wrapper">
+                <svg svg-icon="{{'yandex_logo_name'| translate}}" class="ya_logo"></svg>
+            </div>
+            <div class="ya_tagline">
+                <div class="ya_tagline_title" ng-bind="'navYandexDns' | translate"></div>
+                <div class="ya_tagline_desc" ng-bind="'yandex_dns_note' | translate"></div>
+                <a class="ya_tagline_about_link" href="http://dns.yandex.ru">{{'navYandexDnsAbout' | translate}}</a>
+            </div>
+        </div>
+        <div 
+            class="mt-20"
+            nw-labeled-switch 
+            nw-label="enable" 
+            nw-model="ydSettings.enabled" 
+            nw-change="toggleYandexDns()">
+        </div>
+    </div>
+    <div class="card" ng-show="ydSettings.enabled">
+        <h4 ng-bind="'yandex_dns_default_mode' | translate"></h4>
+        <div class="note" ng-bind="'yandex_dns_default_mode_note' | translate"></div>
+        <div class="radio-group"
+            nw-radio-group 
+            nw-options="ydModesAvailable"
+            nw-model="ydSettings.default">
+        </div>
+        <div class="note">{{'yandex_dns_safe_mode_note' | translate}}</div>
+        <div class="note">{{'yandex_dns_child_mode_note' | translate}}</div>
+    </div>
+    <div class="button_block center">
+        <button class="colored"
+                ng-bind="'applyButton' | translate"
+                ng-click="save()"
+                ng-disabled="!saveEnabled()"
+        ></button>
+    </div>
+</form>
+
+
+

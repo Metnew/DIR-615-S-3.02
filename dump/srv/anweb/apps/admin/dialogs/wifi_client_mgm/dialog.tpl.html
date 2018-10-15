@@ -1,0 +1,112 @@
+<div class="dialog_top_line">
+	<div class="dialog_close_mobile" ng-click="closeThisDialog()"></div>
+	<div class="dialog_title_text" ng-bind="ngDialogData.header"></div>
+	<div class="dialog_close" ng-click="closeThisDialog()">
+		<svg svg-icon="cross-medium"></svg>
+	</div>
+</div>
+<div class="dialog_content_wrapper">
+	<div class="dialog_content">
+<!--
+		<div class="mb-10" ng-repeat="param in ngDialogData.paramsList">
+			<div class="light" ng-bind="param.label | translate"></div>
+			<div nw-siglevel="ngDialogData.rule[param.key]"></div>
+		</div>
+-->
+
+		<div class="nw-static row" ng-if="client.hostname">
+			<span class="title" ng-bind="'wifiClientMgmhostname' | translate"></span>
+			<span class="info">{{ client.hostname ? client.hostname : '-' }}</span>
+		</div>
+
+		<div class="nw-static row" ng-if="!isEmpty(client.mac)">
+			<span class="title" ng-bind="'wifiClientMgmmac' | translate"></span>
+			<span class="info" ng-bind="client.mac"></span>
+		</div>
+
+		<div class="nw-static row" ng-if="!isEmpty(client.SSID)">
+			<span class="title" ng-bind="'wifiClientMgmSSID' | translate"></span>
+			<span class="info" ng-bind="client.SSID"></span>
+		</div>
+
+		<div class="nw-static row" ng-if="!isEmpty(client.rssi)">
+			<span class="title" ng-bind="'wifiClientMgmrssi' | translate"></span>
+			<span class="client-table-signal-level" svg-icon="{{ imgSignal }}"></span>
+			<span class="info" ng-bind="client.rssi"></span>
+		</div>
+
+		<div class="nw-static row" ng-if="!isEmpty(client.band)">
+			<span class="title" ng-bind="'wifiClientMgmband' | translate"></span>
+			<span class="info" ng-bind="client.bandName"></span>
+		</div>
+
+		<div class="nw-static row" ng-if="!isEmpty(client.bw)">
+			<span class="title" ng-bind="'wifiClientMgmbw' | translate"></span>
+			<span class="info" ng-bind="client.bw"></span>
+		</div>
+
+		<div class="nw-static row" ng-if="!isEmpty(client.mode)">
+			<span class="title" ng-bind="'wifiClientMgmmode' | translate"></span>
+			<span class="info" ng-bind="client.mode"></span>
+		</div>
+
+		<div class="nw-static row" ng-if="client.online != undefined">
+			<span class="title" ng-bind="'wifiClientMgmonline' | translate"></span>
+			<span class="info" nw-time="client.online"></span>
+		</div>
+
+		<div class="nw-static row" ng-if="client.idle != undefined">
+			<span class="title" ng-bind="'wifiClientMgmidle' | translate"></span>
+			<span class="info" nw-time="client.idle"></span>
+		</div>
+
+		<div class="nw-static row" ng-if="!isEmpty(client.lastTxRate)">
+			<span class="title" ng-bind="'wifiClientMgmlastTxRate' | translate"></span>
+			<span class="info" ng-bind="client.lastTxRate"></span>
+		</div>
+
+		<div class="nw-static row" ng-if="!isEmpty(client.rx_bytes) && !isEmpty(client.tx_bytes)">
+			<span class="title" ng-bind="'Rx/Tx'"></span>
+<!--
+			<span class="title" ng-bind="('wifiClientMgmrx_bytes' | translate) + '/' + ('wifiClientMgmtx_bytes' | translate)"></span>
+-->
+			<span class="info" ng-bind="client.rx_bytes + '/' + client.tx_bytes"></span>
+		</div>
+
+		<div class="nw-static row" ng-if="!isEmpty(client.psm)">
+			<span class="title" ng-bind="'wifiClientMgmpsm' | translate"></span>
+			<span class="info" ng-bind="client.psm"></span>
+		</div>
+
+		<div class="nw-static row" ng-if="!isEmpty(client.mimops)">
+			<span class="title" ng-bind="'wifiClientMgmmimops' | translate"></span>
+			<span class="info" ng-bind="client.mimops"></span>
+		</div>
+
+		<div class="nw-static row" ng-if="!isEmpty(client.stbc)">
+			<span class="title" ng-bind="'wifiClientMgmstbc' | translate"></span>
+			<span class="info" ng-bind="client.stbc"></span>
+		</div>
+
+		<div class="nw-static row" ng-if="!isEmpty(client.sgi)">
+			<span class="title" ng-bind="'wifiClientMgmsgi' | translate"></span>
+			<span class="info" ng-bind="client.sgi"></span>
+		</div>
+
+		<div class="nw-static row" ng-if="!isEmpty(client.mcs)">
+			<span class="title" ng-bind="'wifiClientMgmmcs' | translate"></span>
+			<span class="info" ng-bind="client.mcs"></span>
+		</div>
+
+		<div class="nw-static row" ng-if="!isEmpty(client.aid)">
+			<span class="title" ng-bind="'wifiClientMgmaid' | translate"></span>
+			<span class="info" ng-bind="client.aid"></span>
+		</div>
+
+		<div class="nw-static row" ng-if="!isEmpty(client.sleep)">
+			<span class="title" ng-bind="'wifiClientSleep' | translate"></span>
+			<span class="info" ng-bind="client.sleep"></span>
+		</div>
+	</div>
+</div>
+<div>

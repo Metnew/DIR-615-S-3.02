@@ -1,0 +1,114 @@
+
+<div class="nw-empty-page-state-container" ng-if="ipfilter.isActivate && ipfilter.isEmptyRules()">
+    <div class="nw-empty-page-state-image-add"></div>
+    <div class="nw-empty-page-state-title">
+        {{'ipfilterRulesEmpty' | translate}}
+    </div>
+    <div class="nw-empty-page-state-subtitle">
+        {{'ipfilterRulesEmptyMessage' | translate}}
+    </div>
+    <div class="nw-empty-page-state-buttons-panel">
+
+        <button type="button" class="colored" ng-click="ipfilter.add()">
+            {{'addButton' | translate}}
+        </button>
+
+    </div>
+</div>
+<div class="main-card" ng-if="ipfilter.isActivate && !ipfilter.isEmptyRules()">
+
+	<div class="card-content">
+
+		<div class="table"
+			 nw-table
+			 nw-table-title="ipfilterDesc"
+			 nw-table-on-add="ipfilter.add()"
+			 nw-table-on-delete="ipfilter.remove(items)"
+			 nw-table-on-edit="ipfilter.edit(item)"
+			 nw-table-selected
+			 ng-if="ipfilter.isActivate && !ipfilter.isEmptyRules()"
+		>
+			<table class="ip-filters-table">
+				<thead>
+					<tr>
+						<th ng-if="ipfilter.isSupported('id')">№</th>
+						<th ng-bind="'name' | translate"
+							ng-if="ipfilter.isSupported('name')"
+						></th>
+						<th ng-bind="'ipfilterState' | translate"
+							ng-if="ipfilter.isSupported('state')"
+						></th>
+						<th ng-bind="'ipfilterAction' | translate"
+							ng-if="ipfilter.isSupported('action')"
+						></th>
+						<th ng-bind="'ipfilterIPVersion' | translate"
+							ng-if="ipfilter.isSupported('is_ipv6')"
+						></th>
+						<th ng-bind="'ipfilterProtocol' | translate"
+							ng-if="ipfilter.isSupported('proto')"
+						></th>
+						<th nw-bind-html-compile="ipfilter.generateSourceDestName()"></th>
+<!--
+						<th ng-bind="'ipfilterSource' | translate"
+							ng-if="ipfilter.isSupported('ips') || ipfilter.isSupported('ports')"
+						></th>
+						<th ng-bind="'ipfilterDestination' | translate"
+							ng-if="ipfilter.isSupported('ipd') || ipfilter.isSupported('portd')"
+						></th>
+-->
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="item in ipfilter.rules"
+						nw-mini-table
+						nw-mini-table-caption="ipfilter.getMiniCaption(item)"
+						nw-mini-table-short="ipfilter.getMiniInfo(item)"
+					>
+						<td ng-bind="item.id"
+							class="not_break number"
+							ng-if="ipfilter.isSupported('id')"
+						></td>
+						<td ng-bind="item.name"
+							class="not_break text"
+							ng-if="ipfilter.isSupported('name')"
+						></td>
+						<td ng-if="ipfilter.isSupported('state')" class="not_break ipfilter-status">
+							<status-info
+								status="{{item.state ? 'on': 'off'}}"
+								on="{{'ipfilterStateEnabled' | translate}}"
+								off="{{'ipfilterStateDisabled' | translate}}"
+							></status-info>
+						</td>
+						<td ng-bind="item.action | translate"
+							class="not_break text"
+							ng-if="ipfilter.isSupported('action')"
+						></td>
+						<td ng-bind="item.IPVersion"
+							class="not_break text"
+							ng-if="ipfilter.isSupported('is_ipv6')"
+						></td>
+						<td ng-bind="item.proto | translate"
+							class="not_break text"
+							ng-if="ipfilter.isSupported('proto')"
+						></td>
+						<td nw-bind-html-compile="ipfilter.getSourceDestination(item)"
+							class="fixed-max-width ipfilter-ip"
+						></td>
+<!--
+						<td nw-bind-html-compile="ipfilter.getSource(item)"
+							class="filters-range"
+							ng-if="ipfilter.isSupported('ips') || ipfilter.isSupported('ports')"
+						></td>
+						<td nw-bind-html-compile="ipfilter.getDestination(item)"
+							class="filters-range"
+							ng-if="ipfilter.isSupported('ipd') || ipfilter.isSupported('portd')"
+						></td>
+-->
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+
+</div>

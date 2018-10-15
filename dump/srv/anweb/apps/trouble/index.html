@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="trouble" ng-controller="TroubleCtrl">
+<head>
+<title ng-bind="title"></title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="content-style-type" content="text/css" />
+<meta http-equiv="content-script-type" content="text/javascript" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link type="image/x-icon" rel="shortcut icon" ng-href="{{ '../general/img/favicon.ico' | nocache }}" href />
+
+<link type="text/css" rel="stylesheet" href="/trouble/css/concat?type=css&path=trouble/css_list&_=756e0c3ae71202c252fb8dc85730b6da">
+<link type="text/css" rel="stylesheet" href="/general/css/concat?type=css&path=trouble/general_css_list&_=756e0c3ae71202c252fb8dc85730b6da">
+<script type="text/javascript" src="/cookies"></script>
+<script type="text/javascript" src="/concat?type=js&path=trouble/js_list&_=756e0c3ae71202c252fb8dc85730b6da"></script>
+
+</head>
+<body>
+<div class="trouble__sky"></div>
+<div class="trouble__container">
+	<div class="trouble__logo"></div>
+	<div class="trouble__content" ng-show="isLoaded">
+		<div ui-view></div>
+		<div class="trouble__button-panel">
+			<button ng-click="onExitBtnClick()" ng-bind="'wizard_trouble_extended' | translate" ng-show="isButton('exit_to_admin')"></button>
+			<button class="colored" ng-click="onCheckBtnClick()" ng-bind="'wizard_trouble_recheck' | translate" ng-show="isButton('recheck')"></button>
+			<button class="colored" ng-click="onApplyBtnClick()" ng-bind="'apply' | translate" ng-show="isButton('apply')"></button>
+			<button class="colored" ng-click="onAwayBtnClick()" ng-bind="'wizard_tosite' | translate" ng-show="isButton('exit_to_site') && checkSiteURL()"></button>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>
+

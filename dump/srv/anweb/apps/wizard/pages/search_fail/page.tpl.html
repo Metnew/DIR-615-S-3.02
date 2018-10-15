@@ -1,0 +1,26 @@
+
+<div class="page summary">
+	
+	<div class="wrap">
+		
+		<div class="caption">
+			<div class="caption_logo"></div>
+		</div>
+		
+		<div style="padding: 30px 5px; text-align: center;">
+			{{'wizard_search_fail' | translate}}
+		</div>
+		
+		<div class="next center" ng-if="stepManger.getData().btn_exit">
+			<button class="width_auto" type="button" ng-click="stepManger.action('exit')">{{'wizard_next_extended' | translate}}</button>
+		</div>
+		
+		<div class="navs">
+			<a class="prev single" ng-click="stepManger.action('prev')" ng-if="stepManger.getData().btn_prev">
+				{{'wizard_prev' | translate}}
+			</a>
+		</div>
+		
+	</div>
+	
+</div>

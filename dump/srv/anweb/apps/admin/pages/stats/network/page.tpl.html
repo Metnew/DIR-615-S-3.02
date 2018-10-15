@@ -1,0 +1,46 @@
+<div class="card table"
+     nw-table
+     nw-table-title="nawStatsNet"
+>
+    <table>
+        <thead>
+            <tr>
+                <th ng-bind="'name' | translate"></th>
+                <th>IP - {{'routing_gateway' | translate}}</th>
+<!--
+                <th ng-bind="'MAC'"></th>
+-->
+                <th ng-bind="'Rx/Tx'"></th>
+                <th ng-bind="'rxtx_errors' | translate" ng-if="needShowRxTxErrors()"></th>
+                <th>{{'duration' | translate}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="(key, item) in networkStats"
+                nw-mini-table
+                nw-mini-table-caption="getShortTitle(item)"
+                nw-mini-table-short="item.ip | ipv6cut"
+                class="clickable"
+                ng-click="showDetails(item)"
+            >
+                <td ng-bind="item.name" ng-class="{'red': item.state == 'down', 'green': item.state == 'up'}"></td>
+                <td class="not_break">
+                    <div ng-if="isIpv4(item)">
+                        <span class="light mr-10">IPv4:</span>{{getIp4WithMask(item)}}&nbsp;&ndash;&nbsp;{{item.gw || "-"}}
+                    </div>
+                    <div ng-if="isIpv6(item)">
+                        <!-- <span class="light mr-10">IPv6:</span>{{item.ipv6 || "-"}}&nbsp;&ndash;&nbsp;{{item.gwipv6 || "-"}} -->
+                        <span class="light mr-10">IPv6:</span><span ipv6cut="getIpv6(item) || '-'"></span>&nbsp;&ndash;&nbsp;<span ipv6cut="getIpv6Gw(item) || '-'"></span>
+                    </div>
+                    <div ng-if="!isIpv4(item) && !isIpv6(item)">-</div>
+                </td>
+<!--
+                <td ng-bind="item.mac || '-'" class="not_break upper"></td>
+-->
+                <td class="not_break">{{getRxTxString(item) || '-'}}</td>
+                <td class="not_break" ng-if="needShowRxTxErrors()">{{getRxTxErrorsString(item) || '-'}}</td>
+                <td nw-time="item.duration_s" class="not_break"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

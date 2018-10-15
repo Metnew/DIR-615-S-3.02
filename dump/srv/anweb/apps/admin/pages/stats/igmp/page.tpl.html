@@ -1,0 +1,27 @@
+<div class="card_columns">
+    <div class="card table" ng-repeat="groupType in igmpGroupTypes">
+        <h4 ng-bind="groupType.name" class="pl-25 pr-15"></h4>
+        <div nw-table>
+            <table>
+                <thead>
+                    <tr>
+                        <th ng-bind="'IPAddress' | translate"></th>
+                        <th ng-bind="'iface' | translate"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in groupType.items" 
+                        nw-mini-table 
+                        nw-mini-table-caption="getShortRowTitle(item)" 
+                        nw-mini-table-short="item.name"
+                        class="hide-arrow">
+                        <td class="not_break">
+                            <div ng-repeat="ip in item.maddr">{{ip}}</div>
+                        </td>
+                        <td ng-bind="item.name"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

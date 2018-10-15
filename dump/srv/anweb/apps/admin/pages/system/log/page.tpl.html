@@ -1,0 +1,226 @@
+<div class="view-general-line">
+	<span class="view-general-tabs"
+		ng-repeat="elem in syslog.tabs.list"
+		ng-click="syslog.tabs.change(elem.state)"
+		ng-class="{'view-general-tabs--active': syslog.tabs.state == elem.state}"
+		ng-bind="elem.name | translate"
+	></span>
+</div>
+
+<div class="card card_log" ng-if="syslog.tabs.state == 'log'">
+	<div class="button_block right">
+		<button class="flat colored"
+			ng-click="syslog.updateLog()"
+			ng-bind="'refreshButton' | translate"
+		></button>
+
+		<a class="button flat" href 
+			nw-data-href="syslog.log" 
+			download="syslog.txt" 
+			ng-bind="'syslogExport' | translate"
+		></a>
+	</div>
+
+	<div class="log_wrapper">
+		<textarea readonly class="console log" id="log" style="width:100%" ng-model="syslog.log"></textarea>
+	</div>
+
+</div>
+
+<form name="form" class="css-form" novalidate
+	  ng-submit="syslog.apply()"
+	  nw-form
+	  unsaved-warning-form
+      unsaved-backup-status="{{!syslog.wasModified()}}" 
+>
+	<div class="card" ng-if="syslog.tabs.state == 'settings'">
+
+		<div class="caption_with_icon">
+			<div class="caption_icon" svg-icon="log"></div>
+			<div class="caption">
+				<h4 ng-bind="'logging' | translate"></h4>
+				<div class="caption_desc" ng-bind="'sysLogLoggingDesc' | translate"></div>
+			</div>
+		</div>
+
+		<div nw-labeled-switch
+			 nw-label="enable"
+			 nw-model="syslog.settings.Enable"
+		></div>
+
+		<div class="card_columns" ng-if="syslog.settings.Enable">
+			<div nw-field
+				 nw-label="type"
+			>
+				<select ng-model="syslog.settings.Destination"
+						ng-options="dest.value as dest.name | translate for dest in syslog.getDestinationList()"
+				></select>
+			</div>
+			<div class="note">{{ syslog.getDestinationInfo() | translate }}</div>
+
+			<div nw-field
+				 nw-label="level"
+			>
+				<select ng-model="syslog.settings.Level"
+						ng-options="level.value as level.name | translate for level in syslog.getLevels()"
+				></select>
+			</div>
+		</div>
+
+		<div class="card_columns" ng-if="syslog.isRemoteConfig()">
+			<div nw-field
+				 nw-label="server"
+				 nw-required
+			>
+				<input type="text" nw-type="host" ng-model="syslog.settings.Server">
+			</div>
+
+			<div nw-field
+				 nw-label="port"
+				 nw-required
+			>
+				<input ng-model="syslog.settings.Port"
+					   nw-number
+					   nw-min="1"
+					   nw-max="65535"
+				>
+			</div>
+		</div>
+
+		<div ng-if="syslog.usbSupported()">
+
+			<div class="empty_capt"></div>
+
+			<div class="card_columns">
+				<div class="caption_with_icon">
+					<div class="caption_icon" svg-icon="save_usb"></div>
+					<div class="caption">
+						<h4 ng-bind="'sysLogRecordToUsb' | translate"></h4>
+						<div class="caption_desc" ng-bind="'sysLogRecordToUsbDesc' | translate"></div>
+					</div>
+				</div>
+
+				<div class="card in_card">
+					<div class="syslog-usb-info">
+						<h5 ng-bind="'navStorage' | translate"></h5>
+
+						<div class="note" ng-if="!syslog.numberOfStorage()" ng-bind="'summary_usb_not_connected' | translate"></div>
+
+						<div ng-if="syslog.numberOfStorage()" ng-repeat="device in syslog.usbStorage" class="usb-device row nw-static">
+							<span svg-icon="usb" class="usb-device__icon"></span>
+							<span class="usb-device__name"> {{ device.Device }} </span>
+							<button class="flat colored"
+								ng-click="syslog.unmountUsb(device.__id)"
+								ng-bind="'storage_umount' | translate"
+							></button>
+						</div>
+
+						<div ng-if="syslog.numberOfStorage()">
+							<div class="note" nw-bind-html-compile="'sysLogOnUsbComment' | translate"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="empty"></div>
+
+			<div class="card_columns">
+				<div nw-labeled-switch
+					 nw-label="sysLogOnUsbEnable"
+					 nw-model="syslog.settings.Log2USB.Enable"
+				></div>
+			</div>
+	
+			<div class="note" ng-if="!syslog.numberOfStorage() && syslog.settings.Log2USB.Enable" ng-bind="'sysLogNeedUsbNote' | translate"></div>
+
+			<div ng-if="syslog.settings.Log2USB.Enable">
+				<div class="card_columns">
+					<div nw-field
+						 nw-label="sysLogOnUsbPath"
+						 ng-if="!syslog.storageFilebrowserSupported()"
+						 nw-disabled="!syslog.numberOfStorage()"
+						 nw-required
+					>
+						<input type="text"
+							ng-model="syslog.settings.Log2USB.Directory"
+						>						
+					</div>
+					
+					<div nw-field
+						 nw-label="sysLogOnUsbPath"
+						 nw-required
+						 ng-if="syslog.storageFilebrowserSupported()"
+						 nw-disabled="!syslog.numberOfStorage()"
+					>
+						<div class="filebrowser-dialog__path">
+							<input type="text" ng-model="syslog.settings.Log2USB.Directory">
+							<span svg-icon="search" class="button flat toggle-browser-btn"
+								ng-click="syslog.openFileBrowser(syslog.settings.Log2USB.Directory)" 
+								ng-if="syslog.numberOfStorage()"
+							></span>
+						</div>
+					</div>
+
+					<div nw-field
+						 nw-label="sysLogOnUsbNameFile"
+						 nw-required
+						 nw-disabled="!syslog.numberOfStorage()"
+						  ng-if="!syslog.needExt()"
+					>
+						<input type="text"
+							ng-model="syslog.settings.Log2USB.File"
+						>
+					</div>
+					<div nw-field
+						 nw-label="sysLogOnUsbFileName"
+						 nw-required
+						 nw-disabled="!syslog.numberOfStorage()"
+						  ng-if="syslog.needExt()"
+					>
+						<input type="text"
+							ng-model="syslog.settings.Log2USB.File"
+						>
+					</div>
+				</div>
+				<div class="note" ng-if="syslog.settings.Log2USB.InvalidPath" ng-bind="'log_invalid_usb_path_note' | translate"></div>
+				
+				<div class="card_columns">
+					<div nw-field
+						 nw-label="sysLogOnUsbMaxSizeFile"
+						 nw-required
+						 nw-disabled="!syslog.numberOfStorage()"
+					>
+						<input type="text"
+							   ng-model="syslog.settings.Log2USB.RotateSize"
+								ng-change="syslog.checkRotateSize()"
+							   nw-number	
+							   nw-min="0"
+						/>
+					</div>
+
+					<div nw-field
+						 nw-label="sysLogOnUsbMaxNumFiles"
+						 nw-required
+						 nw-disabled="(!syslog.numberOfStorage() || syslog.settings.Log2USB.RotateSize == 0)"
+					>
+
+						<input type="text"
+							   ng-model="syslog.settings.Log2USB.RotateNumber"
+							   nw-number
+							   nw-min="1"
+							   nw-max="100"
+						/>
+					</div>
+				</div>
+				<div class="note" ng-if="syslog.settings.Log2USB.RotateSize == 0" ng-bind="'info_rotate_size' | translate"></div>
+			</div>
+		</div>
+
+		<div class="button_block center no_top_margin">
+			<button type="submit" class="apply colored"
+				ng-disabled="!syslog.wasModified()"
+				ng-bind="'apply' | translate"
+			></button>
+		</div>
+	</div>
+</form>

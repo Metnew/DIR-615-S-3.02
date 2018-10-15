@@ -1,0 +1,333 @@
+
+<form name="form" class="css-form" novalidate
+      nw-form
+      ng-submit="apply()"
+      unsaved-warning-form
+      unsaved-backup-status="{{!wasModifed()}}"
+>
+    <div ng-if="isActivate && !isWDSActivate">
+
+        <div>
+            
+            <div class="view-general-line" ng-show="band.list.length > 1">
+                <span class="view-general-tabs"
+                    ng-repeat="key in band.list"
+                    ng-click="band.change(key)"
+                    ng-class="{'view-general-tabs--active': key == band.state}"
+                    ng-bind="key"
+                ></span>
+            </div>
+            <div class="card no_padding">
+            <div class="row-grid">
+                <div class="col-md-6">
+                    <div class="card flat">
+                        <div nw-labeled-switch
+                             nw-label="enable"
+                             nw-model="ep.data.Enable"
+                             nw-change="onEnable()"
+                        ></div>
+
+                        <div ng-if="ep.data.Enable">
+
+                            <div nw-labeled-switch
+                                 nw-label="wifiBroadcast24GHz"
+                                 nw-model="ap.Broadcast"
+                                 ng-if="supportedBroadcast('2.4GHz') && showBroadcast('2.4GHz')"
+								 nw-change="enableBroadcast()"
+                            ></div>
+
+                            <div nw-labeled-switch
+                                 nw-label="wifiBroadcast5GHz"
+                                 nw-model="ap5G.Broadcast"
+                                 ng-if="supportedBroadcast('5GHz') && showBroadcast('5GHz')"
+								 nw-change="enableBroadcast()"
+                            ></div>
+
+							<div ng-if="supportedMacAddressClone()">
+								<div nw-field
+									 nw-label="wifiClientMCMode"
+									 nw-disabled="disabledMacAddressClone()"
+								>
+									<div class="custom-select">
+										<select ng-model="ep.data.MacAddressClone.Mode">
+											<option value="off">{{ 'wifiClientMCModeOff' | translate }}</option>
+											<option value="auto">{{ 'wifiClientMCModeAuto' | translate }}</option>
+											<option value="manual">{{ 'wifiClientMCModeManual' | translate }}</option>
+										</select>
+									</div>
+								</div>
+
+								<div nw-field
+									 nw-label="MACaddress"
+									 ng-if="ep.data.MacAddressClone.Mode == 'manual'"
+									 nw-required
+								>
+									<input type="text"
+										ng-model="ep.data.MacAddressClone.Address"
+										nw-type="mac"
+										nw-client-list
+										nw-client-list-type="mac"
+										nw-client-list-source="all wifi"
+										nw-client-list-direction="wifi"
+									>
+								</div>
+
+								<div class="note" ng-if="ep.data.MacAddressClone.Mode == 'auto'">
+									{{'wifiClientMCModeAutoCommite' | translate}}
+								</div>
+
+								<div class="note" ng-if="disabledMacAddressClone()">
+									{{'wifiClientMCDisabledCommite' | translate}}
+								</div>
+								
+							</div>
+
+                            <div nw-field nw-label="wifiConnectMode">
+                                <select ng-model="ep.ConnectMode">
+                                    <option value="select">{{ 'wifiSelectNetwork' | translate }}</option>
+                                    <option value="manual">{{ 'wifiSelectHideNetwork' | translate }}</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="button_block no_padding" ng-if="!ep.data.Enable || ep.ConnectMode == 'select'">
+                            <button type="submit" class="apply colored"
+                                ng-disabled="!wasModifed()"
+                                ng-bind="'apply' | translate"
+                            ></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="summary card flat" ng-if="ep.data.Enable && ep.data.SSID && ep.data.SSID != ''">
+                        <div class="title_card" ng-bind="'wifiClientConnInfo' | translate"></div>
+
+                        <div class="row nw-static">
+                            <span class="title">{{'status' | translate}}:</span>
+                            <span class="info"> {{(ep.Connect ? 'wifiClientConnected' : 'wifiClientNotConnected') | translate }}</span>
+                            <span class="icon status-circle {{ep.Connect ? 'on': 'off'}}"></span>
+                        </div>
+
+                        <div class="row nw-static" ng-if="ep.data.SSID != ''">
+                            <span class="title">{{'wifiSSID' | translate}}:</span>
+                            <span class="info">{{ep.data.SSID}}</span>
+                        </div>
+
+                        <div class="row nw-static" ng-if="ep.data.BSSID != ''">
+                            <span class="title">{{'BSSID' | translate}}:</span>
+                            <span class="info">{{ep.data.BSSID}}</span>
+                        </div>
+
+                        <div class="row nw-static last">
+                            <span class="title">{{'Security' | translate}}:</span>
+                            <span class="info">{{getSecurityInfo(ep.data.Security)}}</span>
+                            <span class="icon">
+                                <img class="wifi-locked-icon" src="/general/img/icon-lock.png" ng-if="ep.data.Security.EncryptionType != 'NONE'">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+              <div class="row-grid">
+                <div class="col-md-6">
+                    <div ng-if="ep.data.Enable && ep.ConnectMode == 'manual'" class="card flat">
+
+                        <div nw-field nw-label="wifiSSID" nw-required>
+                            <input type="text" ng-model="ep.data.SSID" nw-type="notCyrillicChar">
+                        </div>
+
+                        <div nw-field nw-label="wifiBSSID">
+                            <input type="text" ng-model="ep.data.BSSID" nw-type="mac">
+                        </div>
+
+                        <div nw-field nw-label="wifiMode">
+                            <select ng-model="ep.data.Security.ModeEnabled" ng-options="option.value as option.name | translate for option in supportedModes()">
+                            </select>
+                        </div>
+
+                        <div ng-if="showSecurity('enableWEP')">
+
+                            <div nw-labeled-switch
+                                 nw-label="wifiOpenWEP"
+                                 nw-model="ep.data.Security.OpenWEP"
+                            ></div>
+
+                            <div nw-field
+                                 nw-label="wifiWEPType"
+                                 ng-if="ep.data.Security.OpenWEP"
+                            >
+                                <div class="custom-select">
+                                    <select ng-model="ep.data.Security.OpenWEPType"
+                                            ng-options="opt for opt in getWEPTypes()"
+                                    ></select>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div ng-if="showSecurity('WEP')">
+
+                            <div nw-field
+                                 nw-label="wifiWEPKeyID"
+                            >
+                                <div class="custom-select">
+                                    <select ng-model="ep.data.Security.DefaultKeyID"
+                                            ng-options="opt for opt in getDefaultKeysID()"
+                                    ></select>
+                                </div>
+                            </div>
+
+                        <div nw-labeled-switch
+                             nw-label="wifiWEPasHEX"
+                             nw-model="ep.data.Security.WEPasHEX"
+                        ></div>
+                        <div class="note">
+                            {{getWEPKeyLenMessage() | translate}}
+                        </div>
+
+                        <div nw-field
+                             nw-label="wifiWEPKey1"
+                             nw-required
+                        >
+                            <input type="password"
+                                ng-model="ep.data.Security.WEPKey1"
+                                nw-custom-valid="validWEPKey(wepKey)"
+                                nw-eye
+                            >
+                        </div>
+
+                        <div nw-field
+                            nw-label="wifiWEPKey2"
+                            nw-required
+                        >
+                            <input type="password"
+                                ng-model="ep.data.Security.WEPKey2"
+                                nw-custom-valid="validWEPKey(wepKey)"
+                                nw-eye
+                            >
+                        </div>
+
+                        <div nw-field
+                             nw-label="wifiWEPKey3"
+                             nw-required
+                        >
+                            <input type="password"
+                                ng-model="ep.data.Security.WEPKey3"
+                                nw-custom-valid="validWEPKey(wepKey)"
+                                nw-eye
+                            >
+                        </div>
+
+                        <div nw-field
+                             nw-label="wifiWEPKey4"
+                             nw-required
+                        >
+                            <input type="password"
+                                ng-model="ep.data.Security.WEPKey4"
+                                nw-custom-valid="validWEPKey(wepKey)"
+                                nw-eye
+                            >
+                        </div>
+
+                        </div>
+
+                    <div ng-if="showSecurity('PSK')">
+                        <div nw-field
+                             nw-label="wifiPSKKey"
+                             nw-required
+                        >
+                            <input type="password"
+                                ng-model="ep.data.Security.PreSharedKey"
+                                nw-custom-valid="validPSKKey(pskKey)"
+                                nw-eye
+                            >
+                        </div>
+                        <div class="note">
+                            {{'invalid_psk' | translate}}
+                        </div>
+
+                            <div nw-field
+                                 nw-label="wifiWPAEncryption"
+                                 nw-required
+                            >
+                                <div class="custom-select">
+                                    <select ng-model="ep.data.Security.EncryptionType"
+                                        ng-options="opt for opt in getEncrypTypes()"
+                                    ></select>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-if="ep.data.Enable && ep.ConnectMode == 'select'">
+                <div class="row-grid">
+                    <div class="card flat"
+                         alert="info"
+                         ng-if="hasWarning('radio_disabled')"
+                    >
+                        <div nw-bind-html-compile="'wifiClientRadioDisableWarning' | translate"></div>
+                    </div>
+                </div>
+
+                <div class="row-grid">
+                    <div class="card flat"
+                         alert="info"
+                         ng-if="hasWarning('radio_24GHz_disabled') && showBroadcast('2.4GHz')"
+                    >
+                        <div nw-bind-html-compile="'wifiClientRadio24GHzDisableWarning' | translate"></div>
+                    </div>
+                </div>
+
+                <div class="row-grid">
+                    <div class="card flat"
+                         alert="info"
+                         ng-if="hasWarning('radio_5GHz_disabled') && showBroadcast('5GHz')"
+                    >
+                        <div nw-bind-html-compile="'wifiClientRadio5GHzDisableWarning' | translate"></div>
+                    </div>
+                </div>
+
+                <div class="button_block left" ng-if="hasWarning()">
+                    <button type="button" class="colored"
+                            ng-click='enableRadio("2.4GHz")'
+                            ng-bind="'wifiEnableRadioButton' | translate"
+                            ng-if="hasWarning('radio_disabled')"
+                    ></button>
+                    <button type="button" class="colored"
+                            ng-click='enableRadio("2.4GHz")'
+                            ng-bind="'wifiEnableRadio24GHzButton' | translate"
+                            ng-if="hasWarning('radio_24GHz_disabled') && showBroadcast('2.4GHz')"
+                    ></button>
+                    <button type="button" class="colored"
+                            ng-click='enableRadio("5GHz")'
+                            ng-bind="'wifiEnableRadio5GHzButton' | translate"
+                            ng-if="hasWarning('radio_5GHz_disabled') && showBroadcast('5GHz')"
+                    ></button>
+                </div>
+
+                <div ui-view="table@client"></div>
+
+            </div>
+
+            <div class="button_block left" ng-if="ep.data.Enable && ep.ConnectMode == 'manual'">
+                <button type="submit" class="apply colored"
+
+                    ng-disabled="!wasModifed()"
+                    ng-bind="'apply' | translate"
+                ></button>
+            </div>
+        </div>
+
+    </div>
+    <div class="card" alert="info" ng-if="isWDSActivate">
+		{{ 'wifiClientWDSWarning' | translate }}
+    </div>
+    </div>
+</form>
+

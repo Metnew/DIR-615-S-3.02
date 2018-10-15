@@ -1,0 +1,49 @@
+<div class="card" ng-if="lanForm.interface.isShowCard()">
+	
+	<div ng-if="lanForm.action == 'add'">
+		<div nw-field 
+			 nw-label="lanName" 
+			 nw-required
+		>
+			<input type="text" ng-model="lanForm.interface.data.Name">
+		</div>
+		
+		<div nw-field 
+			 nw-label="VLAN"
+			 ng-if="lanForm.interface.isShowList()"
+		>
+			<div class="custom-select">
+				<select nw-not-dirty 
+					ng-model="lanForm.interface.state"
+					ng-options="option.value as option.description | translate for option in lanForm.interface.listNew"
+					ng-change="lanForm.interface.change()"
+				></select>
+			</div>
+		</div>
+
+		<div nw-field 
+			 nw-label="lanInterface"
+			 ng-if="lanForm.interface.isShowVlan() && lanForm.interface.isShowInput()"
+		>
+			<input disabled type="text" value="{{ lanForm.interface.data.__vlanName }}">
+		</div>
+
+	</div>
+	
+	<div ng-if="lanForm.action == 'edit'">
+		<div nw-field 
+			 nw-label="lanName" 
+			 nw-required
+		>
+			<input disabled type="text" value="{{lanForm.interface.data.Name}}">
+		</div>
+
+		<div nw-field 
+			 nw-label="VLAN"
+			 ng-if="lanForm.interface.isShowVlan()"
+		>
+			<input disabled type="text" value="{{lanForm.interface.data.__vlanName}}">
+		</div>
+	</div>
+
+</div>

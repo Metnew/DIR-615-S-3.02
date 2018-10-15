@@ -1,0 +1,44 @@
+<div class="card table page_sessions" 
+    nw-table 
+    nw-table-title="navStatsSessions"
+    nw-table-on-custom-event="onRefreshClick()"
+	nw-table-custom-event-name="refreshButton"
+    nw-table-limit
+    >
+    <nw-progress-bar pb-type="'indeter'" pb-hidden="!loading"></nw-progress-bar>
+    <table> 
+        <thead>
+            <tr>
+                <th>
+                    {{'protocol' | translate}}
+                </th>
+                <th>
+                    {{'sourseIPAddr' | translate}}
+                </th>
+                <th>
+                    {{'ipfilterSourcePort' | translate}}
+                </th>
+                <th>
+                    {{'destIPAddr' | translate}}
+                </th>
+                <th>
+                    {{'ipfilterDestinationPort' | translate}}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in sessionStats" 
+            nw-mini-table
+            nw-mini-table-caption="getShortRowTitle(item)"
+            nw-mini-table-short="item.protocol"
+            class="hide-arrow"
+            >
+                <td ng-bind="item.protocol"></td>
+                <td ng-bind="item.sourceIp"></td>
+                <td ng-bind="item.sourcePort"></td>
+                <td ng-bind="item.destIp"></td>
+                <td ng-bind="item.destPort"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

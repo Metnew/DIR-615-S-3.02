@@ -1,0 +1,63 @@
+<div nw-labeled-switch
+	 nw-label="wanPppNoAuth"
+	 nw-model="ppp.data.WithoutAuth"
+	 nw-change="ppp.onChangeUsePassword()"
+	 ng-if="ppp.isShow('WithoutAuth')"
+></div>
+
+<div nw-field 
+	 nw-label="wanPppUsername" 
+	 nw-required="ppp.isRequired('Username')"
+	 ng-if="ppp.isShow('Username')"
+>
+	<input type="text" 
+		nw-type="notCyrillicChar" 
+		ng-model="ppp.data.Username"
+	>
+</div>
+
+<div nw-field 
+	 nw-label="wanPppPassword" 
+	 nw-required="ppp.isRequired('Password')" 
+	 nw-disabled="ppp.isDisabled('Password')"
+	 ng-if="ppp.isShow('Password')" 
+>
+	<input type="password" 
+		nw-type="pppPassword"
+		nw-eye
+		ng-model="ppp.data.Password"
+	>
+</div>
+
+<div nw-field 
+	 nw-label="wanServiceName" 
+	 ng-if="ppp.isShow('ServiceName') && (ppp.type != 'pptp')"
+>
+	<input type="text"
+		ng-model="ppp.data.ServiceName"
+	>
+</div>
+
+<div nw-field 
+	 nw-label="wanVPNServiceName" 
+	 nw-required
+	 ng-if="ppp.isShow('ServiceName') && (ppp.type == 'pptp')"
+>
+	<input type="text" 
+		nw-type="host" 
+		ng-model="ppp.data.ServiceName"
+	>
+</div>
+
+<div nw-field 
+	 nw-label="wanIPv6OriginMethod" 
+	 ng-if="ppp.isShow('Origin')"
+>
+	<div class="custom-select">
+		<select 
+			ng-model="ppp.data.Origin" 
+			ng-options="option.value as option.name | translate for option in ppp.select.Origin"
+		>
+		</select>
+	</div>
+</div>

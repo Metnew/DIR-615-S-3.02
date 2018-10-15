@@ -1,0 +1,11 @@
+<div class="col-md-6"  ng-if="wan.mode == 'full'">
+	<div class="card flat minH">
+		<div class="title_card" ng-bind="'misc' | translate"></div>
+		<div ng-repeat="info in flagsInfo" ng-if="flags.supported[info.name]">
+			<div nw-labeled-switch
+				nw-label="{{info.description}}"
+				nw-model="flags.data[info.name]"
+			></div>
+		</div>
+	</div>
+</div>

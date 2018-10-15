@@ -1,0 +1,112 @@
+
+<div class="nw-empty-page-state-container" ng-if="vservers.isActivate && vservers.isEmptyRules()">
+    <div class="nw-empty-page-state-image-add"></div>
+    <div class="nw-empty-page-state-title">
+        {{'vserversRulesEmpty' | translate}}
+    </div>
+    <div class="nw-empty-page-state-subtitle">
+        {{'vserversRulesEmptyMessage' | translate}}
+    </div>
+    <div class="nw-empty-page-state-buttons-panel">
+
+        <button type="button" class="colored" ng-click="vservers.add()">
+            {{'addButton' | translate}}
+        </button>
+
+    </div>
+</div>
+
+<div class="main-card page_vservers_info" ng-if="vservers.isActivate && !vservers.isEmptyRules()">
+    <div class="row-grid">
+        <div class="col-md-12">
+            <div class="card flat"
+                 alert="info"
+                 ng-if="vservers.intefracesEmpty">
+                <div> {{'vserversEmptyInterfaces' | translate}}: {{vservers.intefracesEmpty}}</div>
+                <div>{{'vserversCantUseInterface' | translate}}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-grid">
+        <div class="col-md-12">
+            <div class="card-content">
+            <div class="table"
+                 nw-table
+                 nw-table-title="vserversDesc"
+                 nw-table-on-add="vservers.add()"
+                 nw-table-on-delete="vservers.remove(items)"
+                 nw-table-on-edit="vservers.edit(item)"
+                 nw-table-selected
+                 ng-if="vservers.isActivate && !vservers.isEmptyRules()"
+            >
+                <table>
+                    <thead>
+                        <tr>
+                            <th ng-bind="'vserversName' | translate"
+                                ng-if="vservers.isSupported('Name')"
+                            ></th>
+                            <th ng-bind="'vserversInterface' | translate"
+                                ng-if="vservers.isSupported('Source.Iface')"
+                            ></th>
+                            <th ng-bind="'vserversProtocol' | translate"
+                                ng-if="vservers.isSupported('Proto')"
+                            ></th>
+                            <th ng-bind="'vserversPrivate' | translate"
+								ng-if="vservers.isSupported('Dest.Ports') || vservers.isSupported('Dest.IP')"
+                            ></th>
+                            <th ng-bind="'vserversPublic' | translate"
+								ng-if="vservers.isSupported('Source.IP') || vservers.isSupported('Source.Ports')"
+                            ></th>
+                            <th ng-bind="'vserversNATLoopback' | translate"
+                                ng-if="vservers.isSupported('SNAT')"
+                            ></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in vservers.config.Rules"
+                            nw-mini-table
+                            nw-mini-table-caption="item.name"
+                            nw-mini-table-short="vservers.getMiniInfo(item)"
+                        >
+                            <td ng-bind="item.Name"
+                                ng-if="vservers.isSupported('Name')"
+                                class="row_truncate name"
+                                title="{{item.Name}}"
+                            ></td>
+                            <td ng-bind="vservers.getIfaceName(item.Source.Iface)"
+                                ng-if="vservers.isSupported('Source.Iface')"
+                                class="row_truncate iface"
+                                title="{{vservers.getIfaceName(item.Source.Iface)}}"
+                            ></td>
+                            <td ng-bind="item.Proto"
+                                ng-if="vservers.isSupported('Proto')"
+                                class="row_proto"
+                            ></td>
+							<td class="row_ipv4" ng-if="vservers.isSupported('Dest.Ports') || vservers.isSupported('Dest.IP')">
+								<div ng-if="vservers.isSupported('Dest.IP')">
+									<span class="light">{{ 'IP' }}:</span>&nbsp;<span ng-bind="vservers.getIP(item.Dest.IP)"></span>
+								</div>
+								<div ng-if="vservers.isSupported('Dest.Ports')">
+									<span class="light">{{ 'port' | translate }}:</span>&nbsp;<span nw-bind-html-compile="vservers.joinPorts(item.Dest.Ports)"></span>
+								</div>
+							</td>
+							<td class="row_ipv4" ng-if="vservers.isSupported('Source.IP') || vservers.isSupported('Source.Ports')">
+								<div ng-if="vservers.isSupported('Source.IP')">
+									<span class="light">{{ 'IP' }}:</span>&nbsp;<span class="ipv4">{{vservers.getIP(item.Source.IP)}}</span>
+								</div>
+								<div ng-if="vservers.isSupported('Source.Ports')">
+									<span class="light">{{ 'port' | translate }}:</span>&nbsp;<span nw-bind-html-compile="vservers.joinPorts(item.Source.Ports)"></span>
+								</div>
+							</td>
+                            <td class="not_break text" ng-if="vservers.isSupported('SNAT')"
+                                nw-bind-html-compile="vservers.getNATLoopbackStatus(item.SNAT)"
+                            ></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>

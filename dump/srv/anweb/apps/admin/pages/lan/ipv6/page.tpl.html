@@ -1,0 +1,188 @@
+<div class="row-grid" ng-if="ipv6.isActive">
+
+	<div ng-include="'/admin/pages/lan/interface/page.list.tpl.html'"
+		 ng-controller="lanInterfaceListCtrl"
+	></div>
+	
+	<div class="col-md-6">
+		<div class="card flat">
+			<h4 ng-bind="'lanIPv6Caption' | translate"></h4>
+			<div nw-field 
+				 nw-label="lanIPv6AddressingMode"
+				 ng-if="ipv6.supported.AddressingMode"
+			>
+				<div class="custom-select">
+					<select nw-not-dirty 
+						ng-model="ipv6.data.AddressingMode" 
+						ng-options="option.value as option.name | translate for option in ipv6.addressingModes"
+					></select>
+				</div>
+			</div>
+			<div nw-field 
+				 nw-label="lanIPv6Address" 
+				 nw-required
+				 nw-disabled="ipv6.staticIP.isDisabled()"
+			>
+				<input type="text" 
+					ng-model="ipv6.staticIP.basic.data.Address"
+					nw-custom-valid="ipv6.staticIP.validation(value, 'Address')"
+				>
+			</div>
+
+			<div nw-field 
+				 nw-label="lanIPPrefix" 
+				 nw-required
+				 nw-disabled="ipv6.staticIP.isDisabled()"
+			>
+				<input type="text" 
+					ng-model="ipv6.staticIP.basic.data.Prefix"
+					nw-custom-valid="ipv6.staticIP.validation(value, 'Prefix')"
+				>
+			</div>
+
+			<div nw-field
+				 nw-label="lanIPv6GatewayIP"
+				 nw-disabled="true"
+				 ng-if="ipv6.supported.StaticIP.GatewayAddress && ipv6.data.AddressingMode == 'Dynamic'"
+			>
+				<input type="text"
+					nw-type="ipv6"
+					ng-model="ipv6.staticIP.basic.data.GatewayAddress"
+				>
+			</div>
+
+			<div nw-field
+				 nw-label="lanIPv6GatewayIP"
+				
+				 ng-if="ipv6.supported.StaticIP.GatewayAddress && ipv6.data.AddressingMode == 'Static'"
+			>
+				<input type="text"
+					nw-type="ipv6"
+					ng-model="ipv6.staticIP.basic.data.GatewayAddress"
+					nw-custom-valid="ipv6.staticIP.validation(value, 'GatewayAddress')"
+				>
+			</div>
+		</div>
+	</div>
+	
+	<div class="col-md-6">
+		<div class="card flat" ng-if="ipv6.supported.DHCP.__base">
+			<h4 ng-bind="'lanIPv6ConfigAddressing' | translate"></h4>
+			
+				<div nw-field 
+					 nw-label="lanIPv6DHCPMode"
+					 ng-if="ipv6.dhcp.server.isShow('AutoconfigurationMode')"
+				>
+					<div class="custom-select">
+						<select 
+							ng-model="ipv6.dhcp.data.Server.AutoconfigurationMode" 
+							ng-options="option.value as (option.name | translate) for option in ipv6.dhcp.autoconfigurationModes"
+						>
+						</select>
+					</div>
+				</div>
+				<div ng-if="ipv6.dhcp.data.Server.AutoconfigurationMode != 'Disable'">
+					<div nw-field 
+						 nw-label="lanIPv6DHCPMinAddress" 
+						 nw-required
+						 ng-if="ipv6.dhcp.server.isShow('MinAddress')"
+						 nw-disabled="ipv6.dhcp.server.isDisabled('MinAddress')"
+					>
+						<input type="text"
+							ng-model="ipv6.dhcp.data.Server.MinAddress"
+							nw-custom-valid="ipv6.dhcp.validationOnSubmit(value, 'MinAddress')"
+						>
+					</div>
+					<div nw-field 
+						 nw-label="lanIPv6DHCPMaxAddress" 
+						 nw-required
+						 ng-if="ipv6.dhcp.server.isShow('MaxAddress')"
+						 nw-disabled="ipv6.dhcp.server.isDisabled('MaxAddress')"
+					>
+						<input type="text" 
+							ng-model="ipv6.dhcp.data.Server.MaxAddress"
+							nw-custom-valid="ipv6.dhcp.validationOnSubmit(value, 'MaxAddress')"
+						>
+					</div>
+					<div nw-field 
+						 nw-label="lanDHCPLeaseTime" 
+						 nw-required
+						 ng-if="ipv6.dhcp.server.isShow('LeaseTime')"
+						 nw-disabled="ipv6.dhcp.server.isDisabled('LeaseTime')"
+					>
+						<input nw-number
+							nw-min="2" 
+							ng-model="ipv6.dhcp.data.Server.LeaseTime"
+						>
+					</div>
+					
+					<div class="checkbox-field" 
+						 nw-checkbox 
+						 nw-label="lanDHCPDNSRelay" 
+						 ng-if="ipv6.dhcp.server.isShow('DNSRelay')"
+						 nw-disabled="ipv6.dhcp.server.isDisabled('DNSRelay')"
+					>
+						<input type="checkbox" ng-model="ipv6.dhcp.data.Server.DNSRelay">
+					</div>
+					
+					<div class="checkbox-field" 
+						 nw-checkbox 
+						 nw-label="lanDHCPv6RADVD" 
+						 ng-if="ipv6.dhcp.server.isShow('RADVD')"
+						 nw-disabled="ipv6.dhcp.server.isDisabled('RADVD')"
+					>
+						<input type="checkbox" ng-model="ipv6.dhcp.data.Server.RADVD">
+					</div>
+				</div>
+			</div>
+		</div>
+
+</div>
+
+<div class="row-grid" ng-if="ipv6.isActive && ipv6.dhcp.staticAddresses.supported && ipv6.dhcp.data.Server.AutoconfigurationMode == 'Statefull'">
+
+	<div class="col-md-12">
+
+		<div class="card flat table"
+			 nw-table
+			 nw-table-empty-status="ipv4.dhcp.staticAddresses.isEmpty()"
+			 nw-table-empty-title="lanDHCPv6StaticAddressCaption"
+			 nw-table-empty-subtitle="lanDHCPStaticAddressEmptyRulesMessage"
+			 nw-table-empty-button="addButton"
+			 nw-table-empty-button-click="ipv6.dhcp.staticAddresses.onAdd()"
+			 nw-table-empty-button2="lanDHCPStaticAddressSelectClients"
+			 nw-table-empty-button2-click="ipv6.dhcp.staticAddresses.onSelectClients()"
+
+			 nw-table-title="lanDHCPv6StaticAddressCaption"
+			 nw-table-on-add="ipv6.dhcp.staticAddresses.onAdd()"
+			 nw-table-on-edit="ipv6.dhcp.staticAddresses.onEdit(item, instance)"
+			 nw-table-on-delete="ipv6.dhcp.staticAddresses.onDelete(items, instances)"
+			 nw-table-on-custom-event="ipv6.dhcp.staticAddresses.onSelectClients()"
+			 nw-table-custom-event-name="lanDHCPStaticAddressSelectClients"
+			 nw-table-selected
+		>
+			<table class="nw-mini-table">
+				<thead>
+					<tr>
+						<th ng-bind="'lanDHCPStaticAddressIPaddress' | translate"></th>
+						<th ng-bind="'lanDHCPStaticAddressMACAddress' | translate"></th>
+						<th ng-bind="'lanDHCPStaticAddressHostname' | translate"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="(key, item) in ipv6.dhcp.staticAddresses.list"
+						nw-mini-table
+						nw-mini-table-caption="(item.Hostname)?item.Hostname:item.IPAddress"
+						nw-mini-table-short="item.MACAddress"
+					>
+						<td ng-bind="item.IPAddress"></td>
+						<td ng-bind="item.MACAddress"></td>
+						<td ng-bind="(item.Hostname) ? item.Hostname : '-'"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+
+</div>

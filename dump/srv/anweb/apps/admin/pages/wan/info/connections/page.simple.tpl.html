@@ -1,0 +1,64 @@
+<div nw-empty-state
+     nw-empty-state-title="wanConnectionsListEmpty"
+     nw-empty-state-subtitle="wanConnectionsListEmptyMessage"
+     nw-empty-state-button="addButton"
+     nw-empty-state-button-click="wan.info.connections.add()"
+     ng-if="wan.info.connections.isEmpty() && wan.info.connections.isMakeList" 
+>
+</div>
+
+<div class="card no_padding wan_simple"
+     ng-if="!wan.info.connections.isEmpty()"
+>
+	<div class="row-grid">
+		<div class="{{ wan.info.connections.isSingle() ? 'col-md-12' : 'col-md-6' }}"
+			ng-repeat="connection in wan.info.connections.list"
+			ng-class-odd="'odd'"
+		>
+			<div class="card flat">
+				<div class="title_card" ng-bind="connection.actualType | translate"></div>
+
+				<div class="title_buttons">
+					<button class="colored flat "
+						ng-bind="'edit' | translate"
+						ng-click="wan.info.connections.edit(connection)"
+					></button>
+					<button class="colored flat"
+						ng-bind="'restartConn' | translate"
+						ng-click="wan.info.connections.reconnectItem(connection)"
+						ng-disabled="connection._reconnecting"
+					></button>
+				</div>
+				
+				<div class="row nw-static">
+					<span class="title">{{ 'status' | translate }}:</span>
+					<span class="info" ng-show="!connection._reconnecting">{{ connection.status().statusText | translate }}</span>
+					<span class="icon status-circle {{ connection.status().status }}" ng-show="!connection._reconnecting"></span>
+					<div class="circular_spinner_mini svg_spinner" ng-show="connection._reconnecting" style="margin: 0;">
+						<svg class="mini_circular" viewBox="16px 16px 16px 16px">
+							<circle class="mini_path" cx="8px" cy="8px" r="5px" fill="none" stroke-width="2" stroke-miterlimit="10" />
+						</svg>
+					</div>
+				</div>
+				
+				<div class="row nw-static" ng-repeat="row in connection.rows" ng-hide="!!row.hide">
+					<span class="title">{{row.name | translate}}:</span>
+					<span ng-if="row.ipv6cut && row.value" class="info" ipv6cut="row.value"></span>
+					<span ng-if="!row.ipv6cut" class="info" >{{ row.value }}</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<div class="button_block left">
+				<button class="colored"
+					ng-bind="'changeCfg' | translate"
+					ng-click="wan.info.connections.reconfigure()"
+				></button>
+				<button class="colored flat"
+					ng-bind="'wanAdvancedMode' | translate"
+					ng-click="wanCore.mode.setAdvanced(true)"
+				></button>
+			</div>
+		</div>
+	</div>
+</div>

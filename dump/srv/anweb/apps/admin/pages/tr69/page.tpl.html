@@ -1,0 +1,126 @@
+<form nw-form
+      unsaved-warning-form
+      unsaved-backup-status="{{!wasModified()}}"
+      ng-submit="save()"
+      name="tr69Form"
+      class="tr69_form"
+>
+    <div class="card_columns">
+        <div class="card">
+            <h4 ng-bind="'tr69_client' | translate"></h4>
+            
+            <div nw-field
+                 nw-label="tr69_interface"
+            >
+                <select ng-model="tmp.iface"
+                        ng-options="iface | translate for iface in ifacesList"
+                >
+                </select>
+            </div>
+
+            <div nw-labeled-switch
+                 nw-label="tr69_enable"
+                 nw-model="tr69.Enable"
+                 ng-if="!BRCM_CMS_BUILD"
+            ></div>
+        </div>
+        
+        <div class="card">
+            <h4 ng-bind="'tr69_acs' | translate"></h4>
+
+            <div nw-field
+                 nw-label="tr69_acs_url"
+            >
+                <input nw-type="url" ng-model="tr69.AcsURL">
+            </div>
+
+            <div nw-field
+                 nw-label="tr69_acs_user"
+            >
+                <input ng-model="tr69.AcsUser">
+            </div>
+
+            <div nw-field
+                 nw-label="tr69_acs_pwd"
+            >
+                <input type="password"
+                    ng-model="tr69.AcsPwd"
+                    nw-eye>
+            </div>
+        </div>
+
+        <div class="card" ng-if="DLINK_TR069CLIENT_USE_DSCP_SOCKOPT">
+            <h4 ng-bind="'tr69_network' | translate"></h4>
+
+            <div nw-field
+                 nw-label="tr69_dscp_mark"
+            >
+                <select ng-model="tr69.DSCPMark"
+                        ng-options="option.value as (option.name | translate) for option in getDSCPMarkList()"
+                ></select>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h4 ng-bind="'tr69_inform' | translate"></h4>
+            
+            <div nw-labeled-switch
+                 nw-label="tr69_inform_enable"
+                 nw-model="tr69.InformEnable"
+            ></div>
+                        
+            <div nw-field
+                 nw-label="tr69_interval"
+            >
+                <input nw-number
+                       nw-number-type="string"
+                       nw-min="0"
+                       ng-model="tr69.InformInterval"
+                >
+            </div>
+        </div>
+        
+        <div class="card">
+            <h4 ng-bind="'tr69_connection' | translate"></h4>
+
+            <div nw-field
+                 nw-label="tr69_conn_user"
+            >
+                <input ng-model="tr69.ConnReqUser">
+            </div>
+
+            <div nw-field
+                 nw-label="tr69_conn_pwd"
+            >
+                <input type="password"
+                    ng-model="tr69.ConnReqPwd"
+                    nw-eye>
+            </div>
+
+            <div nw-field
+                 nw-label="tr69_conn_port"
+                 ng-if="!BCM"
+            >
+                <input nw-number
+                       nw-min="1"
+                       nw-max="65535"
+                       ng-model="tr69.ConnReqPort"
+                >
+            </div>
+
+            <div nw-field
+                 nw-label="tr69_conn_path"
+                 ng-if="!BCM"
+            >
+                <input ng-model="tr69.ConnReqPath">
+            </div>            
+        </div>
+    </div>
+
+    <div class="button_block center">
+        <button type="submit"
+               class="colored"
+               ng-disabled="!wasModified()"
+        >{{'apply' | translate}}</button>
+    </div>
+</form>

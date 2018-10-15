@@ -1,0 +1,205 @@
+<div class="card no_padding">
+	<form name="form" class="css-form" novalidate onsubmit="return false;"
+		nw-form
+		ng-submit="dosSettings.apply()"
+		unsaved-warning-form
+		unsaved-backup-status="{{!dosSettings.isChange()}}"
+	>
+
+		<div ng-if="dosSettings.isActivate">
+
+			<div class="row-grid">
+				<div class="col-md-6">
+					<div class="card flat">
+						<div nw-labeled-switch
+							 nw-label="enable"
+							 nw-model="dosSettings.data.enable"
+						></div>
+						<div class="note" ng-bind="'dosEnableWarning' | translate"  ng-if="dosSettings.data.enable"></div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row-grid" ng-if="dosSettings.data.enable">
+				<div class="col-md-6">
+					<div class="card flat">
+
+						<div class="title_card" ng-bind="'dosPerSourceTitle' | translate"></div>
+
+						<div nw-labeled-switch
+							 nw-label="TCP/SYN"
+							 nw-model="dosSettings.data.ipFloodSYN"
+						></div>
+						<div nw-field
+							 nw-label="dosPerSourceSYNThres"
+							 ng-if="dosSettings.data.ipFloodSYN"
+							 nw-required
+						>
+							<input nw-number
+								   nw-min="1"
+								   ng-model="dosSettings.data.perSourceSYNThres"
+							>
+						</div>
+
+						<div nw-labeled-switch
+							 nw-label="TCP/FIN"
+							 nw-model="dosSettings.data.ipFloodFIN"
+						></div>
+						<div nw-field
+							 nw-label="dosPerSourceFINThres"
+							 ng-if="dosSettings.data.ipFloodFIN"
+							 nw-required
+						>
+							<input nw-number
+								   nw-min="1"
+								   ng-model="dosSettings.data.perSourceFINThres"
+							>
+						</div>
+
+						<div nw-labeled-switch
+							 nw-label="UDP"
+							 nw-model="dosSettings.data.ipFloodUDP"
+						></div>
+						<div nw-field
+							 nw-label="dosPerSourceUDPThres"
+							 ng-if="dosSettings.data.ipFloodUDP"
+							 nw-required
+						>
+							<input nw-number
+								   nw-min="1"
+								   ng-model="dosSettings.data.perSourceUDPThres"
+							>
+						</div>
+
+						<div nw-labeled-switch
+							 nw-label="ICMP"
+							 nw-model="dosSettings.data.ipFloodICMP"
+						></div>
+						<div nw-field
+							 nw-label="dosPerSourceICMPThres"
+							 ng-if="dosSettings.data.ipFloodICMP"
+							 nw-required
+						>
+							<input nw-number
+								   nw-min="1"
+								   ng-model="dosSettings.data.perSourceICMPThres"
+							>
+						</div>
+
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<div class="card flat">
+
+						<div class="title_card" ng-bind="'dosOtherTitle' | translate"></div>
+
+						<div nw-labeled-switch
+							 nw-label="dosTCPUDPPortScan"
+							 nw-model="dosSettings.data.TCPUDPPortScan"
+						></div>
+						<div nw-labeled-switch
+							 nw-label="dosHighSensitivity"
+							 nw-model="dosSettings.data.TCPUDPPortScanHighSens"
+							 ng-if="dosSettings.data.TCPUDPPortScan"
+						>
+						</div>
+
+						<div nw-labeled-switch
+							 nw-label="IP Land"
+							 nw-model="dosSettings.data.IPLand"
+						></div>
+
+						<div nw-labeled-switch
+							 nw-label="IP Spoof"
+							 nw-model="dosSettings.data.IPSpoof"
+						></div>
+
+						<div nw-labeled-switch
+							 nw-label="IP TearDrop"
+							 nw-model="dosSettings.data.IPTearDrop"
+						></div>
+
+						<div nw-labeled-switch
+							 nw-label="TCP scan"
+							 nw-model="dosSettings.data.TCPScan"
+						></div>
+
+						<div nw-labeled-switch
+							 nw-label="dosTCPSynWithData"
+							 nw-model="dosSettings.data.TCPSynWithData"
+						></div>
+
+						<div nw-labeled-switch
+							 nw-label="UDP Bomb"
+							 nw-model="dosSettings.data.UDPBomb"
+						></div>
+
+						<div nw-labeled-switch
+							 nw-label="dosSourceIpBlock"
+							 nw-model="dosSettings.data.sourceIpBlock"
+						></div>
+						<div nw-field
+							 nw-label="dosBlockTime"
+							 ng-if="dosSettings.data.sourceIpBlock"
+						>
+							<input nw-number
+								   nw-min="0"
+								   ng-model="dosSettings.data.blockTime"
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row-grid">
+				<div class="col-md-12">
+					<div class="card flat table"
+						 nw-table
+						 nw-table-title="dosBlockedAddresses"
+						 nw-table-limit
+						 ng-if="dosSettings.blocked.length > 0"
+					>
+						<table>
+							<thead>
+								<tr>
+									<th>
+										<span ng-bind="'dosAttackSource' | translate"></span>
+									</th>
+									<th>
+										<span ng-bind="'dosAttackDestination' | translate"></span>
+									</th>
+									<th>
+										<span ng-bind="'dosAttackType' | translate"></span>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="item in dosSettings.blocked track by $index"
+									nw-mini-table
+									nw-mini-table-caption="dosSettings.getMiniTableCaption(item)"
+									nw-mini-table-short="item.type"
+								>
+									<td>{{item.src}}</td>
+									<td>{{item.dst}}</td>
+									<td>{{item.type}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<div class="row-grid">
+				<div class="col-md-12">
+					<div class="button_block center">
+						<button type="submit" class="colored"
+							ng-disabled="!dosSettings.isChange()"
+							ng-bind="'apply'|translate"
+						></button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

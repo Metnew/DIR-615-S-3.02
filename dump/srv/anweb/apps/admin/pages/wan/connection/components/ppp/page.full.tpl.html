@@ -1,0 +1,255 @@
+<div class="col-md-6">
+	<div class="card flat minH">
+		<h4>PPP</h4>
+		
+		<div nw-labeled-switch
+			 nw-label="wanPppNoAuth"
+			 nw-model="ppp.data.WithoutAuth"
+			 nw-change="ppp.onChangeUsePassword()"
+			 ng-if="ppp.isShow('WithoutAuth')"
+		></div>
+		
+		<div nw-field 
+			 nw-label="wanPppUsername" 
+			 nw-required="ppp.isRequired('Username')"
+			 ng-if="ppp.isShow('Username')"
+		>
+			<input type="text" 
+				nw-type="notCyrillicChar" 
+				ng-model="ppp.data.Username"
+			>
+		</div>
+
+		<div nw-field 
+			 nw-label="wanPppPassword" 
+			 nw-required="ppp.isRequired('Password')" 
+			 nw-disabled="ppp.isDisabled('Password')"
+			 ng-if="ppp.isShow('Password')" 
+		>
+			<input type="password" 
+				nw-type="pppPassword"
+				nw-eye
+				ng-model="ppp.data.Password"
+			>
+		</div>
+		
+		<div nw-field 
+			 nw-label="wanServiceName" 
+			 ng-if="ppp.isShow('ServiceName') && (ppp.type != 'pptp')"
+		>
+			<input type="text"
+				ng-model="ppp.data.ServiceName"
+			>
+		</div>
+		
+		<div nw-field 
+			 nw-label="wanVPNServiceName" 
+			 nw-required
+			 ng-if="ppp.isShow('ServiceName') && (ppp.type == 'pptp')"
+		>
+			<input type="text" 
+				nw-type="host" 
+				ng-model="ppp.data.ServiceName"
+			>
+		</div>
+
+		<div nw-field 
+			 nw-label="wanMaxMRUSize"
+			 nw-required="ppp.isRequired('MaxMRUSize')"
+			 ng-if="ppp.isShow('MaxMRUSize') && (ppp.type != 'pptp')"
+		>
+			<input nw-number
+				nw-min="0" 
+				ng-model="ppp.data.MaxMRUSize"
+				nw-max="1492"
+			>
+		</div>
+
+		<div nw-field
+			 nw-label="wanMaxMRUSize"
+			 nw-required="ppp.isRequired('MaxMRUSize')"
+			 ng-if="ppp.isShow('MaxMRUSize') && (ppp.type == 'pptp')"
+		>
+			<input nw-number
+				nw-min="1280"
+				ng-model="ppp.data.MaxMRUSize"
+				nw-max="1460"
+			>
+		</div>
+		
+		<div nw-field 
+			 nw-label="wanAuthenticationProtocol" 
+			 ng-if="ppp.isShow('AuthenticationProtocol')"
+		>
+			<div class="custom-select">
+				<select 
+					ng-model="ppp.data.AuthenticationProtocol" 
+					ng-options="option.value as option.name | translate for option in ppp.select.authProtocol"
+				>
+				</select>
+			</div>
+		</div>
+		
+		<div nw-field 
+			 nw-label="wanEncryptionProtocol" 
+			 ng-if="ppp.isShow('EncryptionProtocol')"
+		>
+			<div class="custom-select">
+				<select 
+					ng-model="ppp.data.EncryptionProtocol" 
+					ng-options="option.value as option.name | translate for option in ppp.select.encProtocol"
+				>
+				</select>
+			</div>
+		</div>
+		
+		<div nw-labeled-switch
+			 nw-label="wanKeepAlive"
+			 nw-model="ppp.data.KeepAlive"
+			 ng-if="ppp.isShow('KeepAlive')"
+		></div>
+		
+		<div nw-field 
+			 nw-label="wanLcpInterval"
+			 nw-required="ppp.isRequired('LCPEcho')" 
+			 nw-disabled="ppp.isDisabled('LCPEcho')"
+			 ng-if="ppp.isShow('LCPEcho')"
+		>
+			<input nw-number
+				nw-min="0"
+				ng-model="ppp.data.LCPEcho"
+			>
+		</div>
+		
+		<div nw-field 
+			 nw-label="wanLcpFails" 
+			 nw-required="ppp.isRequired('LCPEchoRetry')" 
+			 nw-disabled="ppp.isDisabled('LCPEchoRetry')"
+			 ng-if="ppp.isShow('LCPEchoRetry')"
+		>
+			<input nw-number
+				nw-min="0"
+				nw-max="255" 
+				ng-model="ppp.data.LCPEchoRetry"
+			>
+		</div>
+		
+		<div nw-labeled-switch
+			 nw-label="wanOnDemand"
+			 nw-model="ppp.onDemand.value"
+			 nw-change="ppp.onDemand.change()"
+			 ng-if="ppp.onDemand.isShow()"
+		> 
+		</div>
+		<div nw-field 
+			nw-label="wanIdleDisconnectTime" 
+			nw-required="ppp.isRequired('IdleDisconnectTime')" 
+			nw-disabled="ppp.isDisabled('IdleDisconnectTime')"
+			ng-if="ppp.isShow('IdleDisconnectTime')"
+		>
+			<input nw-number
+				nw-min="0" 
+				ng-model="ppp.data.IdleDisconnectTime"
+			>
+		</div>
+		
+		<div nw-field 
+			 nw-label="wanPppExtraOptions" 
+			 ng-if="ppp.isShow('ExtraOptions')"
+		> 
+			<input type="text" ng-model="ppp.data.ExtraOptions">
+		</div>
+		
+		<div nw-field 
+			 nw-label="wanPppStaticIp" 
+			 ng-if="ppp.isShow('StaticIP')"
+		>
+			<input type="text" nw-type="ip" ng-model="ppp.data.StaticIPAddress0">
+		</div>
+
+		<div nw-labeled-switch
+			 nw-label="wanPppIpExt"
+			 nw-model="ppp.data.IPExtension"
+			 ng-if="ppp.isShow('IPExtension')"
+		> 
+		</div>
+
+		<div nw-labeled-switch
+			 nw-label="wanPppDebug"
+			 nw-model="ppp.data.PPPDebug"
+			 ng-if="ppp.isShow('PPPDebug')"
+		></div>
+
+		<div nw-labeled-switch
+			 nw-label="wanMPPC"
+			 nw-model="ppp.data.PPPMPPC"
+			 ng-if="ppp.isShow('PPPMPPC')"
+		></div>
+		
+	</div>
+</div>
+
+<div class="col-md-6">
+	<div class="card flat minH" ng-if="ppp.isPPPv6()">
+		<h4>IP</h4>
+		<div nw-field 
+			 nw-label="wanIPv6OriginMethod" 
+			 ng-if="ppp.isShow('Origin')"
+		>
+			<div class="custom-select">
+				<select 
+					ng-model="ppp.data.Origin" 
+					ng-options="option.value as option.name | translate for option in ppp.select.Origin"
+				>
+				</select>
+			</div>
+		</div>
+		
+		<div nw-labeled-switch
+			 nw-label="wanIPv6GatewayIPBySlaac"
+			 nw-model="ppp.data.GatewayIPv6AddressBySlaac"
+			 ng-if="ppp.isShow('GatewayIPv6AddressBySlaac')"
+		></div>
+
+		<div nw-field 
+			 nw-label="wanIPv6GatewayIP"
+			 nw-required="ppp.isRequired('GatewayIPv6Address')" 
+			 nw-disabled="ppp.isDisabled('GatewayIPv6Address')"
+			 ng-if="ppp.isShow('GatewayIPv6Address')"
+		>
+			<input type="text" 
+				nw-type="ipv6" 
+				ng-model="ppp.data.GatewayIPv6Address"
+			>
+		</div>
+		
+		<div nw-labeled-switch
+			 nw-label="wanIPv6DNSAutomatically"
+			 nw-model="ppp.data.DNSIPv6Automatical"
+			 ng-if="ppp.isShow('DNSIPv6Automatical')"
+		></div>
+		
+		<div nw-field 
+			 nw-label="wanIPv6DNSServer1"
+			 nw-required="ppp.isRequired('DNSIPv6Server1')" 
+			 nw-disabled="ppp.isDisabled('DNSIPv6Server1')"
+			 ng-if="ppp.isShow('DNSIPv6Server1')"
+		>
+			<input type="text"
+				nw-type="ipv6" 
+				ng-model="ppp.data.DNSIPv6Server1"
+			>
+		</div>
+
+		<div nw-field 
+			 nw-label="wanIPv6DNSServer2" 
+			 nw-disabled="ppp.isDisabled('DNSIPv6Server2')"
+			 ng-if="ppp.isShow('DNSIPv6Server2')"
+		>
+			<input type="text"
+				nw-type="ipv6"
+				ng-model="ppp.data.DNSIPv6Server2"
+			>
+		</div>
+	</div>
+</div>

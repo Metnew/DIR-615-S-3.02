@@ -1,0 +1,31 @@
+<div ui-view>
+<div class="card table"
+     nw-table
+     nw-table-title="navStatsPorts"
+>
+    <table>
+        <thead>
+            <tr>
+                <th ng-bind="'port' | translate"></th>
+                <th ng-bind="'status' | translate"></th>
+                <th ng-bind="('stat_traffic_sent'| translate) + ', ' + ('size_MB' | translate)"></th>
+                <th ng-bind="('stat_traffic_received' | translate) + ', ' + ('size_MB' | translate)"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="(key, item) in portStats"
+                nw-mini-table
+                nw-mini-table-caption="item.alias"
+                ng-click="showDetails(item)"
+                class="clickable"
+            >
+                <td ng-bind="item.alias"></td>
+                <td class="not_break" ng-class="{'red': !item.status, 'green': item.status}">{{item.status? ('stat_port_connected'| translate) : ('stat_port_disconnected'| translate)}}</td>
+                <td class="not_break">{{bytesToMbytes(item.BytesSent)}}</td>
+                <td class="not_break">{{bytesToMbytes(item.BytesReceived)}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+

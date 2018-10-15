@@ -1,0 +1,29 @@
+
+<div class="page geo">
+	
+	<div class="wrap">
+		
+		<img class="geo noselect" src="img/geo.png">
+		
+		<div class="geo-caption noselect">
+			{{found.__fullname}}
+			<div>{{message | translate}}</div>
+		</div>
+		
+		<div class="next noselect" ng-show="!!found">
+			<button class="no" ng-click="no()">{{'no' | translate}}</button>
+			<button ng-click="yes()">{{'yes' | translate}}</button>
+		</div>
+		
+		<div class="next noselect" ng-show="!!message && !found">
+			<button class="no" ng-click="skip()">{{'wizard_skip' | translate}}</button>
+		</div>
+		
+		<div class="navs">
+			<a href class="prev single" ng-click="customPrevStep()">{{'back' | translate}}</a>
+		</div>
+		
+	</div>
+	
+</div>
+

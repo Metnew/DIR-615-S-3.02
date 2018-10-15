@@ -1,0 +1,89 @@
+<div ng-if="isActivate">
+
+    <div class="card_columns" ng-if="constants.rlx819xHwIPv6">
+
+		<div class="card">
+
+			<div nw-labeled-switch
+				 nw-label="routing_hw_ipv6"
+				 nw-model="hwIPv6Route.data.enable"
+			></div>
+
+			<div class="note"
+				 ng-bind="'routing_hw_ipv6_desc' | translate"
+			></div>
+
+			<div class="button_block center">
+				<button type="submit" class="colored"
+					ng-click="applyHwRoute()"
+					ng-disabled="!hwIPv6WasModifed()"
+					ng-bind="'apply' | translate"
+				></button>
+			</div>
+
+		</div>
+
+	</div>
+
+    <div class="nw-empty-page-state-container" ng-if="isEmptyRules()">
+        <div class="nw-empty-page-state-image-add"></div>
+        <div class="nw-empty-page-state-title">
+            {{'routing_rules_empty' | translate}}
+        </div>
+        <div class="nw-empty-page-state-subtitle">
+            {{'routing_rules_empty_message' | translate}}
+        </div>
+        <div class="nw-empty-page-state-buttons-panel">
+
+            <button type="button" class="colored" ng-click="add()">
+                {{'addButton' | translate}}
+            </button>
+
+        </div>
+    </div>
+
+    <div ng-if="!isEmptyRules()">
+        <div class="card table routing"
+             nw-table
+             nw-table-title="routing_list"
+             nw-table-on-add="add()"
+             nw-table-on-delete="remove(items, keys)"
+             nw-table-on-edit="edit(item, key)"
+             nw-table-selected
+        >
+            <table>
+                <thead>
+                    <tr>
+                        <th ng-bind="'routing_network' | translate"></th>
+                        <th ng-bind="'routing_netmask' | translate"></th>
+                        <th ng-bind="'routing_gateway' | translate"></th>
+                        <th ng-bind="'iface' | translate"></th>
+                        <th ng-bind="'routing_metric' | translate"></th>
+                        <th ng-bind="'routing_accessibility' | translate"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="(key, item) in routes"
+                        nw-mini-table
+                        nw-mini-table-caption="getSubnet(item)"
+                        nw-mini-table-short="item.gw"
+                    >
+                        <td ng-bind="item.ip"></td>
+                        <td ng-bind="item.netmask || '-'"></td>
+                        <td ng-bind="item.gw"></td>
+                        <td ng-bind="getIfaceName(item)"></td>
+                        <td ng-bind="item.met || '-'"></td>
+                        <td>
+                            <status-info
+                                status="{{!!item.notavail ? 'off': 'on'}}"
+                                on="{{'yes' | translate}}"
+                                off="{{'no' | translate}}">
+                            </status-info>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

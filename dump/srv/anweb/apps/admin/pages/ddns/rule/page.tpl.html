@@ -1,0 +1,115 @@
+<div class="main-card">
+    <form class="ddns-form" 
+        name="ddns_form" 
+        id="ddns_form" 
+        nw-form 
+        unsaved-warning-form 
+        novalidate 
+        ng-submit="ddnsSave()"
+        unsaved-backup-status="{{isSavingDisabled()}}"
+        >
+        <div class="card-content">
+            <div class="row-grid bottom-space">
+                <div class="col-md-6 block-left">
+                    <div nw-field
+                        nw-label="ddns_host_name"
+                        ng-if="!config.Multihostname"
+                        nw-required
+                    >
+                       <input ng-model="ddns.Hostname"
+                              nw-custom-valid="checkDomain(ddns.Hostname)"
+                       >
+                    </div>
+                    <div class="changing_list" ng-if="config.Multihostname">
+                        <div class="card-title" ng-bind="'ddns_host_name' | translate" ng-if="config.Multihostname"></div>
+                        <div class="input_with_action"
+                            ng-repeat="(key, item) in ddns.Hostname track by key"
+                        >
+                            <div nw-field
+                                nw-required>
+                                <input type="text"
+                                        ng-model="item.Name"
+                                        placeholder="{{'ddnsHostnameExample' | translate}}"
+                                        nw-set-focus="{{ddns.focus == true}}"
+                                        nw-custom-valid="checkDomain(item.Name)"
+                                >
+                            </div>
+                            <div class="input_action"
+                                ng-click="removeHost(item, key)"
+                            >
+                                ×
+                            </div>  
+                        </div>
+                        <div class="button_block right" >
+                            <input type="button"
+                                    ng-click="addHost()"
+                                    value="{{'addHostButton' | translate}}"
+                                    class="colored flat"
+                            >
+                        </div>
+                    </div>
+       
+                    <div nw-field
+                       nw-label="ddns_host_name"
+                       ng-if="config.Multihostname"
+                    ></div>
+                    <div nw-field
+                    nw-label="ddns_service"
+                    nw-required
+                    >
+                        <select ng-model="tmp.Service"
+                           ng-options="service.Name | translate for service in services"
+                        >
+                        </select>
+                    </div>
+                </div>         
+        
+
+            <div class="col-md-6 block-right">
+               <div nw-field
+                    nw-label="ddns_username"
+                    nw-required
+               >
+                   <input ng-model="ddns.Username">
+               </div>
+       
+               <div nw-password
+                    nw-password-label="ddns_pass"
+                    nw-password-value="ddns.Password"
+                    nw-password-required
+                    nw-password-novalidation
+               ></div>
+           
+               <div nw-field
+                    nw-label="ddns_iface"
+                    ng-if="config.NeedChooseIface"
+                    nw-required
+               >
+                   <select ng-model="ddns.Iface"
+                           ng-options="iface.iface as iface.name | translate for iface in ifaces"
+                   >
+                   </select>
+               </div>
+               
+               <div nw-field
+                    nw-label="ddns_period"
+                    nw-required
+               >
+                   <input nw-number
+                          nw-min="1"
+                          ng-model="ddns.Period"
+                   >
+               </div>
+            </div>            
+        </div>
+    </div>
+        <div class="card-action">
+            <button class="colored"
+                    ng-bind="'save'|translate"
+                    type="submit"
+                    ng-disabled="isSavingDisabled()"
+            ></button>
+        </div>
+    </form>
+</div>
+    

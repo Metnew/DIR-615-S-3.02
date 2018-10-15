@@ -1,0 +1,74 @@
+<div class="content_block title2">
+    {{ ((constants.RENAME_USB_TO_LTE) ? 'wizard_lte_modem_detecting_step' : 'wizard_usb_modem_detecting_step') | translate }}
+</div>
+<div class="sub-step-title-loader">
+    <nw-progress-bar pb-type="'indeter'" pb-hidden="dongleStep.usbModemLoaderHidden()"></nw-progress-bar>
+</div>
+<div class="content_block">
+    <div class="inline_field" ng-if="dongleStep.dongle.info().status == 'ok' || dongleStep.dongle.info().status == 'ready'">
+        <div class="group" ng-if="!!dongleStep.dongle.info().vendor">
+            <div class="name">{{ 'wizard_dongle_vendor' | translate }}:</div>
+            <div class="value" ng-bind="dongleStep.dongle.info().vendor"></div>
+        </div>
+        <div class="group" ng-if="!!dongleStep.dongle.info().model">
+            <div class="name">{{ 'wizard_dongle_model' | translate }}:</div>
+            <div class="value" ng-bind="dongleStep.dongle.info().model"></div>
+        </div>
+        <div class="group" ng-if="dongleStep.dongle.info().pinStatus == 'ok' && dongleStep.dongle.info().operator">
+            <div class="name">{{ 'wizard_dongle_operator' | translate }}:</div>
+            <div class="value" ng-bind="dongleStep.dongle.info().operator"></div>
+        </div>
+        <div class="group" ng-if="!!dongleStep.dongle.info().actualMode">
+            <div class="name">{{ 'wizard_dongle_mode' | translate }}:</div>
+            <div class="value" ng-bind="dongleStep.dongle.info().actualMode"></div>
+        </div>
+    </div>
+</div>
+
+<div ng-if="dongleStep.dongle.state()">
+    <div class="content_block">
+        <div ng-if="dongleStep.dongle.state() == 'wait_create' && dongleStep.dongle.info().actualMode == '3G'">{{ 'wizard_wait_create_3g' | translate }}</div>
+        <div ng-if="dongleStep.dongle.state() == 'wait_create' && dongleStep.dongle.info().actualMode == 'LTE'">{{ 'wizard_wait_create_lte' | translate }}</div>
+        <div ng-if="dongleStep.dongle.state() == 'wan_created'">
+            {{ 'wizard_autoconn_created' | translate }}
+            <br /> {{ 'wizard_continue_configuration' | translate }}
+        </div>
+        <div ng-if="dongleStep.dongle.state() == 'wan_failed'">
+            {{ 'wizard_autoconn_not_created' | translate }}
+            <br /> {{ 'wizard_manual_configuration' | translate }}
+        </div>
+        <div ng-if="dongleStep.dongle.state() == 'wait_dongle'">{{ ((constants.RENAME_USB_TO_LTE) ? 'wizard_wait_lte_modem' : 'wizard_wait_dongle') | translate }}</div>
+        <div ng-if="dongleStep.dongle.state() == 'wait_sim'">{{ 'wizard_wait_sim' | translate }}</div>
+        <div ng-if="dongleStep.dongle.state() == 'wait_pin' && (!dongleStep.modemPinStatus || dongleStep.modemPinStatus == 'pin_required')">{{ 'wizard_pin_required' | translate }}</div>
+        <div ng-if="dongleStep.dongle.state() == 'wait_pin' && dongleStep.modemPinStatus == 'puk_required'">{{ 'wizard_puk_required' | translate }}</div>
+        <div ng-if="dongleStep.dongle.state() == 'wait_pin' && dongleStep.modemPinStatus == 'puk2_required'">{{ 'wizard_puk2_required' | translate }}</div>
+        <div ng-if="dongleStep.dongle.state() == 'wait_pin'" ng-show="dongleStep.modemTryLeft == null">
+			<br /> {{ dongleStep.formatPinMessage(dongleStep.modemPinStatus) | translate }}
+		</div>
+        <div ng-if="dongleStep.dongle.state() == 'wait_pin'" ng-show="dongleStep.modemTryLeft !== null">
+            {{ 'wizard_pin_attempt' | translate }} {{ dongleStep.modemTryLeft }}
+        </div>
+        <div ng-if="dongleStep.dongle.state() == 'sim_is_blocked'">{{ 'wizard_sim_blocked' | translate }}</div>
+        <div ng-if="dongleStep.dongle.state() == 'intersected_subnet'">{{ 'wizard_intersected_subnet' | translate }}</div>
+    </div>
+    <div class="content_block inline_input_wrap pin_field" ng-if="dongleStep.dongle.state() == 'wait_pin'">
+        <div nw-field nw-label="{{ translatePinStatus(dongleStep.modemPinStatus) }}" nw-required>
+            <input tabindex="115" type="text" name="ModemPin" ng-model="dongleStep.modemData.PIN" ng-required>
+        </div>
+    </div>
+    <div class="content_block" ng-if="dongleStep.dongle.state() == 'wait_pin'">
+        <div class="next left">
+            <button class="width_auto" ng-click="dongleStep.modemApplyPIN()">{{ 'wizard_apply' | translate }}</button>
+        </div>
+    </div>
+    <div class="content_block" ng-if="dongleStep.dongle.state() == 'wait_create' || dongleStep.dongle.state() == 'wan_failed'">
+        <div class="next left">
+            <button class="width_auto" ng-click="dongleStep.modemAbortCheck()">{{ 'wizard_next_extended' | translate }}</button>
+        </div>
+    </div>
+    <div class="content_block" ng-if="dongleStep.dongle.state() == 'intersected_subnet'">
+        <div class="next left">
+            <button class="width_auto" ng-click="dongleStep.exit()">{{ 'wizard_trouble_extended' | translate }}</button>
+        </div>
+    </div>
+</div>

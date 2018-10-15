@@ -1,0 +1,87 @@
+<div class="system card ping" nw-overlay="!isRequestInProgress">
+    <form name="pingSettings"
+          ng-submit="getPing()"
+          nw-form
+    >
+
+        <div class="group">
+            <div nw-field
+                 class="ping_host_style"
+                 nw-label="ping_host"
+                 nw-required
+                 ng-if="ping.is_ipv6"
+            >
+                <input ng-model="ping.host"
+                       nw-type="hostv6"
+                >
+            </div>
+
+            <div nw-field
+                 nw-label="ping_host"
+                 nw-required
+                 ng-if="!ping.is_ipv6"
+                 class="ping_host_style"
+            >
+                <input ng-model="ping.host"
+                       nw-type="host"
+                >
+            </div>
+
+            <div nw-field
+                 nw-label="ping_count"
+                 nw-required
+                 class="ping_count_style"
+            >
+                <input ng-model="ping.count"
+                       nw-type="count"
+                       nw-number
+                       nw-min="1"
+                       nw-max="10"
+                >
+            </div>
+
+            <div nw-labeled-switch 
+                 nw-label="sys_ping_is_ipv6" 
+                 nw-model="ping.is_ipv6"
+                 ng-if="ipv6Avail"
+                 class="ping_is_ipv6_label"
+            ></div>
+
+            <div nw-field
+                class="ping_more_settings_label"
+            >
+                <button type="button"
+                    class="flat colored ping_more_settings_button"
+                    ng-click="openPingSettings()"
+                >
+                    {{'additional_settings' | translate}}
+                </button>
+            </div>
+
+            <div nw-field
+            >
+                <span class="ping_settings_count"
+                      ng-if="settingsDiffCount() != 0">({{settingsDiffCount()}})</span>
+            </div>
+
+        </div>
+
+        <div class="log_wrapper">
+            <textarea readonly class="console log" id="console" ng-model="console"></textarea>
+        </div>
+
+        <div class="button_block center">
+            <button type="submit"
+                    class="colored"
+            >
+                {{'startButton' | translate}}
+            </button>
+
+            <button type="button"
+                    ng-click="clearConsole()"
+            >
+                {{'clearButton' | translate}}
+            </button>
+        </div>
+    </form>
+</div>

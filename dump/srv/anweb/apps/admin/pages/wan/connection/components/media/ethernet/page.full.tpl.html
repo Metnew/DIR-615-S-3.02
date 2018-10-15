@@ -1,0 +1,20 @@
+<div class="col-md-6">
+	<div class="card flat minH">
+		<h4>Ethernet</h4>
+		<div nw-field nw-label="macaddr">
+			<input type="text"
+				nw-mac-not-null-and-not-multicast
+				ng-model="media.data.Ethernet.MACAddress"
+				nw-mac-clone
+				nw-mac-restore="media.data.Ethernet.MACAddressDefault"
+			>
+		</div>
+		<div nw-field nw-label="wanMaxMRUSize">
+			<input nw-number
+				nw-min="1400" 
+				nw-max="1550" 
+				ng-model="media.data.Ethernet.MaxMRUSize"
+			>
+		</div>
+	</div>
+</div>

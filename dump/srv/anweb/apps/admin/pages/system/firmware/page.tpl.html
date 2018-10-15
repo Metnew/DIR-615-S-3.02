@@ -1,0 +1,61 @@
+<div class="system firmware"  ng-controller="SysFirmwareCtrl" >
+    <div class="card local_update">
+        <h3>{{'systemLocalUpdate' | translate}}
+            <div class="desc" ng-if="firmware.curVersion">
+                {{ ('curFwVersion' | translate) + ": " + firmware.curVersion }}
+            </div>
+        </h3>
+
+        <div class="firmware_wrapper" nw-file-upload-form
+            nw-upload-url="{{firmware.local.fwUploadURL}}"
+            nw-field-button-title="systemChooseFileBtn"
+            nw-submit-title="sysUpdateFirmwareBtn"
+            nw-submit-button-class="colored"
+            nw-upload-begin="firmware.local.fwUploadBegin"
+            nw-upload-end="firmware.local.fwUploadEnd"
+        ></div>
+    </div>
+    <form
+        name="firmwareSettings"
+        ng-submit="firmware.remote.applySettings()"
+        nw-form
+        unsaved-warning-form
+        unsaved-backup-status="{{!firmware.wasModified()}}"
+    >
+        <div class="card remote_update" ng-if="firmware.remote.isSupported()">
+            <h3 ng-show="firmware.remote.enable() != false">{{'systemRemoteUpdate' | translate}}</h3>
+
+            <div nw-field
+                 nw-label="systemRemoteServer"
+                 ng-show="firmware.remote.enable() != false"
+            >
+                <input type="text" ng-model="firmware.config.Server">
+            </div>
+
+            <div nw-labeled-switch
+                nw-label="systemAutoCheckUpdates"
+                nw-model="firmware.config.Enable"
+            ></div>
+
+            <div nw-field
+                nw-label="firmwareAutoInterval"
+                nw-required
+                ng-if="firmware.remote.isShowPeriod()"
+            >
+                <input nw-number
+                       nw-min="60"
+                       nw-max="86400"
+                       ng-model="firmware.config.Period"
+                >
+            </div>
+
+            <div ng-bind="firmware.status.text" ng-class="firmware.status.color" class="note"></div>
+
+            <div class="button_block stretch">
+                <button type="button" ng-click="firmware.remote.update()" ng-show="firmware.remote.isNeedUpdate()">{{'sysUpdateFirmwareBtn' | translate }}</button>
+                <button type="button" ng-click="firmware.remote.checkUpdates()" ng-hide="firmware.remote.isNeedUpdate()">{{'systemCheckUpdatesBtn' | translate }}</button>
+                <button type="submit" class="colored" ng-disabled="!firmware.wasModified()">{{'systemApplySettingsBtn' | translate }}</button>
+            </div>
+        </div>
+    </form>
+</div>

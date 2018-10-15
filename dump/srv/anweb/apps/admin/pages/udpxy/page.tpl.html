@@ -1,0 +1,116 @@
+<div class="main-card">
+<form name="form" class="css-form" novalidate
+      nw-form
+      ng-submit="udpxy.apply()"
+      unsaved-warning-form
+      unsaved-backup-status="{{!udpxy.wasModified()}}"
+>
+	<div class="card-content">
+		<div class="row-grid">
+			<div class="note" ng-bind="'udpxyDesc' | translate"></div>
+			<div class="note" ng-bind="'udpxyNote' | translate"></div>
+
+			<div nw-labeled-switch 
+				 nw-label="udpxyEnable"
+				 nw-model="udpxy.data.Enable"
+				 nw-disabled="udpxy.data.IgmpxEnable"
+			></div>
+		</div>
+
+			<div class="row-grid" ng-if="udpxy.data.Enable">
+				<div class="note" nw-bind-html-compile="udpxy.getLinkNote()"></div>
+			
+			<div class="col-md-6 block-left">
+				<div nw-field
+					 nw-label="udpxyPort"
+					 ng-if="udpxy.data.AllowAllPorts"
+			         nw-required
+			    >
+			        <input nw-number
+			               nw-min="1"
+			               nw-max="65535"
+						   ng-model="udpxy.data.Port"
+					>
+				</div>
+				
+				<div nw-field
+					nw-label="udpxyPort"
+					ng-if="!udpxy.data.AllowAllPorts"
+					nw-required
+		   		>
+
+					<input nw-number
+						nw-min="1024"
+						nw-max="65535"
+						ng-model="udpxy.data.Port"
+					>
+				</div>
+				
+				<div nw-field
+			         nw-label="udpxyMaxcli"
+			         nw-required
+			    >
+			        <input nw-number
+			               nw-min="1"
+			               nw-max="10"
+			               ng-model="udpxy.data.MaxCli"
+			        >
+				</div>
+
+				<div nw-field 
+					nw-label="lanInterface" 
+					nw-required 
+					ng-if="udpxy.needIfaces">
+					<select ng-model="udpxy.data.IfaceLan" 
+							ng-options="option.value as option.name for option in udpxy.getIface()"
+					></select>
+				</div>
+			</div>
+
+			<div class="col-md-6 block-right">
+
+			    <div nw-field
+			         nw-label="udpxySocbuf"
+			         nw-required
+			    >
+			        <input nw-number
+			               nw-min="4096"
+			               nw-max="1048576"
+			               ng-model="udpxy.data.SocBuf"
+			        >
+			    </div>
+
+			    <div nw-field
+			         nw-label="udpxyBufcli"
+			         nw-required
+			    >
+			        <input nw-number
+			               nw-min="4096"
+			               nw-max="1048576"
+			               ng-model="udpxy.data.BufCli"
+			        >
+			    </div>
+					
+
+				<div nw-field 
+					nw-label="wanInterface" 
+					nw-required 
+					ng-if="udpxy.needIfaces()">
+					<select ng-model="udpxy.data.IfaceWan" 
+							ng-options="option.value as option.name for option in udpxy.getIface()"
+					></select>
+				</div>
+			</div>
+
+			</div>
+			
+		</div>
+
+	<div class="card-action">
+        <button type="submit" class="colored"
+        	ng-disabled="!udpxy.wasModified()"
+            ng-bind="'apply' | translate"
+        ></button>
+    </div>
+</form>
+</div>

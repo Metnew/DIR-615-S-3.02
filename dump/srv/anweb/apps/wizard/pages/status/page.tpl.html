@@ -1,0 +1,713 @@
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="page status">
+	<div class="wrap">
+		
+		<div class="caption">
+			<div class="caption_logo"></div>
+		</div>
+		
+		<div ng-if="step == 'apply'">
+			<div class="content_block center title">
+				{{'wizard_apply_info' | translate}}
+			</div>
+			<div class="content_block center">
+				<div nw-circles="applyMax"></div>
+			</div>
+		</div>
+		
+		<div ng-if="step == 'info'">
+			<div class="status_box">
+				<div class="text">
+					{{'wizard_status_apply' | translate}}<br /><br />
+					
+					<div style="font-size: 16px;" ng-if="rootIsWIFIClient">{{'wizard_status_wifi_recon' | translate}}</div>
+					
+					<div ng-if="isWiFiEnabled() && rootIsWIFIClient">
+						<div class="inline_field">
+							<div class="group">
+								<div class="name">{{'wizard_smr_ssid' | translate}}:</div>
+								<div class="value">{{nativeData.Config.WiFi.Radio.1.AccessPoint.1.SSID}}</div>
+							</div>
+							<div class="group" ng-if="!isWiFiEncrypted()">
+								<div class="name">{{'wizard_smr_encrypt' | translate}}:</div>
+								<div class="value">{{translateWifiSecurityMode(nativeData.Config.WiFi.Radio.1.AccessPoint.1.Security.ModeEnabled)}}</div>
+							</div>
+							<div class="group" ng-if="isWiFiEncrypted()">
+								<div class="name">{{'wizard_smr_password' | translate}}:</div>
+								<div class="value">{{nativeData.Config.WiFi.Radio.1.AccessPoint.1.Security.PreSharedKey}}</div>
+							</div>
+						</div>
+					</div>
+					
+					<div style="font-size: 16px;" ng-if="nativeData && !isWiFiEnabled() && rootIsWIFIClient">
+						{{'wizard_wifi_warn2' | translate}}
+					</div>
+					<div style="font-size: 16px;" ng-if="!rootIsWIFIClient">
+						{{'wizard_lan_warn2' | translate}}
+					</div>
+					
+				</div>
+			</div>
+			<div class="navs">
+				<a class="next" ng-click="changeStatusStep('devСheck')">
+					{{'wizard_next' | translate}}
+				</a>
+			</div>
+		</div>
+		
+		<div ng-if="step == 'devСheck'">
+			<div class="status_box">
+				<div class="text center title">
+					{{'wizard_status_test' | translate}}
+				</div>
+				<div class="circle_bar">
+					<div ng-repeat="n in [1,2,3,4,5]" class="circle" ng-class="{'filled': devCheckCount >= $index}"></div>
+				</div>
+			</div>
+		</div>
+		
+		<div ng-if="step == 'devError'">
+			<div class="status_box">
+				<div class="text">
+					{{'wizard_status_noavailable' | translate}}<br /><br />
+					
+					<div ng-if="!nativeData && rootIsWIFIClient" style="font-size: 16px;">{{'wizard_status_wifi_param' | translate}}</div>
+					
+					<div ng-if="nativeData && isWiFiEnabled() && rootIsWIFIClient">
+						
+						<div style="font-size: 16px;">{{'wizard_status_wifi_param' | translate}}</div>
+						
+						<div class="inline_field">						
+							<div class="group">
+								<div class="name">{{'wizard_smr_ssid' | translate}}:</div>
+								<div class="value">{{nativeData.Config.WiFi.Radio.1.AccessPoint.1.SSID}}</div>
+							</div>
+							<div class="group" ng-if="!isWiFiEncrypted()">
+								<div class="name">{{'wizard_smr_encrypt' | translate}}:</div>
+								<div class="value">{{translateWifiSecurityMode(nativeData.Config.WiFi.Radio.1.AccessPoint.1.Security.ModeEnabled)}}</div>
+							</div>
+							<div class="group" ng-if="isWiFiEncrypted()">
+								<div class="name">{{'wizard_smr_password' | translate}}:</div>
+								<div class="value">{{nativeData.Config.WiFi.Radio.1.AccessPoint.1.Security.PreSharedKey}}</div>
+							</div>
+						</div>
+						
+					</div>
+					
+					<div style="font-size: 16px; margin-bottom: 15px;" ng-if="nativeData && !isWiFiEnabled() && rootIsWIFIClient">
+						{{'wizard_wifi_warn3' | translate}}
+					</div>
+					
+					<div style="font-size: 16px; margin-bottom: 15px;" ng-if="!showPortPanel() && !rootIsWIFIClient">
+						{{'wizard_lan_warn' | translate}}
+					</div>
+					
+					<div ng-if="showPortPanel()">
+						<div style="font-size: 16px;">
+							{{'wizard_port_warn' | translate}}
+						</div>
+						
+						<div class="content_block" nw-ports
+							nw-box-info="rootBoxInfo"
+							nw-avail-ports="rootAvailPorts"
+							nw-services="nativeData.Config.VLAN.groups.lan">
+						</div>
+						
+					</div>
+				</div>				
+			</div>
+			<div class="next center">
+				<button class="width_auto" ng-click="changeStatusStep('devСheck')">{{ 'wizard_trouble_recheck' | translate }}</button>
+			</div>
+		</div>
+
+		<div ng-if="step == 'updateAvail'">
+			<div class="content_block center title updateAvail" ng-bind="getFirmwareMessage()">
+			</div>
+			<div class="next">
+				<button class="width_auto" ng-click="runUpdate()">{{ 'yes' | translate }}</button>
+				<button class="no width_auto" ng-click="cancelUpdate()">{{ 'no' | translate }}</button>
+			</div>
+		</div>
+		
+		<div ng-if="step == 'updateCompleted'">
+			<div class="content_block center title">
+				{{ 'wizard_update_finished' | translate }}
+			</div>
+			<div class="content_block center">
+				{{'wizard_update_version' | translate}}: <b>{{rootUpdateVersion}}</b>
+			</div>		
+			<div class="navs">
+				<a class="next" ng-click="changeStatusStep('netCheck')">
+					{{'wizard_next' | translate}}
+				</a>
+			</div>
+		</div>
+		
+		<div ng-if="step == 'updateFailed'">
+			<div class="content_block text center title">
+				{{ 'wizard_update_failed' | translate }}
+			</div>
+			<div class="navs">
+				<a class="next" ng-click="changeStatusStep('netCheck')">
+					{{'wizard_next' | translate}}
+				</a>
+			</div>
+		</div>
+		
+		<div ng-if="step == 'updateCheck'">
+			<div class="content_block center title">
+				{{'wizard_update_checking' | translate}}
+			</div>
+			<div class="content_block center">
+				<div nw-step-circles nw-step-circles-count="5" nw-step-circles-value="circleCount % 5"></div>
+			</div>
+		</div>		
+		
+		<div ng-if="step == 'error'">
+			<div class="status_box">				
+				<div class="text center title">
+					{{ 'wizard_notconn_rst' | translate }}
+				</div>
+
+				<div style="margin-bottom: 20px; text-align: center;">
+					{{'wizard_trouble_support' | translate}}
+				</div>
+
+
+				<div class="contact_info" ng-show="gDeviceInfo.supportTel || gDeviceInfo.supportMail">
+					<div class="text center" ng-show="!!gDeviceInfo.supportTel">
+						{{'wizard_phone' | translate}}: <b>{{ gDeviceInfo.supportTel }}</b>
+					</div>
+					<div class="text center mail" ng-show="!!gDeviceInfo.supportMail">
+						{{'wizard_mail' | translate}}: <b>{{ gDeviceInfo.supportMail }}</b>
+					</div>
+				</div>
+
+				<div>
+					<div class="inline_field">
+						<div class="group">
+							<div class="name">{{'wizard_smr_model' | translate}}:</div>
+							<div class="value">{{gDeviceInfo.modelName}}</div>
+						</div>
+
+						<div class="group">
+							<div class="name">{{'wizard_smr_software_version' | translate}}:</div>
+							<div class="value">{{gDeviceInfo.version}}</div>
+						</div>
+						<div class="group" ng-if="gDeviceInfo.serialNumber">
+							<div class="name">{{'wizard_smr_serial' | translate}}:</div>
+							<div class="value">{{gDeviceInfo.serialNumber}}</div>
+						</div>
+						<div class="group">
+							<div class="name">{{'Mac'}}:</div>
+							<div class="value">{{gDeviceInfo.ipv4gw.mac}}</div>
+						</div>
+						<div ng-if="nativeData.Config.WAN.PPPoE">
+							<div class="group">
+								<div class="name">{{'wizard_smr_username' | translate}} PPPoE:</div>
+								<div class="value">{{nativeData.Config.WAN.PPPoE.Connection.1.Username}}</div>
+							</div>
+							<div class="group">
+								<div class="name">{{'wizard_smr_password' | translate}} PPPoE:</div>
+								<div class="value">{{nativeData.Config.WAN.PPPoE.Connection.1.Password}}</div>
+							</div>
+						</div>
+						<div ng-if="nativeData.Config.WAN.PPPoEDual">
+							<div class="group">
+								<div class="name">{{'wizard_smr_username' | translate}} PPPoE:</div>
+								<div class="value">{{nativeData.Config.WAN.PPPoEDual.Connection.1.Username}}</div>
+							</div>
+							<div class="group">
+								<div class="name">{{'wizard_smr_password' | translate}} PPPoE:</div>
+								<div class="value">{{nativeData.Config.WAN.PPPoEDual.Connection.1.Password}}</div>
+							</div>
+						</div>						
+					</div>
+				</div>
+			</div>
+			<div class="next">
+				<button class="width_auto" ng-click="changeStatusStep('devСheck')">{{ 'wizard_trouble_recheck' | translate }}</button>
+				<button class="no width_auto" onclick="goAway('/')">{{ 'wizard_next_extended' | translate }}</button>
+			</div>
+		</div>
+		
+		<div ng-if="step == 'applyErr'">
+			<div class="content_block center title">
+				{{'wizard_apply_error' | translate}}
+			</div>
+			<div class="next">
+				<button class="width_auto" ng-click="exitFromWizard(true)">{{'wizard_next_extended' | translate}}</button>
+			</div>
+		</div>
+		
+	</div>	
+</div>

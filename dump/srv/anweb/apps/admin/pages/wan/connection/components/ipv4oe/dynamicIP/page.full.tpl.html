@@ -1,0 +1,51 @@
+<div class="col-md-6">
+	<div class="card flat minH">
+		<h4>IPv4</h4>
+		<div nw-labeled-switch
+			 nw-label="wanDNSAutomatically"
+			 nw-model="dynip.data.DNSAutomatical"
+			 ng-if="dynip.supported.DNSAutomatical"
+		></div>
+
+		<div nw-field 
+			 nw-label="wanDNSServer1" 
+			 nw-required="!dynip.data.DNSAutomatical" 
+			 nw-disabled="dynip.data.DNSAutomatical"
+			 ng-if="dynip.supported.DNSServer1"
+		>
+			<input type="text" 
+				ng-model="dynip.data.DNSServer1"
+				nw-network-validation="dnsServer1"
+				nw-network-dns-server-two="dynip.data.DNSServer2"
+			>
+		</div>
+
+		<div nw-field 
+			 nw-label="wanDNSServer2"
+			 nw-required="!dynip.data.DNSAutomatical && dynip.isDefined('CUSTOM_2KOM_21535')"
+			 nw-disabled="dynip.data.DNSAutomatical"
+			 ng-if="dynip.supported.DNSServer2" 
+		>
+			<input type="text" 
+				ng-model="dynip.data.DNSServer2"
+				nw-network-validation="dnsServer2"
+				nw-network-dns-server-one="dynip.data.DNSServer1"
+			>
+		</div>
+		
+		<div nw-field 
+			 nw-label="Vendor ID" 
+			 ng-if="dynip.supported.VendorID"
+		>
+			<input type="text" ng-model="dynip.data.VendorID">
+		</div>
+		
+		<div nw-field 
+			 nw-label="wanHostname" 
+			 ng-if="dynip.supported.Hostname"
+		>
+			<input type="text" ng-model="dynip.data.Hostname" nw-custom-valid="validateHostname(dynip.data.Hostname)">
+		</div>
+		
+	</div>
+</div>

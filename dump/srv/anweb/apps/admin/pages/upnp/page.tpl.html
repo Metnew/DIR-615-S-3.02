@@ -1,0 +1,41 @@
+<div class="card_columns">
+    <div class="card">
+        <div nw-labeled-switch
+             nw-label="enable"
+             nw-model="upnp.enable"
+             nw-change="upnpChange()"
+        ></div>
+    </div>
+</div>    
+
+<div class="card table upnp"
+     nw-table
+
+     nw-table-title="upnp_list"
+     ng-if="showTable && upnp.enable"
+>
+    <table>
+        <thead>
+            <tr>
+                <th ng-bind="'upnp_protocol' | translate"></th>
+                <th ng-bind="'upnp_addr' | translate"></th>
+                <th ng-bind="'upnp_port' | translate"></th>
+                <th ng-bind="'upnp_ext_port' | translate"></th>
+                <th ng-bind="'upnp_descr' | translate"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="(key, item) in igdList"
+                nw-mini-table
+                nw-mini-table-caption="getCaption(item)"
+                nw-mini-table-short="getShort(item)"
+            >
+                <td ng-bind="item.protocol"></td>
+                <td ng-bind="item.addr"></td>
+                <td ng-bind="item.port"></td>
+                <td ng-bind="item.ext_port"></td>
+                <td ng-bind="item.descr"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

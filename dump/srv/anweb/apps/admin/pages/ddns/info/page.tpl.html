@@ -1,0 +1,61 @@
+<div ng-if="isActivate">
+        
+            <div class="nw-empty-page-state-container" ng-if="isEmptyRules()">
+                <div class="nw-empty-page-state-image-add"></div>
+                <div class="nw-empty-page-state-title">
+                    {{'ddns_rules_empty' | translate}}
+                </div>
+                <div class="nw-empty-page-state-subtitle">
+                    {{'ddns_rules_empty_message' | translate}}
+                </div>
+                <div class="nw-empty-page-state-buttons-panel">
+                    <button type="button" class="colored" ng-click="add()">
+                        {{'addButton' | translate}}
+                    </button>
+                </div>
+            </div>
+        
+            <div class="main-card">
+            <div class="card-content" ng-if="!isEmptyRules()">
+            <div class="row-grid">
+                <div class="table ddns"
+                     nw-table
+                     nw-table-title="ddns_list"
+                     nw-table-on-add="add()"
+                     nw-table-on-add-disable="isAddDisabled()"
+                     nw-table-on-delete="remove(items, keys)"
+                     nw-table-on-edit="edit(item, key)"
+                     nw-table-selected
+                >
+                    <table>
+                        <thead>
+                            <tr>
+                                <th ng-bind="'ddns_host_name' | translate"></th>
+                                <th ng-bind="'ddns_service' | translate"></th>
+                                <th ng-bind="'ddns_username' | translate"></th>
+                                <th ng-bind="'ddns_iface' | translate" ng-if="config.NeedChooseIface"></th>
+                                <th ng-bind="'ddns_period' | translate"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="(key, item) in ddns"
+                                nw-mini-table
+                                nw-mini-table-caption="getHostname(item)"
+                                nw-mini-table-short="item.Service"
+                            >
+                                <td ng-bind="item.Hostname" ng-if="!config.Multihostname"></td>
+                                <td class="not_break" ng-if="config.Multihostname">
+                                        <div ng-repeat="host in item.Hostname">{{host.Name}}</div>
+                                    </td>
+                                <td ng-bind="item.Service"></td>
+                                <td ng-bind="item.Username"></td>
+                                <td ng-bind="item.Iface" ng-if="config.NeedChooseIface"></td>
+                                <td ng-bind="item.Period"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>

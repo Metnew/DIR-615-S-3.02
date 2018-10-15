@@ -1,0 +1,104 @@
+<div class="content_block title2">
+{{'wifi_step_header' | translate }}&nbsp;{{freq}}&nbsp;{{'ghz' | translate }}
+</div>
+<div class="content_block">
+	<div class="checkbox_wrap" ng-if="!isWiFiRepeater()">
+		<div nw-wizard-checkbox ng-model="wifiStep.profile.$WiFiStep[freq].Enable" ng-change="wifiStep.onWifiEnableChange()" ng-disabled="rootIsWIFIClient || getMode().isDisabled('Wireless')"></div>
+		<span ng-class="{'disabled_text': rootIsWIFIClient}">{{'enable' | translate}}</span>
+	</div>
+	
+	<div class="checkbox_wrap" ng-if="!isWiFiRepeater() && supportWiFiClient">
+		<div nw-wizard-checkbox ng-model="wifiStep.profile.$WiFiStep[freq].EnableBroadcast" ng-disabled="rootIsWIFIClient || getMode().isDisabled('BroadcastWireless')"></div>
+		<span>{{'wifiBroadcast' | translate}}&nbsp;{{freq}}&nbsp;{{'ghz' | translate }}</span>
+	</div>
+	<div class="note" ng-bind="'wizard_wifi_broadcast_note'| translate" ng-if="!isWiFiRepeater() && supportWiFiClient"></div>
+	
+	<div ng-if="wifiStep.profile.$WiFiStep[freq].Enable">
+		<div nw-field nw-label="wizard_wifi_base_name" nw-required ng-if="wifiStep.profile.$WiFiStep[freq].Enable">
+			<input tabindex="201" type="text" name="WiFiStep_SSID" nw-type="notCyrillicChar" ng-model="wifiStep.profile.$WiFiStep[freq].SSID" ng-required nw-custom-valid="wifiStep.checkWIFISSID(value)"
+			ng-change="wifiStep.onWifiNetworkNameChange()" maxlength="33" ng-maxlength="32">
+			<!--wifiStep.checkWIFISSID24(value) -->
+		</div>
+		<div class="checkbox_wrap">
+			<div nw-wizard-checkbox ng-model="wifiStep.profile.$WiFiStep[freq].WithoutPass"></div>
+			<span>{{'wizard_wifi_without_pass' | translate}}</span>
+		</div>
+		<div class="note_custom-icon" ng-if="wifiStep.profile.$WiFiStep[freq].WithoutPass">
+			<span class="inline-warning" svg-icon="warning"></span>
+			{{'wifi_network_opened_warning' | translate}}
+		</div>
+		<div nw-field nw-label="wizard_password" nw-required ng-if="(step.name == 'WiFiStep' || step.name == 'WiFi5GStep') && wifiStep.profile.$WiFiStep[freq].Enable && !wifiStep.profile.$WiFiStep[freq].WithoutPass">
+			<input tabindex="202" type="password" name="WiFiStep_PSK" ng-model="wifiStep.profile.$WiFiStep[freq].PSK" ng-required nw-custom-valid="wifiStep.checkPSK(value)" nw-eye>
+		</div>
+		<div class="note description" ng-if="(step.name == 'WiFiStep' || step.name == 'WiFi5GStep') && wifiStep.profile.$WiFiStep[freq].Enable && !wifiStep.profile.$WiFiStep[freq].WithoutPass">
+            {{'invalid_psk' | translate}}
+        </div>
+		<div ng-if="restoreWifi(freq).needShow()" class="note_custom-icon restore-wifi-block">
+			<input type="button"
+				ng-click="restoreWifi(freq).restore()"
+				value="{{'restore_settings' | translate}}"
+				class="restore-wifi-btn"
+			></input>
+			{{'wizard_restore_wifi_settings_note' | translate}}
+			<div style="clear: both"></div>
+		</div>
+    </div>
+</div>
+<div class="content_block" ng-show="wifiStep.profile.$WiFiStep[freq].supportGuestNet && wifiStep.profile.$WiFiStep[freq].Enable && wifiStep.profile.$DeviceMode.Mode != 'ap'">
+	<div class="checkbox_wrap">
+	<div nw-wizard-checkbox ng-model="wifiStep.profile.$WiFiStep[freq].GuestAP"></div>
+		{{'wizard_enable_guest_network' | translate }}
+	</div>
+	<div class="note">
+		<div>{{'wizard_enable_guest_network_desc1' | translate }}</div>
+		<div ng-if="wifiStep.profile.$WiFiStep[freq].supportGuestAccess">
+			{{'wizard_enable_guest_network_desc2' | translate }}<br />{{'wizard_enable_guest_network_desc3' | translate }}<br />
+		</div>
+        <div ng-if="constants.WIFI_GUEST_ACCESS_WARHING">
+			<br /><span class="inline-warning" svg-icon="warning"></span>
+			{{'wizard_guest_network_warn' | translate }}
+		</div>
+	</div>
+</div>
+<div class="content_block" ng-if="wifiStep.profile.$WiFiStep[freq].GuestAP">
+	<div nw-field nw-label="wizard_wifi_guest_name" nw-required>
+		<input tabindex="203"
+			type="text"
+			name="WiFiStep_GuestAP"
+			nw-type="notCyrillicChar"
+			ng-model="wifiStep.profile.$WiFiStep[freq].GuestSSID"
+			ng-required
+			nw-custom-valid="wifiStep.checkWIFISSID(value)"
+			ng-change="wifiStep.onWifiGestSSIDChange()"
+			maxlength="33"
+			ng-maxlength="32"
+		>
+	</div>
+	<div class="checkbox_wrap">
+		<div nw-wizard-checkbox ng-model="wifiStep.profile.$WiFiStep[freq].GuestWithoutPass"></div>
+		<span>{{'wizard_wifi_without_pass' | translate}}</span>
+	</div>
+	<div nw-field nw-label="wizard_password" nw-required ng-if="!wifiStep.profile.$WiFiStep[freq].GuestWithoutPass">
+		<input tabindex="204" type="password" name="WiFiStep_GuestPSK" ng-model="wifiStep.profile.$WiFiStep[freq].GuestPSK" ng-required nw-custom-valid="wifiStep.checkPSK(value)" nw-eye>
+	</div>
+	<div class="note" ng-if="!wifiStep.profile.$WiFiStep[freq].GuestWithoutPass">
+		{{'invalid_psk' | translate}}
+    </div>
+	<div nw-field
+		nw-label="wifiMaxClients"
+		nw-required
+		ng-if="wifiStep.profile.$WiFiStep[freq].supportMaxAssociatedDevices">
+		<input nw-number nw-min="0" nw-max="20" ng-model="wifiStep.profile.$WiFiStep[freq].GuestMaxAssociatedDevices" >
+	</div>
+	<div class="checkbox_wrap" ng-if="wifiStep.supportedParam('GuestBandwidthRestricted')"  >
+		<div nw-wizard-checkbox ng-model="wifiStep.profile.$WiFiStep[freq].GuestBandwidthRestricted.enable" ng-change="wifiStep.onBandwidthRestrictedEnableChange()" ></div>
+		<span>{{'wifiBandwidthRestrictedEnable' | translate}}</span>
+	</div>
+	<div nw-field nw-label="wifiBandwidthRestricted" nw-required ng-if="wifiStep.supportedParam('GuestBandwidthRestricted') && wifiStep.profile.$WiFiStep[freq].GuestBandwidthRestricted.enable">
+		<input tabindex="205" type="text" name="WiFiStep_BandwithRestricted" ng-model="wifiStep.profile.$WiFiStep[freq].GuestBandwidthRestricted.value"
+			ng-required
+			nw-number
+			nw-min="{{wifiStep.profile.$WiFiStep[freq].GuestBandwidthRestricted.min}}"
+			nw-max="{{wifiStep.profile.$WiFiStep[freq].GuestBandwidthRestricted.max}}">
+	</div>
+</div>

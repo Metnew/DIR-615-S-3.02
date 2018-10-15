@@ -1,0 +1,119 @@
+<form nw-form
+      unsaved-warning-form
+      unsaved-backup-status="{{!wasModified()}}"
+      ng-submit="save()"
+      name="dnsForm"
+      class="dns_form"
+>
+    <div class="card_columns">
+        <div ng-class="{'break_avoid': availIPv6}"
+             ng-repeat="(protocol, protocolData) in protocols"
+        >
+            <div class="card" ng-if="!isAPMode">
+                <h4>{{'dns_' + protocol | translate}}</h4>
+
+                <div nw-labeled-switch
+                     nw-label="manual"
+                     nw-model="dns[protocol].Manual"
+                     nw-disabled="constants.CUSTOM_2KOM_21535"
+                ></div>
+
+                <div nw-labeled-switch
+                     nw-label="DefaultGateway"
+                     nw-model="dns[protocol].Defroute"
+                     ng-if="availDefroute"
+                     ng-hide="dns[protocol].Manual"
+
+                ></div>
+
+                <div nw-field
+                     nw-label="interface"
+                     nw-disabled="dns[protocol].Manual || dns[protocol].Defroute"
+                >
+                    <select ng-model="dns[protocol].Ifname"
+                            ng-options="iface as data.Name | translate for (iface, data) in ifaces[protocol]"
+                    >
+                    </select>
+                </div>
+            </div>
+
+            <div class="card changing_list"
+                 ng-if="dns[protocol].Manual || isAPMode"
+            >
+                <h4>{{'nameservers_' + protocol  | translate}}</h4>
+                <div class="input_with_action"
+                     ng-repeat="(inx, server) in dns[protocol].Servers"
+                >
+                    <div nw-field>
+                        <input ng-model="dns[protocol].Servers[inx]"
+                               nw-type="{{protocolData.name}}"
+                               placeholder="{{'dns_example' | translate}}: {{protocolData.example}}"
+                               nw-set-focus="{{dns[protocol].focus == true}}"
+                        >
+                    </div>
+
+                    <div class="input_action"
+                         ng-click="removeServer(protocol, inx)"
+                    >
+                        ×
+                    </div>
+                </div>
+
+                <div class="button_block right">
+                    <input type="button"
+                           ng-click="add(protocol)"
+                           value="{{'add_server_button' | translate}}"
+                           class="colored flat"
+                           ng-disabled="isDisabledButtonAdd()"
+                    >
+                </div>
+            </div>
+        </div>
+    </div>
+
+	<!-- Хосты > -->
+	<div ng-if="!rules.dnsHideStaticHost">
+		<div class="card table"
+			 nw-table
+
+             nw-table-empty-status="hosts.isEmpty()"
+             nw-table-empty-title="dnsHostsEmpty"
+             nw-table-empty-subtitle="dnsHostsEmptyMessage"
+             nw-table-empty-button="addButton"
+             nw-table-empty-button-click="hosts.add()"
+
+			 nw-table-title="dnsHostsList"
+			 nw-table-on-add="hosts.add()"
+			 nw-table-on-delete="hosts.remove(items, keys)"
+			 nw-table-on-edit="hosts.edit(item, key)"
+			 nw-table-selected
+		>
+			<table>
+				<thead>
+					<tr>
+						<th ng-bind="'dnsHostsIp' | translate"></th>
+						<th ng-bind="'dnsHostsName' | translate"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="(inx, item) in dns.Hosts track by inx"
+						nw-mini-table
+						nw-mini-table-caption="item.hostname"
+						nw-mini-table-short="item.ip"
+					>
+						<td ng-bind="item.ip"></td>
+						<td ng-bind="item.hostname"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<!-- < Хосты -->
+
+    <div class="button_block center">
+        <button type="submit"
+               class="colored"
+               ng-disabled="!wasModified()"
+        >{{'apply' | translate}}</button>
+    </div>
+</form>

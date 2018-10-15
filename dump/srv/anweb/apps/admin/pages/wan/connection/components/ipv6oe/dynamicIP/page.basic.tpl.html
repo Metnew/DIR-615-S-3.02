@@ -1,0 +1,12 @@
+<div nw-field 
+	 nw-label="wanIPv6OriginMethod" 
+	 ng-if="dynipv6.supported.Origin"
+>
+	<div class="custom-select">
+		<select 
+			ng-model="dynipv6.data.Origin" 
+			ng-options="option.value as option.name | translate for option in dynipv6.select.Origin"
+		>
+		</select>
+	</div>
+</div>

@@ -1,0 +1,70 @@
+<div class="col-md-6">
+	<div class="card flat minH">
+		<h4 ng-bind="'l2USBDesc' | translate"></h4>
+		<div nw-field nw-label="wanDongleMode">
+			<div class="custom-select">
+				<select 
+					ng-model="usbmodem.dongle.Mode" 
+					ng-options="option.value as option.name | translate for option in usbmodem.select.Mode[usbmodem.dongle.Type]"
+				>
+				</select>
+			</div>
+		</div>
+
+		<div nw-field 
+			 nw-label="wanAPN" 
+			 ng-if="usbmodem.isShow('APN')"
+		>
+			<input type="text" ng-model="usbmodem.data.APN">
+		</div>
+
+		<div nw-field 
+			 nw-label="wanDialNumber" 
+			 nw-required
+			 ng-if="usbmodem.isShow('DialNumber')"
+		>
+			<input type="text" ng-model="usbmodem.data.DialNumber">
+		</div>
+
+		<div nw-labeled-switch
+			 nw-label="wanPppNoAuth"
+			 nw-model="usbmodem.data.WithoutAuth"
+			 nw-change="usbmodem.onChangeUsePassword()"
+			 ng-if="usbmodem.isShow('WithoutAuth')"
+		></div>
+
+		<div nw-field
+			 nw-label="wanAuthenticationProtocol"
+			 nw-disabled="usbmodem.isDisabled('AuthenticationProtocol')"
+			 ng-if="usbmodem.isShow('AuthenticationProtocol')"
+		>
+			<div class="custom-select">
+				<select
+					ng-model="usbmodem.data.AuthenticationProtocol"
+					ng-options="option.value as option.name | translate for option in usbmodem.select.AuthenticationProtocol"
+				>
+				</select>
+			</div>
+		</div>
+
+		<div nw-field 
+			 nw-label="wanUsbLogin" 
+			 ng-if="usbmodem.isShow('Login')"
+			 nw-required="usbmodem.isRequired('Login')"
+		>
+			<input type="text" ng-model="usbmodem.data.Login">
+		</div>
+
+		<div nw-field 
+			 nw-label="wanUsbPassword" 
+			 ng-if="usbmodem.isShow('Password')"
+			 nw-disabled="usbmodem.isDisabled('Password')"
+			 nw-required="usbmodem.isRequired('Password')"
+		>
+			<input type="password"
+				nw-eye
+				ng-model="usbmodem.data.Password"
+			>
+		</div>
+	</div>
+</div>

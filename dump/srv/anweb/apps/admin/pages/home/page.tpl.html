@@ -1,0 +1,44 @@
+<div class="card">
+    <div class="home-greeting">
+        <h4>{{ 'home_greeting'|translate }}</h4>
+        <h6>{{ 'home_desc'|translate }}</h6>
+    </div>
+    <div class="tile-card">
+        <div ng-if="goUrlFilter">
+            <nw-tile icon="2clr_pcontrol" name="navUrlFilter" desc="url_filter_desc" action-name="menuGo" action-handler="goUrlFilter()">
+            </nw-tile>
+        </div>
+        <div ng-if="goYandexDnsRules">
+            <nw-tile icon="2clr_yadns" name="navYandexDns" desc="yandex_dns_note" action-name="menuGo" action-handler="goYandexDnsRules()">
+            </nw-tile>
+        </div>
+        <div ng-if="goWifiMac">
+            <nw-tile icon="2clr_wifilim" name="wifi_clients_access_name" desc="wifi_clients_access_desc" action-name="menuGo" action-handler="goWifiMac()">
+            </nw-tile>
+        </div>
+        <div ng-if="goPortsWizard">
+            <nw-tile icon="2clr_palloc" name="navPortsWizard" desc="ports_wizard_desc" action-name="menuGo" action-handler="goPortsWizard()">
+            </nw-tile>
+        </div>
+        <div ng-if="goStorageDlna">
+            <nw-tile class="nw-tile-dlna" icon="2clr_dlna" name="dlna_server" desc="dlna_desc" action-name="menuGo" action-handler="goStorageDlna()">
+            </nw-tile>
+        </div>
+        <div ng-if="goPrintServer">
+            <nw-tile icon="2clr_print" name="navPrintserver" desc="print_server_desc" action-name="menuGo" action-handler="goPrintServer()">
+            </nw-tile>
+        </div>
+        <div ng-if="goStorageTorrent">
+            <nw-tile icon="2clr_torrent" name="navStorageTorrent" desc="torrent_client_desc" action-name="menuGo" action-handler="goStorageTorrent()">
+            </nw-tile>
+        </div>
+        <div ng-if="goSummary">
+            <nw-tile icon="2clr_info" name="device_information" desc="device_information_desc" action-name="menuGo" action-handler="goSummary()">
+            </nw-tile>
+        </div>
+        <div ng-if="goWifiCommon">
+            <nw-tile icon="2clr_wifiset" name="wifi_conf" desc="wifi_conf_desc" action-name="menuGo" action-handler="goWifiCommon()">
+            </nw-tile>
+        </div>
+    </div>
+</div>

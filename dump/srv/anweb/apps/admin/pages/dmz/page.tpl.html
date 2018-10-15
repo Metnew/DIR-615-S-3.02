@@ -1,0 +1,59 @@
+<div class="card no_padding overflow_hidden">
+<form name="form" class="css-form" novalidate
+      nw-form
+      ng-submit="dmz.apply()"
+      unsaved-warning-form
+      unsaved-backup-status="{{!dmz.wasModified()}}"
+>
+	<div class="row-grid">
+		<div class="col-md-6">
+			<div class="card flat">
+				<div nw-labeled-switch
+					 nw-label="enable"
+					 nw-model="dmz.data.enable"
+				></div>
+
+				<div nw-labeled-switch
+					 nw-label="dmzEnableSNAT"
+					 nw-model="dmz.data.enable_snat"
+					 nw-disabled="!dmz.data.enable"
+					 ng-if="dmz.useEnableSNAT()"
+				></div>
+
+				<div nw-field
+					 nw-label="dmzIPAddress"
+					 nw-required="dmz.data.enable"
+					 nw-disabled="!dmz.data.enable"
+				>
+					<input type="text"
+						ng-model="dmz.data.ip"
+						nw-type="ipv4"
+						nw-client-list
+						nw-client-list-version="ipv4"
+					>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-6">
+			<div class="card flat"
+				alert="warning"
+				ng-if="dmz.showIpWarning()"
+			>
+				{{'dmz_ip_warning' | translate}}
+			</div>
+		</div>
+	</div>
+
+	<div class="row-grid">
+		<div class="col-md-12">
+			<div class="button_block left no_top_margin">
+				<button type="submit" class="colored"
+					ng-disabled="!dmz.wasModified()"
+					ng-bind="'apply' | translate"
+				></button>
+			</div>
+		</div>
+	</div>
+</form>
+</div>

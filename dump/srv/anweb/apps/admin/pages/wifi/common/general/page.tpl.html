@@ -1,0 +1,97 @@
+<div class="card flat"
+	 ng-controller="WifiCommonGeneral"
+>
+
+	<div class="title_card" ng-bind="'generalSettings' | translate"></div>
+
+	<div nw-labeled-switch
+		 nw-label="wifiEnable"
+		 nw-model="wifi.general.data.Enable"
+		 ng-if="wifi.general.supportedParam('Enable')"
+	></div>
+
+	<div nw-field
+		 nw-label="wifiCountry"
+		 ng-if="wifi.general.supportedParam('RegulatoryDomain')"
+		 nw-disabled="wifi.general.constants.disabledCountry"
+	>
+		<div class="custom-select">
+			<select ng-model="wifi.general.data.RegulatoryDomain"
+					ng-options="key as value for (key , value) in wifi.general.getPossibleCountries()"
+			>
+			</select>
+		</div>
+	</div>
+
+	<div nw-field
+		 nw-label="wifiStandard"
+		 ng-if="wifi.general.supportedParam('OperatingStandards')"
+	>
+		<div class="custom-select">
+			<select ng-model="wifi.general.data.OperatingStandards"
+					ng-options="name as value for (name, value) in wifi.general.supportedStandards()"
+					nw-custom-valid="wifi.general.validationModeEnable()"
+			></select>
+		</div>
+	</div>
+
+	<div nw-labeled-switch
+         nw-label="wifiHideSSID"
+         nw-model="wifi.general.data.SSIDAdvertisementEnabledCommon"
+         ng-if="wifi.general.supportedParam('SSIDAdvertisementEnabledCommon')"
+    ></div>
+    <div class="note" ng-bind="'wifi_hide_SSID_note' | translate"  ng-if="wifi.ap.supportedParam('SSIDAdvertisementEnabledCommon')"></div>
+
+	<div nw-labeled-switch
+		 nw-label="wifiAutoChannel"
+		 nw-model="wifi.general.data.AutoChannelEnable"
+		 ng-if="wifi.general.supportedParam('AutoChannelEnable')"
+	></div>
+
+	<div nw-labeled-switch
+		 nw-label="wifiEnableHighChannel"
+		 nw-model="wifi.general.data.HighChannelEnable"
+		 nw-disabled="!wifi.general.data.AutoChannelEnable"
+		 ng-if="wifi.general.supportedParam('HighChannelEnable') && wifi.band.state == '5GHz'"
+	></div>
+	<div class="note"
+		ng-bind="'wifiHighChannelsComment' | translate"
+		ng-if="wifi.general.supportedParam('HighChannelEnable') && wifi.general.data.HighChannelEnable && wifi.band.state == '5GHz' && wifi.general.data.AutoChannelEnable"
+	></div>
+	<div class="note"
+		ng-bind="'wifiHighChannelsOffComment' | translate"
+		ng-if="wifi.general.supportedParam('HighChannelEnable') && !wifi.general.data.HighChannelEnable && wifi.band.state == '5GHz' && wifi.general.data.AutoChannelEnable"
+	></div>
+
+	<div nw-field ng-if="wifi.general.supportedParam('Channel')" class="nwfield_element">
+        <div class="nwfield_label" ng-class="{'nwfield_label_disabled': isDisabled}">
+            <span class="label" ng-bind="'wifiChannel' | translate"></span>
+        </div>
+        <span class="full-width input input_button"
+            ng-class="{'disabled': wifi.general.data.AutoChannelEnable}"
+            ng-click="!wifi.general.data.AutoChannelEnable && wifi.general.selectWifiChannel(wifi.band.state)" >
+            {{wifi.general.data.AutoChannelEnable? wifi.general.getAutoChannelComment() : wifi.general.data.Channel}}
+        </span>
+	</div>
+
+	<div nw-labeled-switch
+		 nw-label="wifiAutoChannelReselect"
+		 nw-model="wifi.general.data.AutoChannelReselect"
+		 nw-disabled="!wifi.general.data.AutoChannelEnable"
+		 ng-if="wifi.general.supportedParam('AutoChannelReselect')"
+	></div>
+
+	<div nw-field
+         nw-label="wifiAutoChannelReselectPeriod"
+         nw-required
+         nw-disabled="!wifi.general.data.AutoChannelReselect"
+         ng-if="wifi.general.supportedParam('AutoChannelReselectPeriod')"
+    >
+        <input nw-number
+        	   nw-min="60"
+               nw-max="86400"
+               ng-model="wifi.general.data.AutoChannelReselectPeriod"
+        >
+    </div>
+
+</div>

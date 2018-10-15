@@ -1,0 +1,37 @@
+<div ng-if="general.action == 'add'">
+	<div nw-field 
+		 nw-label="contype" 
+	>
+		<div class="custom-select">
+			<select nw-not-dirty 
+					ng-model="wan.model.contype"
+					ng-options="option.value as option.name|translate for option in wan.contypes" 
+			></select>
+		</div>
+	</div>
+	
+	<div nw-field 
+		 nw-label="iface" 
+		 ng-show="wan.interfaces.length > 1"
+	>
+		<div class="custom-select">
+			<select nw-not-dirty 
+					ng-model="wan.model.interface" 
+					ng-options="option as option.info|translate group by option.description|translate for option in wan.interfaces"
+				></select>
+		</div>
+	</div>
+</div>
+<div ng-if="general.action == 'edit'">
+	<div nw-field 
+		 nw-label="contype" 
+	>
+		<input disabled type="text" value="{{ wan.model.contype | translate}}">
+	</div>
+
+	<div nw-field 
+		 nw-label="iface" 
+	>
+		<input disabled type="text" value="{{general.ifaceDescription()}}">
+	</div>
+</div>

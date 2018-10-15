@@ -1,0 +1,73 @@
+<div ng-if="isActivate">
+
+
+    <div class="nw-empty-page-state-container" ng-if="isEmptyRules()">
+        <div class="nw-empty-page-state-image-add"></div>
+        <div class="nw-empty-page-state-title">
+            {{'raccess_rules_empty' | translate}}
+        </div>
+        <div class="nw-empty-page-state-subtitle">
+            {{'raccess_rules_empty_message' | translate}}
+        </div>
+        <div class="nw-empty-page-state-buttons-panel">
+
+            <button type="button" class="colored" ng-click="add()">
+                {{'addButton' | translate}}
+            </button>
+
+        </div>
+    </div>
+
+    <div ng-if="!isEmptyRules()">
+        <div class="card" alert="info" ng-show="busyPorts.length || systemPorts.length">
+            <div ng-show="busyPorts.length">{{'raccess_busy_ports' | translate}}: {{busyPorts.join(', ')}}.</div>
+			<div ng-show="systemPorts.length">{{'raccess_busy_system_ports' | translate}}: {{systemPorts.join(', ')}}.</div>
+            <div>{{'raccess_cant_use_ports' | translate}}</div>
+        </div>
+
+        <div class="card table raccess"
+             nw-table
+             nw-table-title="raccess_list"
+             nw-table-on-add="add()"
+             nw-table-on-delete="remove(items, keys)"
+             nw-table-on-edit="edit(item, key)"
+             nw-table-selected
+        >
+            <table>
+                <thead>
+                    <tr>
+                        <th ng-bind="'raccess_name' | translate"
+                            ng-if="defined.bcm_rlx_ralink"
+                        ></th>
+                        <th ng-bind="'iface' | translate"
+                            ng-if="defined.bcm_rlx_ralink"
+                        ></th>
+                        <th ng-bind="'raccess_ip' | translate"></th>
+                        <th ng-bind="'raccess_mask' | translate"></th>
+                        <th ng-bind="'raccess_port' | translate"></th>
+                        <th ng-bind="'raccess_protocol' | translate"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="(key, item) in rules"
+                        nw-mini-table
+                        nw-mini-table-caption="getCaption(item)"
+                        nw-mini-table-short="getShort(item)"
+                    >
+                        <td ng-bind="item.name"
+                            ng-if="defined.bcm_rlx_ralink"
+                        ></td>
+                        <td ng-bind="getInterfaceName(item.iface)"
+                            ng-if="defined.bcm_rlx_ralink"
+                        ></td>
+                        <td ng-bind="item.ips"></td>
+                        <td ng-bind="item.source_mask || '-'"></td>
+                        <td ng-bind="item.sport || '-'"></td>
+                        <td ng-bind="getPortName(item.dport)"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,169 @@
+
+<form class="css-form" name="form" novalidate
+    nw-form 
+    ng-submit="wifi.action.connect()"
+>
+    <div ng-if="wifi.isActivate">
+        
+        <div class="view-general-line" ng-show="wifi.band.list.length > 1">
+            <span class="view-general-tabs"
+                ng-repeat="key in wifi.band.list"
+                ng-click="wifi.band.change(key)"
+                ng-class="{'view-general-tabs--active': key == wifi.band.state}"
+                ng-bind="key"
+            ></span>
+        </div>
+
+        <div class="card no_padding">
+
+            <div class="row-grid">
+                <div class="col-md-12">
+                    <div class="card flat"
+                         alert="info"
+                         ng-if="wifi.hasWarning('radioDisable')"
+                    >
+                        <div nw-bind-html-compile="'wifiWPSRadioDisableWarning' | translate"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-grid">
+                <div class="col-md-12">
+                    <div class="card flat"
+                         alert="info"
+                         ng-if="wifi.hasWarning('unallowableMode')"
+                    >
+                        <div nw-bind-html-compile="'wifiWPSUnallowableModeWarning' | translate"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-grid">
+                <div class="col-md-12">
+                    <div class="card flat"
+                         alert="info"
+                         ng-if="wifi.hasWarning('broadcastDisable')"
+                    >
+                        <div nw-bind-html-compile="'wifiWPSBroadcastDisableWarning' | translate"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-grid">
+                <div class="col-md-12">
+                    <div class="button_block center" ng-if="wifi.hasWarning()">
+                        <button type="button" class="colored"
+                                ng-click='wifi.action.enableRadio()'
+                                ng-bind="'wifiEnableRadioButton' | translate"
+                                ng-if="wifi.hasWarning('radioDisable')"
+                        ></button>
+                        <button type="button" class="colored"
+                                ng-click='wifi.action.enableRadioBroadcast()'
+                                ng-bind="'wifiEnableRadioBroadcastButton' | translate"
+                                ng-if="wifi.hasWarning('broadcastDisable')"
+                        ></button>
+                    </div>
+                </div>
+            </div>
+
+        <div ng-if="!wifi.hasWarning()">
+            
+            <div class="row-grid">
+                <div class="col-md-6">
+                    <div class="card flat">
+                        <div class="title_card" ng-bind="'wifiWPSControl' | translate"></div>
+
+                        <div nw-flat-switch
+                             nw-state="wifi.wps.data.Enable"
+                             nw-text-enable="wifiWPSEnable"
+                             nw-text-disable="wifiWPSDisable"
+                             nw-action="wifi.action.update()"
+                        ></div>
+
+                        <div ng-if="wifi.wps.data.Enable">
+                             <div class="button_block no_top_margin">
+                                <button type="submit" class="colored"
+                                        ng-bind="'wps_init_connection' | translate"
+                                ></button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card flat" ng-if="wifi.wps.data.Enable">
+                        <div class="title_card" ng-bind="'wifiWPSInfo' | translate"></div>
+
+                        <div class="row nw-static" ng-if="wifi.hasInfoParam('state')">
+                            <span class="title">{{'wifiWPSConfigState' | translate}}:</span>
+                            <span class="info" ng-bind="wifi.info.state | translate"></span>
+                        </div>
+
+                        <div class="row nw-static" ng-if="wifi.hasInfoParam('connStatus')">
+                            <span class="title">{{'wifiWPSConnectionStatus' | translate}}:</span>
+                            <span class="info" ng-bind="wifi.info.connStatus | translate"></span>
+                        </div>
+
+                        <div class="row nw-static" ng-if="wifi.hasInfoParam('pin')">
+                            <span class="title">{{'wifiWPSDefPin' | translate}}:</span>
+                            <span class="info" ng-bind="wifi.info.pin"></span>
+                        </div>
+
+                        <div class="row nw-static" ng-if="wifi.hasInfoParam('defpin')">
+                            <span class="title">{{'wifiWPSDefPin' | translate}}:</span>
+                            <span class="info" ng-bind="wifi.info.defpin"></span>
+                        </div>
+
+                        <div class="row nw-static" ng-if="wifi.hasInfoParam('devpin')">
+                            <span class="title">{{'wifiWPSDevPin' | translate}}:</span>
+                            <span class="info" ng-bind="wifi.info.devpin"></span>
+                        </div>
+
+                        <div class="row nw-static" ng-if="wifi.hasInfoParam('clipin')">
+                            <span class="title">{{'wifiWPSCliPin' | translate}}:</span>
+                            <span class="info" ng-bind="wifi.info.clipin"></span>
+                        </div>
+
+                        <div class="row nw-static" ng-if="wifi.hasInfoParam('ssid')">
+                            <span class="title">{{'wifiSSID' | translate}}:</span>
+                            <span class="info" ng-bind="wifi.info.ssid"></span>
+                        </div>
+
+                        <div class="row nw-static" ng-if="wifi.hasInfoParam('mode')">
+                            <span class="title">{{'wifiMode' | translate}}:</span>
+                            <span class="info" ng-bind="wifi.info.mode"></span>
+                        </div>
+
+                        <div class="row nw-static" ng-if="wifi.hasInfoParam('encr')">
+                            <span class="title">{{'wifiEncrypt' | translate}}:</span>
+                            <span class="info" ng-bind="wifi.info.encr"></span>
+                        </div>
+
+                        <div class="row nw-static last" ng-if="wifi.hasInfoParam('psk')">
+                            <span class="title">{{'wifiPSKKey' | translate}}:</span>
+                            <span class="info" ng-bind="wifi.info.psk"></span>
+                        </div>
+
+                        <div class="button_block stretch">
+                            <button type="button" class="colored"
+                                    ng-click='wifi.action.refresh()'
+                                    ng-bind="'updateButton' | translate"
+                                    ng-if="wifi.hasAction('refresh')"
+                            ></button>
+                            <button type="button"
+                                    ng-click='wifi.action.reset()'
+                                    ng-bind="'wpsResetButton' | translate"
+                                    ng-disabled="!wifi.wps.data.Configured"
+                                    ng-if="wifi.hasAction('reset')"
+                            ></button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+        </div>
+        </div>
+    </div>
+</form>
+

@@ -1,0 +1,61 @@
+
+<div class="changing_list">
+
+	<div class="input_with_action"
+		 ng-repeat="item in urlfilter.list"
+		 ng-show="!item.__removed"
+	>
+		<div nw-field-group>
+			<div nw-field
+				 nw-required
+				 ng-if="!urlfilter.isRLX819XFilter"
+			>
+				<input nw-type="text"
+					   ng-model="item.url"
+					   ng-change="urlfilter.setRule(item, $index)"
+					   placeholder="{{'urlfilterRuleUrlExample' | translate}}"
+					   nw-custom-valid="urlfilter.validationUrl(url, $index)"
+					   url-wrapper
+					   nw-set-focus="{{urlfilter.focus == true}}"
+				>
+			</div>
+
+			<div nw-field
+				 nw-required
+				 ng-if="urlfilter.isRLX819XFilter"
+			>
+				<input nw-type="domain"
+					   ng-model="item.url"
+					   ng-change="urlfilter.setRule(item, $index)"
+					   placeholder="{{'urlfilterRuleUrlExample' | translate}}"
+					   nw-custom-valid="urlfilter.validationUrl(url, $index)"
+					   url-wrapper
+					   nw-set-focus="{{urlfilter.focus == true}}"
+				>
+			</div>
+
+			<div nw-field
+				 nw-required
+				 ng-if="urlfilter.isBroadcomModem"
+			>
+				<input type="text"
+					   nw-type="port"
+					   ng-model="item.port"
+					   placeholder="{{'urlfilterRulePortExample' | translate}}"
+				>
+			</div>
+		</div>
+
+		<div class="input_action"
+			 ng-click="urlfilter.removeRule($index)"
+		>×</div>
+	</div>
+
+	<div class="button_block right">
+		<button type="button" class="colored flat"
+				ng-click="urlfilter.addRule()"
+				ng-bind="'addButton' | translate"
+		></button>
+	</div>
+
+</div>

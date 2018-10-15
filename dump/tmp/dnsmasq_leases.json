@@ -1,0 +1,18 @@
+{
+      "dhcpv4": {
+            "clients": [
+                  {
+                        "lease": "86308",
+                        "lease_expires": "153353",
+                        "MACAddress": "98:de:d0:13:23:2d",
+                        "ip": "192.168.1.56",
+                        "hostname": "MBP",
+                        "vendorid": "",
+                        "client_id": "01:98:de:d0:13:23:2d"
+                  }
+            ]
+      },
+      "dhcpv6": {
+            "clients": []
+      }
+}

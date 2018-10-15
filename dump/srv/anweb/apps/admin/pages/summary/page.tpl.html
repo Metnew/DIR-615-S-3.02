@@ -1,0 +1,416 @@
+<div ng-if="isActivate">
+    <div class="card_columns summary" ng-if="pageLoadSuccess">
+        
+        <!-- Информация о системе -->
+
+        <div class="card">
+            <h3>{{'device_information' | translate}}</h3>
+
+            <div class="row nw-static">
+                <span class="title">{{'model' | translate}}:</span>
+                <span class="info">{{devInfo.fw_name || '-'}}</span>
+            </div>
+
+            <div class="row nw-static" ng-if="devInfo.hwRevision && !constants.CUSTOM_GOODLINE_21218">
+                <span class="title">{{'hwRevision' | translate}}:</span>
+                <span class="info">{{devInfo.hwRevision || '-'}}</span>
+            </div>
+
+            <div class="row nw-static">
+                <span class="title">{{'fw_version' | translate}}:</span>
+                <span class="info"><a ui-sref="system.firmware">{{devInfo.fw_version || '-'}}</a></span>
+            </div>
+
+            <div class="row nw-static" ng-if="!constants.CUSTOM_GOODLINE_21218">
+                <span class="title">{{'build_time' | translate}}:</span>
+                <span class="info">{{devInfo.fw_buildDate || '-'}}</span>
+            </div>
+
+            <div class="row nw-static">
+                <span class="title">{{'vendor' | translate}}:</span>
+                <span class="info">{{devInfo.fw_vendor || '-'}}</span>
+            </div>
+
+            <div class="row nw-static" ng-if="devInfo.fw_bugs">
+                <span class="title">{{ ((!constants.CUSTOM_GOODLINE_21218) ? 'support' : 'support_full') | translate }}:</span>
+                <span class="info">
+                    <a href="mailto:{{devInfo.fw_bugs | trimLetters: '<': '>' }}">{{devInfo.fw_bugs | trimLetters: '<': '>' }}</a>
+                </span>
+            </div>
+
+			<div class="row nw-static" ng-if="!devInfo.fw_bugs && devInfo.fw_tel">
+                <span class="title">{{'support' | translate}}:</span>
+                <span class="info">{{devInfo.fw_tel | trimLetters: '<': '>' }}</span>
+            </div>
+
+			<div class="row nw-static" ng-if="devInfo.fw_tel && constants.PHONE">
+				<span class="title">{{'support_phone' | translate}}:</span>
+				<span class="info">{{devInfo.fw_tel | trimLetters: '<': '>' }}</span>
+			</div>
+
+			<div class="row nw-static" ng-if="constants.LAYZER">
+				<span class="title">{{'website' | translate}}:</span>
+				<span class="info">
+					<a href="http://www.ekran39.ru/" target="_blank">{{ "http://www.ekran39.ru/" }}</a>
+				</span>
+			</div>
+
+            <div class="row nw-static" ng-if="!constants.CUSTOM_GOODLINE_21218">
+                <span class="title">{{'summary' | translate}}:</span>
+                <span class="info">{{devInfo.fw_buildNotes | translate}}</span>
+            </div>
+
+            <div class="row nw-static">
+                <span class="title">{{'uptime' | translate}}:</span>
+                <span class="info">
+                    <!-- {{uptime.d}}{{'d' | translate}} {{uptime.h}}:{{uptime.m}}:{{uptime.s}} -->
+                    <a ng-click="openCpuMemoryDialog()"><up-time time="uptime"></up-time></a>
+                </span>
+            </div>
+
+            <div class="row nw-static" ng-if="constants.DAP_MODE_SUPPORT && constants.ROUTE_MODE_SUPPORT && deviceMode && !constants.CUSTOM_PLANETA_21337">
+                <span class="title">{{'device_mode' | translate}}:</span>
+                <span class="info">
+                    <a class="dashed" ng-click="openModeDialog()">{{'summary_mode_' + deviceMode | translate}}</a>
+                </span>
+            </div>
+
+			<div class="row nw-static leds-enable" ng-if="constants.LEDS_DISABLE_SUPPORT">
+				<span class="title">{{'summaryLedsDisable' | translate}}:</span>
+                <span class="info">
+					<div nw-labeled-switch
+						 nw-label="disable"
+						 nw-model="ledsEnable"
+						 nw-change="changeLedsDisable(ledsEnable)"
+					></div>
+				</span>
+            </div>
+
+			<div ng-if="constants.CUSTOM_AIRTEL_20896" ng-include="'pages/summary/airtel.addon.html'"></div>
+        </div>
+
+        <!-- Точка доступа Wi-Fi 2.4 ГГц -->
+
+        <div class="card" ng-if="wifiInfo.f24.exists">
+            <h3>Wi-Fi {{'24ghz' | translate}}</h3>
+
+            <div class="row nw-static">
+                <span class="title">{{'status' | translate}}:</span>
+                <span class="info">
+                    {{(wifiInfo.f24.status ? 'on': 'off') | translate}}
+                </span>
+                <span class="icon status-circle {{wifiInfo.f24.status ? 'on': 'off'}}"></span>
+            </div>
+
+            <div class="row nw-static">
+                <span class="title">{{'broadcast' | translate}}:</span>
+                <span class="info">
+                    {{wifiInfo.f24.broadcast | translate}}
+                </span>
+                <span class="icon status-circle {{wifiInfo.f24.broadcastLed}}"></span>
+            </div>
+
+            <div class="row nw-static">
+                <span class="title">{{'wifi_guest_net_count' | translate}}:</span>
+                <span class="info">
+                    {{wifiInfo.f24.guestNetCount}}
+                </span>
+            </div>
+
+            <div class="row nw-static">
+                <span class="title">{{'summary_ssid_label' | translate}}:</span>
+                <span class="info"><a ui-sref="wifi.ap.edit({freq: '2.4GHz', inx: 1})">{{wifiInfo.f24.ssid}}</a></span>
+            </div>
+
+            <div class="row nw-static last">
+                <span class="title">{{'Security' | translate}}:</span>
+                <span class="info">
+                    <a ui-sref="wifi.ap.edit({freq: '2.4GHz', inx: 1})">{{wifiInfo.f24.authMode}}</a>
+                </span>
+                <span class="icon">
+                    <img class="wifi-locked-icon" src="/general/img/icon-lock.png" ng-if="wifiInfo.f24.authMode != 'Open'">
+                </span>
+            </div>
+        </div>
+
+        <!-- Точка доступа Wi-Fi 5 ГГц -->
+
+        <div class="card" ng-if="wifiInfo.f5.exists">
+            <h3>Wi-Fi {{'5ghz' | translate}}</h3>
+
+            <div class="row nw-static">
+                <span class="title">{{'status' | translate}}:</span>
+                <span class="info">
+                    {{(wifiInfo.f5.status ? 'on': 'off') | translate}}
+                </span>
+                <span class="icon status-circle {{wifiInfo.f5.status ? 'on': 'off'}}"></span>
+            </div>
+
+            <div class="row nw-static">
+                <span class="title">{{'broadcast' | translate}}:</span>
+                <span class="info">
+                    {{wifiInfo.f5.broadcast | translate}}
+                </span>
+                <span class="icon status-circle {{wifiInfo.f5.broadcastLed}}"></span>
+            </div>
+
+            <div class="row nw-static">
+                <span class="title">{{'wifi_guest_net_count' | translate}}:</span>
+                <span class="info">
+                    {{wifiInfo.f5.guestNetCount}}
+                </span>
+            </div>
+
+            <div class="row nw-static">
+                <span class="title">{{'summary_ssid_label' | translate}}:</span>
+                <span class="info"><a ui-sref="wifi.ap.edit({freq: '5GHz', inx: 1})">{{wifiInfo.f5.ssid}}</a></span>
+            </div>
+
+            <div class="row nw-static last">
+                <span class="title">{{'Security' | translate}}:</span>
+                <span class="info">
+                    <a ui-sref="wifi.ap.edit({freq: '5GHz', inx: 1})">{{wifiInfo.f5.authMode}}</a>
+                </span>
+                <span class="icon" ng-if="wifiInfo.f5.authMode != 'Open'">
+                    <img class="wifi-locked-icon" src="/general/img/icon-lock.png">
+                </span>
+            </div>
+        </div>
+
+        <!-- WAN по IPv4 и WAN по IPv6 -->
+
+        <div class="card"
+             ng-repeat="(key, wan) in wanInfo"
+             ng-if="wan && deviceMode != 'extender'"
+        >
+
+            <h3>{{'wan_con_' + key | translate}}</h3>
+
+            <div class="row nw-static">
+                <span class="title">{{'contype' | translate}}:</span>
+                <span class="info">{{wan.connectionType | translate}}</span>
+            </div>
+
+            <div class="row nw-static" ng-if="wan.status">
+                <span class="title">{{'status' | translate}}:</span>
+                <span class="info not_break">
+                    {{wan.statusDescription | translate}}
+                </span>
+                <span class="icon status-circle {{ wan.status }}"></span>
+            </div>
+
+            <div class="row nw-static last" ng-if="wan.status == 'on'">
+                <span class="title">{{'IPAddress' | translate}}:</span>
+                <span class="info" ng-if="key == 'v4'">{{wan.ip}}</span>
+                <span class="info" ng-if="key == 'v6'" ipv6cut="wan.ipv6"></span>
+                <!-- <span class="info" ng-if="key == 'v6'">{{wan.ipv6}}</span> -->
+            </div>
+        </div>
+
+        <!-- Локальная сеть -->
+
+        <div class="card" nw-overlay="!longAreasReady">
+            <h3>{{'lan' | translate}}</h3>
+
+            <div class="row nw-static">
+                <span class="title">{{'lan_ip_v4' | translate}}:</span>
+                <span class="info"><a ui-sref="network.lan">{{lanInfo.lanIp}}</a></span>
+            </div>
+
+            <div class="row nw-static" ng-if="lanInfo.lanIpv6">
+                <span class="title">{{'lan_ip_v6' | translate}}:</span>
+                <!-- <span class="info"><a ui-sref="network.lan({ipversion:'IPv6'})">{{lanInfo.lanIpv6}}</a></span> -->
+                <span class="info"><a ui-sref="network.lan({ipversion:'IPv6'})" ipv6cut="lanInfo.lanIpv6"></a></span>
+            </div>
+
+
+            <div class="row nw-static" ng-if="wifiInfo">
+                <span class="title">{{'wireless_connections' | translate}}:</span>
+                <span class="info">{{lanInfo.numberOfWirelessClients || '-'}}</span>
+            </div>
+
+            <div class="row nw-static last">
+                <span class="title">{{'wired_connections' | translate}}:</span>
+                <span class="info">{{lanInfo.numberOfWiredClients || '-'}}</span>
+            </div>
+        </div>
+
+        <!-- Порты LAN -->
+
+        <div class="card" ng-hide="lanInfo.notPortsInfo" nw-overlay="!longAreasReady">
+            <h3>{{'lan_ports' | translate}}</h3>
+    
+            <div class="note" ng-if="!lanInfo.ports" ng-bind="'summary_loading' | translate"></div>
+
+            <div ng-repeat="port in lanInfo.ports" class="row nw-static" title="{{ port.management ? ('on_this_port' | translate) : '' }}">
+                <span class="title">{{port.name}}:</span>
+                <span class="info">
+                    {{ port.status ? port.speed : ('off' | translate) }}
+                </span>
+                <span svg-icon="human" class="svg-icon" ng-if="port.management"></span>
+                <span class="icon status-circle {{port.status? 'on': 'disconnected'}}"></span>
+            </div>
+            
+        </div>
+
+        <!-- Статус DSL -->
+
+        <div class="card" ng-if="constants.DSL_STATUS">
+        <h3>{{'navStatsDSL' | translate}}</h3>
+           <div class="row nw-static {{ dslStats != 1 ? 'last' : '' }}">
+                <span class="title">{{'statDslLineState' | translate}}:</span>
+                <span class="info" ng-if="dslStats == 1">{{'on' | translate}}</span>
+                <span class="info" ng-if="dslStats == 0">{{'off' | translate}}</span>
+                <span class="info" ng-if="dslStats != 0 && dslStats != 1">{{dslStats}}</span>
+                <span class="icon status-circle {{(dslStats == 1) ? 'on': ((dslStats == 0) ? 'disconnected' : 'pending')}}"></span>
+            </div>
+        </div>
+
+        <!-- USB-устройства -->
+
+        <div class="card usb-info"
+             ng-if="usbInfo && deviceMode != 'extender'"
+             nw-overlay="!longAreasReady"
+        >
+            <h3>{{ ((constants.RENAME_USB_TO_LTE) ? 'lte_modem_capt' : 'summary_usb_devices') | translate}}</h3>
+            <div class="note" ng-if="usbInfo.isEmpty && !constants.RENAME_USB_TO_LTE">
+                {{'summary_usb_not_connected' | translate}}
+            </div>
+            <div ng-if="!usbInfo.isEmpty" ng-repeat="device in usbInfo.devices" class="usb-device row nw-static">
+                <span svg-icon="{{device.icon}}" class="usb-device__icon"></span>
+                <a href="{{device.link}}" class="usb-device__name">{{device.name}}</a>
+            </div>
+        </div>
+
+        <!-- VoIP линии -->
+
+        <div class="card" 
+            ng-if="voipInfo"
+            ng-repeat="line in voipInfo.lines"
+        >
+            <h3>{{'VoIP'}} {{line.name}}</h3>
+
+            <div class="row nw-static">
+                <span class="title">{{'voipRegistrationStatus' | translate}}:</span>
+                <span class="info">{{line.registration.status_msg | translate}}</span>
+                <span class="icon status-circle {{ line.registration.status }}"></span>
+            </div>
+
+            <!--<div class="row nw-static last">
+                <span class="title">{{'voipPhoneStatus' | translate}}:</span>
+                <span class="info">
+                     <div voip-phone-status="line.phone.status"
+                          voip-phone-status-message="line.phone.status_msg"
+                    ></div>
+                </span>
+                <span class="icon">
+
+                </span>
+            </div>-->
+            <div class="row" voip-phone-status="line.phone.status" voip-phone-status-message="line.phone.status_msg"></div>
+        </div>
+
+        <!-- Яндекс.DNS -->
+        
+        <div class="card yandex settings summary"
+             ng-if="yandexInfo && deviceMode != 'extender'"
+             nw-overlay="!longAreasReady"
+        >
+            <div class="ya_desc mb-10">
+                <div class="ya_logo_wrapper">
+                    <svg svg-icon="{{'yandex_logo_name'| translate}}" class="ya_logo"></svg>
+                </div>
+                <div class="ya_tagline">
+                    <div class="ya_tagline_title" ng-bind="'navYandexDns' | translate"></div>
+                     <div
+                        class="ya_tagline_enable_switch"
+                        nw-labeled-switch
+                        nw-label="enable"
+                        nw-model="yandexInfo.settings.enabled"
+                        nw-change="yandexInfo.toggleYandexDns()">
+                    </div>
+                </div>
+            </div>
+            <div class="yandex_mode_switchers" ng-class="{'disabled' : !yandexInfo.settings.enabled }">
+                <div class="row nw-static" ng-repeat="mode in yandexInfo.modesList">
+                    <span ng-if="!yandexInfo.settings.enabled" class="title">{{yandexInfo.modesInfo[mode].label | translate}}</span>
+                    <span class="title"
+                        ng-if="yandexInfo.settings.enabled"
+                        nw-radio 
+                        nw-label="{{yandexInfo.modesInfo[mode].label}}"
+                        nw-value="mode">
+                        <input type="radio"
+                            ng-model="yandexInfo.settings.default"
+                            ng-change="yandexInfo.updateSettings()"
+                            ng-disabled="!yandexInfo.settings.enabled"
+                            />
+                    </span>
+                    <span ng-class="{ 'info': true, 'selectable': yandexInfo.settings.enabled }">
+                        {{yandexInfo.modesInfo[mode].devicesCount + ' ' + (yandexInfo.getDeviceCountString(yandexInfo.modesInfo[mode].devicesCount) | translate)}}
+                    </span>
+                    <span class="icon yandex_mode_icon {{mode}}_mode"></span>
+                </div>
+            </div>
+        </div>
+
+    	<!-- Процессор и память -->
+        
+       <!--  <div class="card" ng-if="cpuram.isActivate">
+    		<h4 ng-bind="'sysinfoCPU' | translate"></h4>
+    		<div class="row nw-static last">
+    			<span class="title">{{'sysinfoCPULoad' | translate}}:</span>
+    			<span class="info progress-bar">
+    				<nw-progress-bar pb-value="cpuram.cpu" pb-text="cpuram.cpuString"/>
+    			</span>
+    			
+    		</div>
+    		<h4 ng-bind="'susinfoRAM' | translate"></h4>
+    		<div class="row nw-static last">
+    			<span class="title">{{'sysinfoMemoryUse' | translate}}:</span>
+    			<span class="info progress-bar">
+    				<nw-progress-bar pb-value="cpuram.ram.rate.used" pb-text="cpuram.ram.string.used"/>
+    			</span>
+    		</div>
+    		<div class="row nw-static">
+    			<span class="title">{{'sysinfoMemoryFree' | translate}}:</span>
+    			<span class="info" ng-bind="cpuram.ram.string.free"></span>
+    		</div>
+    		<div class="row nw-static">
+    			<span class="title">{{'sysinfoMemoryBuf' | translate}}:</span>
+    			<span class="info" ng-bind="cpuram.ram.string.buf"></span>
+    		</div>
+    		<div class="row nw-static last">
+    			<span class="title">{{'sysinfoMemoryTotal' | translate}}:</span>
+    			<span class="info" ng-bind="cpuram.ram.string.total"></span>
+    		</div>
+    	</div> -->
+
+        <!-- GPON -->
+
+        <div class="card" ng-if="constants.GPON_SUPPORT && devInfo">
+    		<h4 ng-bind="'summary_gpon_status' | translate"></h4>
+
+    		<div class="row nw-static last">
+    			<span class="title">{{'pon_status_onu_state' | translate}}:</span>
+                <span class="info progress-bar" ng-if="onuState">
+                    <nw-slider-serif ng-if="onuState <= 5" sl-value="onuState" sl-text="'pon_o' + onuState" 
+                                    sl-desc="'pon_o' + onuState + '_desc'" sl-show-desc="true" sl-max-count="5">
+                    </nw-slider-serif>
+                    <span class="nw-static" ng-if="onuState > 5" >
+                        <span class="info">{{'pon_o' + onuState | translate}}</span>
+                        <span class="icon status-circle off"></span>
+                    </span>
+                </span>
+    			<span class="info" ng-if="!onuState">{{'pon_state_not_connecting' | translate}}</span>
+    		</div>
+    	</div>
+    </div>
+
+    <div nw-empty-state
+         nw-empty-state-title="errorPullDataDesc"
+         nw-empty-state-subtitle="errorPullDataMsg"
+         nw-empty-state-button="refreshButton"
+         nw-empty-state-button-click="refreshSummary()"
+         ng-if="!pageLoadSuccess"
+    ></div>
+</div>

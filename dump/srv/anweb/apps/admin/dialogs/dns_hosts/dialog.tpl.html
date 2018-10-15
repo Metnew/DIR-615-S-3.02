@@ -1,0 +1,45 @@
+<div class="dialog_top_line">
+    <div class="dialog_close_mobile" ng-click="closeThisDialog()"></div>
+    <div class="dialog_title_text"  ng-bind="model.header | translate">
+    </div>
+    <div class="dialog_close" ng-click="closeThisDialog()">
+        <svg svg-icon="cross-medium"></svg>
+    </div>
+</div>
+<form name="dialog_form" id="dialog_form" class="dialog_content_wrapper" nw-form ng-submit="funcs.save()">
+	<div class="dialog_content">
+
+		<div nw-field
+			 nw-label="dnsHostsIp"
+			 nw-required
+		>
+			<input type="text"
+				   ng-model="model.host.ip"
+				   nw-ip-not-null-and-not-multicast
+				   nw-client-list
+				   nw-client-list-type="ip"
+				   nw-client-list-exclude="{{funcs.getUseIps()}}"
+				   nw-type="ip"
+				   nw-custom-valid="valid.ip(value)"
+			>
+		</div>
+
+		<div nw-field
+			 nw-label="dnsHostsName"
+			 nw-required
+		>
+			<input type="text"
+				ng-model="model.host.hostname"
+				nw-custom-valid="valid.name(value)"
+			>
+		</div>
+
+	</div>
+    <div class="dialog_button_panel button_block right">
+        <button class="colored flat"
+                type="submit"
+                ng-bind="'save'|translate"
+                ng-disabled="funcs.isSavingDisabled()"
+        ></button>
+    </div>
+</form>

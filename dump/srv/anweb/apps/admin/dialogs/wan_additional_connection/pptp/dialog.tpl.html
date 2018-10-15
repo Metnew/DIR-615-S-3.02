@@ -1,0 +1,44 @@
+
+<div class="dialog_top_line">
+    <div class="dialog_close_mobile" ng-click="cancel()"></div>
+    <div class="dialog_title_text"></div>
+    <div class="dialog_close" ng-click="cancel()">
+        <svg svg-icon="cross-medium"></svg>
+    </div>
+</div>
+<form name="form" novalidate class="dialog_content_wrapper">
+	<div class="dialog_content">
+		<div class="dialog_comment" ng-bind="'wanNeedAdditionalConnectionPPTP' | translate"></div>
+		<div nw-radio-group
+			 nw-model="select.type.value"
+			 nw-options="select.type.list"
+		></div>
+        <div class="dialog_comment" ng-if="select.type.value == 'vpn'" ng-bind="'wanNeedAccessToVpn' | translate">
+        </div>
+		<div ng-if="select.type.value == 'internet'">
+			<div ng-if="select.connection.list.length > 1">
+				<div class="dialog_comment" ng-bind="'wanNeedAdditionalConnection2PPTP' | translate"></div>
+				<div ng-repeat="option in select.connection.list">
+					<div class="dialog_comment" 
+						ng-if="$index == 1"
+						ng-bind="'wanNeedAdditionalConnection3PPTP' | translate"
+					></div>
+	            	<div class="radio-field" nw-radio nw-label="{{option.label}}" nw-value="option.value">
+	            		<input type="radio" ng-model="select.connection.value">
+	            	</div>
+	            </div>
+			</div>
+			<div class="dialog_comment" 
+				ng-if="select.connection.list.length == 1"
+				ng-bind="'wanNeedAdditionalConnection4PPTP' | translate"
+			>
+			</div>
+		</div>
+	</div>
+	<div class="dialog_button_panel button_block right">
+		<button type="button" class="colored flat" 
+			ng-click="apply()"
+			ng-bind="'OK'"
+		></button>
+	</div>
+</form>

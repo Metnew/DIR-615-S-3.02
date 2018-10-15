@@ -1,0 +1,74 @@
+<div class="system card traceroute"  nw-overlay="!isRequestInProgress">
+    <form name="tracerouteSettings"
+          ng-submit="getTraceroute()"
+          nw-form
+    >
+
+        <div class="group">
+            <div nw-field
+                 class="traceroute_host_style"
+                 nw-label="traceroute_host"
+                 nw-required
+                 ng-if="traceroute.is_ipv6"
+            >
+                <input ng-model="traceroute.host"
+                       nw-type="hostv6"
+                >
+            </div>
+
+            <div nw-field
+                 class="traceroute_host_style"
+                 nw-label="traceroute_host"
+                 nw-required
+                 ng-if="!traceroute.is_ipv6"
+            >
+                <input ng-model="traceroute.host"
+                       nw-type="host"
+                >
+            </div>
+
+            <div nw-labeled-switch 
+                 nw-label="traceroute_is_ipv6" 
+                 nw-model="traceroute.is_ipv6"
+                 ng-if="ipv6Avail"
+                 class="traceroute_is_ipv6_label"
+            ></div>
+
+            <div nw-field
+                class="traceroute_more_settings_label"
+            >
+                <button type="button"
+                    class="flat colored traceroute_more_settings_button"
+                    ng-click="openTracerouteSettings()"
+                >
+                    {{'additional_settings' | translate}}
+                </button>
+            </div>
+
+            <div nw-field
+            >
+                <span class="traceroute_settings_count"
+                      ng-if="settingsDiffCount() != 0">({{settingsDiffCount()}})</span>
+            </div>
+
+        </div>
+
+        <div class="log_wrapper">
+            <textarea readonly class="console log" id="console" ng-model="console"></textarea>
+        </div>
+
+        <div class="button_block center">
+            <button type="submit"
+                    class="colored"
+            >
+                {{'startButton' | translate}}
+            </button>
+
+            <button type="button"
+                    ng-click="clearConsole()"
+            >
+                {{'clearButton' | translate}}
+            </button>
+        </div>
+    </form>
+</div>

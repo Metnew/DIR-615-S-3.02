@@ -1,0 +1,2 @@
+#!/bin/sh
+insmod /lib/modules/$1.ko

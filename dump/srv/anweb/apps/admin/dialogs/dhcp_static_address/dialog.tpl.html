@@ -1,0 +1,62 @@
+<div class="dialog_top_line">
+    <div class="dialog_close_mobile" ng-click="staticAddress.dialog.onCancel()"></div>
+    <div class="dialog_title_text"  ng-bind="'lanDHCPStaticAddressCaption' | translate">
+    </div>
+    <div class="dialog_close" ng-click="staticAddress.dialog.onCancel()">
+        <svg svg-icon="cross-medium"></svg>
+    </div>
+</div>
+<form name="form" novalidate  ng-submit="staticAddress.dialog.onApply()" nw-form 
+    class="dialog_content_wrapper">
+    <div class="dialog_content">
+        <div nw-field 
+	    	 nw-label="lanDHCPStaticAddressIPaddress" 
+	    	 nw-required
+	    >
+	    	<input type="text"
+	    		nw-custom-valid="staticAddress.validation(value, 'IPAddress')"
+	    		ng-model="staticAddress.data.IPAddress"
+	    		nw-set-focus
+	    	>
+	    </div>
+
+	    <div class="dialog_comment dialog_comment--left dialog_comment--bottom" ng-if="staticAddress.warning() == 'ip_address_is_not_included_to_network' && version == 'ipv4'">
+	    	{{'ip_address_is_not_included_to_network' | translate}} ({{staticAddress.subnet}}/{{staticAddress.mask}})
+	    </div>
+
+		<div class="dialog_comment dialog_comment--left dialog_comment--bottom" ng-if="staticAddress.warning() == 'ip_address_is_not_included_to_network' && version == 'ipv6'">
+			{{'ip_address_is_not_included_to_network' | translate}} ({{staticAddress.subnet}}/{{staticAddress.prefix}})
+		</div>
+
+	    <div nw-field 
+	    	 nw-label="lanDHCPStaticAddressMACAddress"
+	    	 nw-required
+	    >
+	    	<input type="text" 
+	    		nw-type="mac" 
+	    		nw-custom-valid="staticAddress.validation(value, 'MACAddress')"
+	    		ng-model="staticAddress.data.MACAddress"
+	    	>
+	    </div>
+	    <div nw-field 
+	    	 nw-label="lanDHCPStaticAddressHostname"
+	    >
+	    	<input type="text"
+	    		nw-custom-valid="staticAddress.validation(value, 'Hostname')"
+	    		ng-model="staticAddress.data.Hostname"
+	    	>
+	    </div>
+    </div>
+	<div class="dialog_button_panel button_block right">
+		<button type="button"
+               class="flat"
+			ng-if="staticAddress.dialog.action == 'edit'" 
+			ng-click="staticAddress.dialog.onRemove()"
+			ng-bind="'removeButton' | translate"
+		></button>
+		<button type="submit" class="colored flat"
+			ng-bind="'applyButton' | translate"
+			ng-disabled="!staticAddress.isChange()"
+		></button>
+	</div>
+</form>

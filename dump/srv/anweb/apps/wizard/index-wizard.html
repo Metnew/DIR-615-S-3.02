@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="wizard" ng-controller="wizardCtrl">
+<head>
+	
+<title ng-bind="gDeviceInfo.modelName"></title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="content-style-type" content="text/css" />
+<meta http-equiv="content-script-type" content="text/javascript" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<link type="image/x-icon" rel="shortcut icon" ng-href="{{ '../general/img/favicon.ico' | nocache }}" href />
+
+<link type="text/css" rel="stylesheet" href="/wizard/css/concat?type=css&path=wizard/css_list&_=756e0c3ae71202c252fb8dc85730b6da">
+<link type="text/css" rel="stylesheet" href="/general/css/concat?type=css&path=wizard/general_css_list&_=756e0c3ae71202c252fb8dc85730b6da">
+<script type="text/javascript" src="/cookies"></script>
+<script type="text/javascript" src="/concat?type=js&path=wizard/js_list&_=756e0c3ae71202c252fb8dc85730b6da"></script>
+
+</head>
+<body class="dcc">
+	
+<div class="sky" > </div>
+<div class="grass" > </div>
+
+<div class="avail-overlay-bg" ng-show="!gDeviceAvail && gAvailOverlay">&nbsp;</div>
+<div class="avail-overlay" ng-show="!gDeviceAvail && gAvailOverlay">
+	<div class="sky" > </div>
+	<div class="grass" > </div>
+	<div>
+		<div class="title">{{'wizard_device_lost' | translate}}</div>
+		<div style="text-align: center;">
+			<img class="preloader" src="img/preloader.gif">
+		</div>
+		<div class="info">
+			<div class="warn">
+				<img src="img/header_alarm.png">
+				{{'wizard_dont_refresh' | translate}}
+			</div>
+			<div class="hr"></div>
+			<ul>
+				<li>{{'wizard_notavail_lan' | translate}}</li>
+				<li>{{'wizard_notavail_wifi' | translate}}</li>
+		 	</ul>
+		 	<div class="hr"></div>
+		 	<div class="warn sup">
+				* {{'wizard_newtab_notice' | translate}}
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="overlay" ng-show="gIsShowOverlay && !gShowAuthDialog"></div>
+
+<div ui-view ng-show="!gShowAuthDialog && gShowView"></div>
+
+<div ng-show="gShowAuthDialog" ng-include="'/wizard/pages/auth/page.tpl.html'" ng-controller="wizardAuthCtrl"></div>
+
+<div class="cache_block">
+	<img src="img/plug_unknown.png">
+	<img src="img/plug_disconnect.png">
+	<img src="img/plug_connect.png">
+	<img src="img/header_alarm.png">
+</div>
+
+	
+</body>
+</html>
+

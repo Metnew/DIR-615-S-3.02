@@ -1,0 +1,43 @@
+<div class="dialog_top_line">
+    <div class="dialog_close_mobile" ng-click="closeThisDialog()"></div>
+    <div class="dialog_title_text" ng-bind="header | translate"></div>
+    <div class="dialog_close" ng-click="closeThisDialog()">
+        <svg svg-icon="cross-medium"></svg>
+    </div>
+</div>
+<div class="dialog_content_wrapper cpu_memory_info_dialog">
+    <div class="dialog_content" ng-if="cpuram.isActivate">
+    	<h4 ng-bind="'sysinfoCPU' | translate"></h4>
+    	<div class="row nw-static last">
+    		<span class="title">{{'sysinfoCPULoad' | translate}}:</span>
+    		<span class="info progress-bar">
+    			<nw-progress-bar pb-value="cpuram.cpu" pb-text="cpuram.cpuString"/>
+    		</span>
+    		
+    	</div>
+    	<h4 ng-bind="'susinfoRAM' | translate"></h4>
+    	<div class="row nw-static last">
+    		<span class="title">{{'sysinfoMemoryUse' | translate}}:</span>
+    		<span class="info progress-bar">
+    			<nw-progress-bar pb-value="cpuram.ram.rate.used" pb-text="cpuram.ram.string.used"/>
+    		</span>
+    	</div>
+    	<div class="row nw-static">
+    		<span class="title">{{'sysinfoMemoryFree' | translate}}:</span>
+    		<span class="info" ng-bind="cpuram.ram.string.free"></span>
+    	</div>
+    	<div class="row nw-static">
+    		<span class="title">{{'sysinfoMemoryBuf' | translate}}:</span>
+    		<span class="info" ng-bind="cpuram.ram.string.buf"></span>
+    	</div>
+    	<div class="row nw-static last">
+    		<span class="title">{{'sysinfoMemoryTotal' | translate}}:</span>
+    		<span class="info" ng-bind="cpuram.ram.string.total"></span>
+    	</div>
+        <h4 ng-bind="'contOperation' | translate"></h4>
+        <div class="row nw-static last">
+            <span class="title">{{'sinceTheBoot' | translate}}:</span>
+            <up-time class="info" time="uptime"></up-time>
+        </div>
+    </div>
+</div>

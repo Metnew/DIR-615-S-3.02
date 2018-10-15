@@ -1,0 +1,231 @@
+<div ng-if="ipv4.isActive">
+	
+	<div class="row-grid">
+		
+		<div class="col-md-6">
+			<div ng-include="'/admin/pages/lan/interface/page.list.tpl.html'"
+				 ng-controller="lanInterfaceListCtrl"
+			></div>
+			
+			<div class="card flat">
+				
+				<h4 ng-bind="'lanIPCaption' | translate"></h4>
+				<div nw-field 
+					 nw-label="lanIPAddressingMode"
+					 ng-if="ipv4.supported.AddressingMode"
+				>
+					<div class="custom-select">
+						<select nw-not-dirty 
+							ng-model="ipv4.data.AddressingMode" 
+							ng-options="option.value as option.name | translate for option in ipv4.addressingModes"
+						></select>
+					</div>
+				</div>
+				<div nw-field 
+					 nw-label="lanIPAddress" 
+					 nw-required
+					 ng-if="ipv4.supported.StaticIP.Address"
+					  nw-disabled="ipv4.staticIP.isDisabled()"
+				>
+					<input type="text" 
+						ng-model="ipv4.staticIP.basic.data.Address"
+						ng-change="ipv4.staticIP.updatePool()"
+						nw-custom-valid="ipv4.staticIP.validation(value, 'Address', ipv4.staticIP.basic)"
+					>
+				</div>
+				
+				<div nw-field 
+					 nw-label="lanIPSubnetMask" 
+					 nw-required
+					 ng-if="ipv4.supported.StaticIP.SubnetMask"
+					 nw-disabled="ipv4.staticIP.isDisabled()"
+				>
+					<input type="text" 
+						ng-model="ipv4.staticIP.basic.data.SubnetMask"
+						nw-custom-valid="ipv4.staticIP.validation(value, 'SubnetMask', ipv4.staticIP.basic)"
+						nw-autocomplete-network-subnet-mask
+						nw-autocomplete-network-subnet-mask-min-hosts="{{ipv4.getMinHosts()}}"
+						nw-autocomplete-network-subnet-mask-max-hosts="{{ipv4.constraints.MaxHosts}}"
+					>
+				</div>
+
+				<div nw-field
+					 nw-label="lanGatewayIP"
+					 ng-if="ipv4.supported.StaticIP.GatewayAddress"
+					 nw-disabled="ipv4.staticIP.isDisabled()"
+				>
+					<input type="text"
+						nw-type="ipv4"
+						ng-model="ipv4.staticIP.basic.data.GatewayAddress"
+						nw-custom-valid="ipv4.staticIP.validation(value, 'GatewayAddress', ipv4.staticIP.basic)"
+					>
+				</div>
+
+				<div nw-field
+					nw-label="lanAddnHostname"
+					ng-if="ipv4.supported.StaticIP.AddnHostname"
+				>
+				   <input ng-model="ipv4.staticIP.basic.data.AddnHostname"
+						  nw-type="domain"
+				   >
+				</div>
+			</div>
+
+			<div class="card flat" ng-if="ipv4.staticIP.hasAlias()">
+				<h4 ng-bind="'lanIPAliasCaption' | translate"></h4>
+				
+				<div nw-field 
+					 nw-label="lanIPAddress" 
+					 nw-required
+					 ng-if="ipv4.supported.StaticIP.Address"
+				>
+					<input type="text" 
+						ng-model="ipv4.staticIP.alias.data.Address"
+						nw-custom-valid="ipv4.staticIP.validation(value, 'Address', ipv4.staticIP.alias)"
+					>
+				</div>
+				
+				<div nw-field 
+					 nw-label="lanIPSubnetMask" 
+					 nw-required
+					 ng-if="ipv4.supported.StaticIP.SubnetMask"
+				>
+					<input type="text" 
+						ng-model="ipv4.staticIP.alias.data.SubnetMask"
+						nw-custom-valid="ipv4.staticIP.validation(value, 'SubnetMask', ipv4.staticIP.alias)"
+						nw-autocomplete-network-subnet-mask
+						nw-autocomplete-network-subnet-mask-min-hosts="{{ipv4.getMinHosts()}}"
+						nw-autocomplete-network-subnet-mask-max-hosts="{{ipv4.constraints.MaxHosts}}"
+					>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-6">
+			<div class="card flat">
+
+				<h4 ng-bind="'lanConfigAddressing' | translate"></h4>
+				
+				<div nw-field 
+					 nw-label="lanDHCPMode"
+					 ng-if="ipv4.supported.DHCP.Mode"
+				>
+					<select 
+						ng-model="ipv4.dhcp.data.Mode" 
+						ng-options="option.value as (option.name | translate) for option in ipv4.dhcp.modes"
+					>
+					</select>
+				</div>
+				
+				<div ng-if="ipv4.dhcp.data.Mode == 'Server'">
+					
+					<div nw-field 
+						 nw-label="lanDHCPMinAddress" 
+						 nw-required
+						 ng-if="ipv4.supported.DHCP.Server.MinAddress"
+					>
+						<input type="text"
+							nw-type="ipv4" 
+							ng-model="ipv4.dhcp.data.Server.MinAddress"
+							nw-custom-valid="ipv4.dhcp.validationOnSubmit(value, 'MinAddress')"
+						>
+					</div>
+					
+					<div nw-field 
+						 nw-label="lanDHCPMaxAddress" 
+						 nw-required
+						 ng-if="ipv4.supported.DHCP.Server.MaxAddress"
+					>
+						<input type="text" 
+							nw-type="ipv4" 
+							ng-model="ipv4.dhcp.data.Server.MaxAddress"
+							nw-custom-valid="ipv4.dhcp.validationOnSubmit(value, 'MaxAddress')"
+						>
+					</div>
+					
+					<div nw-field 
+						 nw-label="lanDHCPLeaseTime" 
+						 nw-required
+						 ng-if="ipv4.supported.DHCP.Server.LeaseTime"
+					>
+						<input nw-number
+							nw-min="2" 
+							ng-model="ipv4.dhcp.data.Server.LeaseTime"
+						>
+					</div>
+					
+					<div nw-labeled-switch
+						 nw-label="lanDHCPDNSRelay"
+						 nw-model="ipv4.dhcp.data.Server.DNSRelay"
+						 ng-if="ipv4.supported.DHCP.Server.DNSRelay">
+					</div>
+					
+				</div>
+					
+				<div ng-if="ipv4.dhcp.data.Mode == 'Relay'">
+					<div nw-field 
+						 nw-label="lanDHCPDomainRelay" 
+						 nw-required
+						 ng-if="ipv4.supported.DHCP.Relay.DHCPServerIPAddress"
+					>
+						<input type="text"
+							nw-type="ipv4" 
+							ng-model="ipv4.dhcp.data.Relay.DHCPServerIPAddress"
+						>
+					</div>
+				</div>	
+			</div>
+		</div>
+		
+	</div>
+
+	<div ng-if="ipv4.dhcp.staticAddresses.supported && ipv4.dhcp.data.Mode == 'Server'">
+		<div class="row-grid">
+			<div class="col-md-12">
+				<div class="card flat table"
+					 nw-table
+					 nw-table-empty-status="ipv4.dhcp.staticAddresses.isEmpty()"
+
+					 nw-table-empty-title="lanDHCPStaticAddressCaption"
+					 nw-table-empty-subtitle="lanDHCPStaticAddressEmptyRulesMessage"
+					 nw-table-empty-button="addButton"
+					 nw-table-empty-button-click="ipv4.dhcp.staticAddresses.onAdd()"
+					 nw-table-empty-button2="lanDHCPStaticAddressSelectClients"
+					 nw-table-empty-button2-click="ipv4.dhcp.staticAddresses.onSelectClients()"
+
+
+					 nw-table-title="lanDHCPStaticAddressCaption"
+					 nw-table-on-add="ipv4.dhcp.staticAddresses.onAdd()"
+					 nw-table-on-edit="ipv4.dhcp.staticAddresses.onEdit(item, instance)"
+					 nw-table-on-delete="ipv4.dhcp.staticAddresses.onDelete(items, instances)"
+					 nw-table-on-custom-event="ipv4.dhcp.staticAddresses.onSelectClients()"
+					 nw-table-custom-event-name="lanDHCPStaticAddressSelectClients"
+					 nw-table-selected
+				>
+
+
+					<table class="nw-mini-table">
+						<thead>
+							<tr>
+								<th ng-bind="'lanDHCPStaticAddressIPaddress' | translate"></th>
+								<th ng-bind="'lanDHCPStaticAddressMACAddress' | translate"></th>
+								<th ng-bind="'lanDHCPStaticAddressHostname' | translate"></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="(key, item) in ipv4.dhcp.staticAddresses.list"
+								nw-mini-table
+								nw-mini-table-caption="(item.Hostname)?item.Hostname:item.IPAddress"
+								nw-mini-table-short="item.MACAddress"
+							>
+								<td ng-bind="item.IPAddress"></td>
+								<td ng-bind="item.MACAddress"></td>
+								<td ng-bind="(item.Hostname) ? item.Hostname : '-'"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

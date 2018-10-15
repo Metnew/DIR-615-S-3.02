@@ -1,0 +1,38 @@
+<div class="card_columns">
+    <div class="system card telnet">
+        <form name="telnetSettings"
+              ng-submit="telnet.apply()"
+              nw-form
+              unsaved-warning-form
+              unsaved-backup-status="{{!telnet.wasModified()}}" 
+        >
+
+            <div nw-labeled-switch 
+                 nw-label="telnet_enable" 
+                 nw-model="telnet.data.Enable"
+            ></div>
+
+            <div nw-field
+                 nw-label="telnet_port"
+                 nw-required
+                 nw-disabled="!telnet.data.Enable"
+                 ng-if="telnet.supported.Port"
+            >
+                <input ng-model="telnet.data.Port"
+                       nw-number
+                       nw-min="1"
+                       nw-max="65535"
+                >
+            </div>
+
+            <div class="button_block center">
+                <button type="submit"
+                        class="colored"
+                        ng-disabled="!telnet.wasModified()"
+                >
+                    {{'applyButton' | translate}}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

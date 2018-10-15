@@ -1,0 +1,49 @@
+<div class="content_block title2">
+    {{ 'lan' | translate }}
+</div>
+
+<div class="content_block">
+	<div class="checkbox_wrap">
+		<div nw-wizard-checkbox ng-model="lanStep.useDynamic" ng-change="lanStep.useDynamicChange()"></div>
+		{{ 'wizard_manual_lan_ip' | translate }}
+	</div>
+</div>
+
+<div class="content_block">
+	<div class="note_custom-icon">
+		<span class="inline-warning" svg-icon="warning"></span>
+		{{ 'wizard_manual_lan_info' | translate }}
+	</div>
+</div>
+
+<div class="content_block" ng-if="!lanStep.useDynamic">
+	<div nw-field nw-required nw-label="wanAddress">
+		<input type="text"
+			ng-model="lanStep.IPv4Static.Address"
+			nw-network-validation="address"
+			nw-network-validation-subnet-mask-value="{{ lanStep.IPv4Static.SubnetMask }}"
+			ng-change="lanStep.updateIPv4NetworkRange()"
+			tabindex="100"
+		/>
+	</div>
+	<div nw-field nw-required nw-label="wanNetmask">
+		<input type="text"
+			ng-model="lanStep.IPv4Static.SubnetMask"
+			nw-network-validation="subnetMask"
+			nw-autocomplete-network-ip-address-value="{{ lanStep.IPv4Static.Address }}"
+			nw-autocomplete-network-subnet-mask
+			ng-change="lanStep.updateIPv4NetworkRange()"
+			tabindex="101"
+		/>
+	</div>
+	<div nw-field nw-label="lanGatewayIP" ng-if="isDevModeAP()">
+		<input type="text"
+			nw-type="ipv4"
+			ng-model="lanStep.IPv4Static.GatewayAddress"
+			nw-network-validation="gwip"
+			nw-network-address="lanStep.IPv4Static.Address"
+			nw-network-subnet-mask="lanStep.IPv4Static.SubnetMask"
+			tabindex="102"
+		/>
+	</div>
+</div>

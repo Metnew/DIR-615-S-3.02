@@ -1,0 +1,14 @@
+<div class="trouble__header" ng-bind="'wizard_trouble_neterr' | translate"></div>
+<div class="trouble__text" ng-bind="'wizard_trouble_support' | translate"></div>
+
+<div class="trouble__text" ng-show="showPhoneAndMail && (data.supportTel || data.supportMail)">
+	<div ng-show="!!data.supportTel">{{ 'wizard_phone' | translate }}: <b>{{ data.supportTel }}</b></div>
+	<div ng-show="!!data.supportMail">{{ 'wizard_mail' | translate }}: <b>{{ mfilter(data.supportMail) }}</b></div>
+</div>
+
+<div class="trouble__params">
+	<div class="param" ng-show="!!param.value" ng-repeat="param in params">
+		<span class="name" ng-bind="(param.name | translate) + ':'"></span>
+		<span class="value" ng-bind="param.value"></span>
+	</div>
+</div>

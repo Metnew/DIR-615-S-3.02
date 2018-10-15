@@ -1,0 +1,34 @@
+<div class="dialog_top_line">
+	<div class="dialog_close_mobile" ng-click="dialog.close()" ></div>
+	<div class="dialog_title_text" ng-bind="dialog.header">
+	</div>
+	<div class="dialog_close" ng-click="dialog.close()" >
+		<svg svg-icon="cross-medium"></svg>
+	</div>
+</div>
+<form name="form" class="dialog_content_wrapper" novalidate ng-submit="dialog.save()" nw-form>
+	<div class="dialog_content">
+
+		<div nw-field
+			 nw-label="name"
+			 nw-required
+		>
+			<input type="text" ng-model="dialog.rule.note" nw-name>
+		</div>
+
+		<div nw-field
+			 nw-label="macaddr"
+			 nw-required
+		>
+			<input type="text" ng-model="dialog.rule.mac" nw-mac-not-null-and-not-multicast
+			nw-client-list nw-client-list-type="mac" nw-client-list-exclude="{{dialog.getUseRules()}}">
+		</div>
+
+	</div>
+
+
+	<div class="dialog_button_panel button_block right">
+		<button type="submit" class="colored flat" ng-bind="'save' | translate" ng-disabled="dialog.isDisabledSave()"></button>
+		<button type="button" ng-if="dialog.action == 'edit'" ng-click="dialog.remove()" ng-bind="'removeButton' | translate"></button>
+	</div>
+</form>

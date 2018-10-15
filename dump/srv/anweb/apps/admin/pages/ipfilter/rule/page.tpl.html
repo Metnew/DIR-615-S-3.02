@@ -1,0 +1,185 @@
+<div class="main-card">
+	<form name="form" class="css-form" novalidate
+		  nw-form
+		  ng-submit="ipfilter.apply()"
+		  unsaved-warning-form
+		  unsaved-backup-status="{{!ipfilter.wasModified()}}"
+	>
+	<div class="card-content">
+		<div class="row-grid bottom-space">
+			<div class="col-md-6 block-left">
+					<div class="card-title" ng-bind="'ipfilterGeneralSettings' | translate"></div>
+
+					<div nw-labeled-switch
+						 nw-label="ipfilterEnableRule"
+						 nw-model="ipfilter.rule.state"
+						 ng-if="ipfilter.isSupported('state')"
+					></div>
+
+					<div nw-field
+						 nw-label="name"
+						 nw-required="ipfilter.isRequired('name')"
+						 ng-if="ipfilter.isSupported('name')"
+					>
+						<input type="text"
+							ng-model="ipfilter.rule.name"
+							nw-name
+						>
+					</div>
+
+					<div class='note description'>
+						<span>
+							{{ 'name_description' | translate }} 32
+						</span>
+					</div>
+
+					<div nw-field
+						 nw-label="ipfilterAction"
+						 ng-if="ipfilter.isSupported('action')"
+					>
+						<select ng-model="ipfilter.rule.action"
+								ng-options="option.value as (option.name | translate) for option in ipfilter.getActionList()"
+						></select>
+					</div>
+
+					<div nw-field
+						 nw-label="ipfilterProtocol"
+						 ng-if="ipfilter.isSupported('proto')"
+					>
+						<select ng-model="ipfilter.rule.proto"
+								ng-options="option.value as (option.name | translate) for option in ipfilter.getProtocolList()"
+						></select>
+					</div>
+
+					<div nw-field
+						 nw-label="ipfilterIPVersion"
+						 ng-if="ipfilter.isSupported('is_ipv6')"
+					>
+						<select ng-model="ipfilter.ipversion"
+								ng-options="option.value as (option.name | translate) for option in ipfilter.getIPVersionList()"
+								ng-change="ipfilter.changeIPVersion(ipfilter.ipversion)"
+						></select>
+					</div>
+			</div>
+
+			<div class="col-md-6 block-right">
+					<div class="card-title" ng-bind="'ipfilterSourceIPAddress' | translate"></div>
+					<div class="note" ng-bind="ipfilter.getNoteExampleIp() | translate"></div>
+					<div ng-if ="!ipfilter.loading && !constants.DENY_IP_RANGE" nw-ip-range="ipfilter.ip.source"
+						 nw-ip-range-version="{{ipfilter.ipversion}}"
+						 nw-ip-start-plagin="nwClientList"
+						 nw-ip-start-label="{{ipfilter.ipversion == 'ipv4' ? 'ipfilterIPv4AddressBegin': 'ipfilterIPv6AddressBegin'}}"
+						 nw-ip-end-label="{{ipfilter.ipversion == 'ipv4' ? 'ipfilterIPv4AddressEnd': 'ipfilterIPv6AddressEnd'}}"
+						 nw-ip-subnet-label="{{ipfilter.ipversion == 'ipv4' ? 'ipfilterSubnetIPv4Address': 'ipfilterSubnetIPv6Address'}}"
+						 ng-if="ipfilter.isSupported('ips')"
+					></div>
+
+					<div ng-if="constants.DENY_IP_RANGE">
+						<div nw-field
+							 nw-label="ipfilterSourceIPAddress"
+							 ng-if="ipfilter.ipversion == 'ipv4'"
+						>
+							<input type="text"
+								   nw-type="ipv4AddressOrSubnet"
+								   ng-model="ipfilter.ip.source.begin"
+							>
+						</div>
+
+						<div nw-field
+							 nw-label="ipfilterSourceIPAddress"
+							 ng-if="ipfilter.ipversion == 'ipv6'"
+						>
+							<input type="text"
+								   nw-type="ipv6"
+								   ng-model="ipfilter.ip.source.begin"
+							>
+						</div>
+					</div>
+			</div>
+		</div>
+
+		<div class="row-grid">
+			<div class="col-md-6 block-left">
+					<div class="card-title" ng-bind="'ipfilterDestinationIPAddress' | translate"></div>
+					<div class="note" ng-bind="ipfilter.getNoteExampleIp() | translate"></div>
+					<div ng-if ="!ipfilter.loading && !constants.DENY_IP_RANGE" nw-ip-range="ipfilter.ip.destination"
+						 nw-ip-range-version="{{ipfilter.ipversion}}"
+						 nw-ip-start-label="{{ipfilter.ipversion == 'ipv4' ? 'ipfilterIPv4AddressBegin': 'ipfilterIPv6AddressBegin'}}"
+						 nw-ip-start-plagin="nwClientList"
+						 nw-ip-end-label="{{ipfilter.ipversion == 'ipv4' ? 'ipfilterIPv4AddressEnd': 'ipfilterIPv6AddressEnd'}}"
+						 nw-ip-subnet-label="{{ipfilter.ipversion == 'ipv4' ? 'ipfilterSubnetIPv4Address': 'ipfilterSubnetIPv6Address'}}"
+						 ng-if="ipfilter.isSupported('ipd')"
+					></div>
+
+					<div ng-if="constants.DENY_IP_RANGE">
+						<div nw-field
+							 nw-label="ipfilterDestinationIPAddress"
+							 ng-if="ipfilter.ipversion == 'ipv4'"
+						>
+							<input type="text"
+								   nw-type="ipv4AddressOrSubnet"
+								   ng-model="ipfilter.ip.destination.begin"
+							>
+						</div>
+
+						<div nw-field
+							 nw-label="ipfilterDestinationIPAddress"
+							 ng-if="ipfilter.ipversion == 'ipv6'"
+						>
+							<input type="text"
+								   nw-type="ipv6"
+								   ng-model="ipfilter.ip.destination.begin"
+							>
+						</div>
+					</div>
+			</div>
+
+			<div class="col-md-6 block-right">
+					<div class="card-title" ng-bind="'ipfilterPortsSettings' | translate"></div>
+					<div class="note" ng-bind="'ipfilter_port_note' | translate"></div>
+					<div nw-field
+						 nw-label="ipfilterDestinationPort"
+						 ng-if="ipfilter.isSupported('portd')"
+						 nw-disabled="ipfilter.isDisabled('portd')"
+					>
+						<input type="text"
+							ng-model="ipfilter.rule.portd"
+							nw-custom-valid="ipfilter.validation(value, 'portd')"
+						>
+					</div>
+
+					<div nw-labeled-switch
+						nw-label="ipfilter_manual_source_port"
+						nw-model="ipfilter.manualSrcPort"
+						nw-change="ipfilter.onAutoSrcPortChange()"
+						ng-if="ipfilter.isSupported('ports')"
+						class="align-bottom"
+					></div>
+					<div nw-field
+						 nw-label="ipfilterSourcePort"
+						 ng-if="ipfilter.isSupported('ports') && ipfilter.manualSrcPort"
+						 nw-disabled="ipfilter.isDisabled('source_port')"
+					>
+						<input type="text"
+							ng-model="ipfilter.rule.ports"
+							nw-custom-valid="ipfilter.validation(value, 'ports')"
+						>
+					</div>
+			</div>
+		</div>
+	</div>
+
+		<div class="card-action">
+			<button type="button"
+				ng-if="ipfilter.action == 'edit'"
+				ng-click="ipfilter.remove()"
+				ng-bind="'deleteButton' | translate"
+			></button>
+			<button type="submit" class="colored"
+				ng-disabled="ipfilter.action == 'edit' && !ipfilter.wasModified()"
+				ng-bind="'apply' | translate"
+			></button>
+		</div>
+	
+	</form>
+</div>

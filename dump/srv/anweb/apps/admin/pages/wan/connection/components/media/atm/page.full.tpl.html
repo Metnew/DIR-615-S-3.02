@@ -1,0 +1,104 @@
+<div class="col-md-6 minH">
+	<div class="card flat">
+		<h4 class="line">ATM</h4>
+		<div class="content_padding">
+			<div nw-field 
+				 nw-label="atmVPI" 
+				 nw-required="atm.destinationAddress.isRequired('VPI')" 
+				 nw-disabled="atm.destinationAddress.isDisabled('VPI')"
+			>
+				<input nw-number nw-number-type="string"
+					nw-min="0" 
+					nw-max="255"
+					nw-custom-valid="atm.destinationAddress.validation()"
+					ng-model="atm.destinationAddress.vpi" 
+					ng-change="atm.destinationAddress.update()"
+				>
+			</div>
+
+			<div nw-field 
+				 nw-label="atmVCI" 
+				 nw-required="atm.destinationAddress.isRequired('VCI')" 
+				 nw-disabled="atm.destinationAddress.isDisabled('VCI')"
+			>
+				<input nw-number nw-number-type="string"
+					nw-min="32" 
+					nw-max="65535"
+					nw-custom-valid="atm.destinationAddress.validation()"
+					ng-model="atm.destinationAddress.vci" 
+					ng-change="atm.destinationAddress.update()"
+				>
+			</div>
+			
+			<div 
+				nw-field 
+				nw-label="atmEncap"
+				nw-disabled="atm.isDisabled('Encapsulation')"
+			>
+				<div class="custom-select">
+					<select 
+						ng-model="atm.data.Encapsulation" 
+						ng-options="option.value as option.name | translate for option in atm.select.Encapsulation"
+					>
+					</select>
+				</div>
+			</div>
+
+			<div 
+				nw-field 
+				nw-label="atmQoSClass"
+				nw-disabled="atm.isDisabled('QoSClass')"
+			>
+				<div class="custom-select">
+					<select 
+						ng-model="atm.data.QoSClass" 
+						ng-options="option.value as option.name | translate for option in atm.select.QoSClass"
+					>
+					</select>
+				</div>
+			</div>
+			
+			<div 
+				nw-field 
+				nw-label="atmPCR" 
+				nw-required="atm.isRequired('PeakCellRate')"
+				nw-disabled="atm.isDisabled('PeakCellRate')"
+				ng-if="atm.isShow('PeakCellRate')"
+			>
+				<input nw-number
+					nw-min="1" 
+					nw-max="255000" 
+					ng-model="atm.data.PeakCellRate"
+				/>
+			</div>
+			
+
+			<div nw-field 
+				 nw-label="atmSCR"
+				 ng-if="atm.isShow('SustainableCellRate')"
+				 nw-required="atm.isRequired('SustainableCellRate')"
+				 nw-disabled="atm.isDisabled('SustainableCellRate')"
+			>
+				<input nw-number
+					nw-min="1" 
+					nw-max="255000" 
+					ng-model="atm.data.SustainableCellRate" 
+				/>
+			</div>
+
+			<div nw-field 
+				 nw-label="atmMBS"
+				 ng-if="atm.isShow('MaximumBurstSize')"
+				 nw-required="atm.isRequired('MaximumBurstSize')"
+				 nw-disabled="atm.isDisabled('MaximumBurstSize')"
+			>
+				<input nw-number 
+					nw-min="1" 
+					nw-max="1000000" 
+					ng-model="atm.data.MaximumBurstSize" 
+				/>
+			</div>
+
+		</div>
+	</div>
+</div>

@@ -1,0 +1,16 @@
+<div class="content_block title2">
+    {{ 'wizard_change_pass' | translate }}
+</div>
+<div class="content_block">
+    {{ 'wizard_change_pass_desc' | translate }}
+</div>
+<div class="content_block">
+    <div nw-password
+         nw-password-lable="wizard_password"
+         nw-password-value="passwordStep.profile.$PasswordStep.Password"
+         nw-password-tab-index="501"
+         nw-password-valid="passwordStep.passwValidator(value)"
+         ng-if="step.name == 'PasswordStep'"
+         nw-password-description="password_description"
+    ></div>
+</div>

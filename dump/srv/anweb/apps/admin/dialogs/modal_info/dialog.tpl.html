@@ -1,0 +1,11 @@
+<div class="dialog_top_line">
+    <div class="dialog_close_mobile" ng-click="closeThisDialog()"></div>
+    <div class="dialog_title_text" ng-bind="header | translate"></div>
+    <div class="dialog_close" ng-click="closeThisDialog()">
+        <svg svg-icon="cross-medium"></svg>
+    </div>
+</div>
+<div class="dialog_content_wrapper">
+    <div class="dialog_content modal_info" nw-bind-html-compile="content"></div>
+</div>
+<div>

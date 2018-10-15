@@ -1,0 +1,52 @@
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:USER_RULES - [0:0]
+:MINIUPNPD - [0:0]
+:IGMP - [0:0]
+:VSERVER - [0:0]
+:MACS - [0:0]
+:USER_DNAT - [0:0]
+:PASS_THROUGH - [0:0]
+:WAN_FIREWALL - [0:0]
+:SECURITY - [0:0]
+:BRUTE - [0:0]
+:DHCPRELAY - [0:0]
+:logaccept - [0:0]
+:logdrop - [0:0]
+-A SECURITY -p tcp --syn -m limit --limit 1/s -j RETURN
+-A SECURITY -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j RETURN
+-A SECURITY -p udp -m limit --limit 5/s -j RETURN
+-A SECURITY -p icmp -m limit --limit 5/s -j RETURN
+-A SECURITY -j DROP
+-N PING_RULES
+-A INPUT -p icmp --icmp-type echo-request -j PING_RULES
+-A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+-A INPUT -p udp --dport 68 -j ACCEPT
+-A INPUT -j MACS
+-A INPUT -j DHCPRELAY
+-A INPUT -j USER_RULES
+-A INPUT -i lo -m state --state NEW -j ACCEPT
+-A INPUT -i br0 -m state --state NEW -j ACCEPT
+-A INPUT -j USER_DNAT
+-A INPUT -s 224.0.0.0/4 -j ACCEPT
+-A INPUT -d 224.0.0.0/4 -j ACCEPT
+-I OUTPUT -p udp --dport 68 ! -o br0 -j DROP
+-A INPUT -j DROP
+-A FORWARD -j MACS
+-A FORWARD -j USER_RULES
+-A FORWARD -j IGMP
+-A IGMP -j RETURN
+-A FORWARD ! -i br0 -o br0 -j MINIUPNPD
+-A MINIUPNPD -j RETURN
+-A FORWARD -i br0 -o br0 -j ACCEPT
+-A FORWARD -m state --state INVALID -j DROP
+-A FORWARD -m state --state ESTABLISHED,RELATED -j ACCEPT
+-A FORWARD -j USER_DNAT
+-A FORWARD -j PASS_THROUGH
+-A FORWARD -j WAN_FIREWALL
+-A WAN_FIREWALL -j RETURN
+-A USER_DNAT -j RETURN
+-A FORWARD -o br0 -j DROP
+COMMIT

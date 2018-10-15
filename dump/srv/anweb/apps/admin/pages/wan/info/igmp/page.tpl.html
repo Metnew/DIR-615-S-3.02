@@ -1,0 +1,22 @@
+<div class="card flat"
+     ng-if="wan.info.igmp.has() || wan.info.mld.has()"
+>
+	<div class="row-grid">
+		<div class="col-md-6" ng-if="wan.info.igmp.has()">
+			<div class="title_card" ng-bind="'IGMP'"></div>
+			<div nw-radio-group
+				 nw-model="wan.info.igmp.value"
+				 nw-options="wan.info.igmp.options"
+				 nw-change="wan.info.igmp.update()"
+			></div>
+		</div>
+		<div class="col-md-6" ng-if="wan.info.mld.has()">
+			<h4 ng-bind="'MLD'"></h4>
+			<div nw-radio-group
+				 nw-model="wan.info.mld.value"
+				 nw-options="wan.info.mld.options"
+				 nw-change="wan.info.mld.update()"
+			></div>
+		</div>
+	</div>
+</div>

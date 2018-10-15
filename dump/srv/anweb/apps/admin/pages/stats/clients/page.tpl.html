@@ -1,0 +1,31 @@
+<div class="card table"
+     nw-table
+     nw-table-title="navStatsClients"
+>
+    <table>
+        <thead>
+            <tr>
+				<th ng-bind="'statsClientsHostname' | translate"></th>
+                <th ng-bind="'IPAddress' | translate"></th>
+                <th ng-bind="'stat_route_flags' | translate"></th>
+                <th ng-bind="'MAC'"></th>
+                <th ng-bind="'iface' | translate"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in clientStats"
+                nw-mini-table
+                nw-mini-table-caption="item.ip | ipv6cut"
+                nw-mini-table-short="item.name"
+                nw-mini-table-click="showDetails(item, key)"
+            >
+
+				<td ng-bind="item.hostname || '-'"></td>
+                <td ipv6cut="item.ip"></td>
+                <td ng-bind="item.flags"></td>
+                <td ng-bind="item.mac" class="not_break upper"></td>
+                <td ng-bind="item.name" class="not_break"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

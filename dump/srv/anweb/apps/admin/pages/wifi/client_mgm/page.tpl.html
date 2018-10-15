@@ -1,0 +1,66 @@
+
+<div class="nw-empty-page-state-container" ng-if="clients.length == 0">
+    <div class="nw-empty-page-state-image-refresh">
+    </div>
+    <div class="nw-empty-page-state-title">
+        {{'wifi_client_mgmt_noclient' | translate}}
+    </div>
+    <div class="nw-empty-page-state-buttons-panel">
+        <button class="colored"
+                ng-bind="'refreshButton' | translate"
+                ng-click="refresh()"
+        ></button>
+    </div>
+</div>
+
+<div class="main-card" ng-if="clients.length != 0">
+
+	<div class="card-content">
+
+		<div class="table"
+			 nw-table
+			 nw-table-title="wifi_client_mgmt_list"
+			 nw-table-desc="wifiClientMgmDesc"
+			 nw-table-selected
+			 nw-table-on-edit="showAllParams(item, id)"
+			 nw-table-custom-event-name="disconnectButton"
+			 nw-table-on-custom-event-on-selected="disconnect(items)"
+			 nw-table-on-second-custom-event="refresh()"
+			 nw-table-second-custom-event-name="refreshButton"
+			 ng-show="clients.length > 0"
+			 nw-table-selected-matched-func="match(item, items)"
+		>
+			<table>
+				<thead>
+					<tr>
+						<th ng-bind="'wifiClientMgmhostname' | translate"></th>
+						<th ng-bind="'wifiClientMgmmac' | translate"></th>
+						<th ng-bind="'wifiClientMgmband' | translate" ng-if="showBand()"></th>
+						<th ng-bind="'wifiClientMgmSSID' | translate"></th>
+						<th  class="not_break" ng-bind="'wifiClientMgmrssi' | translate"></th>
+						<th class="not_break"><span ng-bind="'wifiClientMgmonline' | translate"></span></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="client in clients"
+						nw-mini-table
+						nw-mini-table-caption="getMiniCaption(client)"
+						nw-mini-table-short="getMiniShort(client)"
+					>
+						<td class="row_truncate fixed-max-width mw-7"> {{ client.hostname ? client.hostname : "-"}} </td>
+						<td class="not_break mac"> {{ client.mac }} </td>
+						<td class="not_break band" ng-if="showBand()"> {{ client.bandName }} </td>
+						<td class="row_truncate fixed-max-width mw-7"> {{ client.SSID }} </td>
+						<td class="not_break rssi">
+							<span class="client-table-signal-level" svg-icon="{{ getImgSignal(client.signal) }}"></span>
+							{{ client.rssi }}
+						</td>
+						<td class="not_break time" nw-time="client.online"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+
+</div>

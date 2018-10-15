@@ -1,0 +1,38 @@
+<div class="card table"
+     nw-table
+     nw-table-title="vlan_list"
+     nw-table-on-add="add()"
+     nw-table-on-delete="remove(items, keys)"
+     nw-table-on-edit="edit(item, key)"
+     nw-table-selected
+     ng-if="!wan.info.connections.isEmpty()"
+>
+    <table>
+        <thead>
+            <tr>
+                <th ng-bind="'vlan_name' | translate"></th>
+                <th ng-bind="'vlan_type' | translate"></th>
+                <th ng-bind="'vlan_ports_u' | translate"></th>
+                <th ng-bind="'vlan_port_t' | translate"></th>
+                <th ng-bind="'vlan_vid' | translate"></th>
+                <th ng-bind="'vlan_enable' | translate"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="not_break"
+                ng-repeat="(inx, vlan) in vlans"
+                nw-mini-table
+                nw-mini-table-caption="vlan.Name"
+                nw-mini-table-short="getTableShort(vlan)"
+                nw-mini-table-info="vlan.Vid"
+            >
+                <td ng-bind="vlan.Name"></td>
+                <td ng-bind="vlan.Type | translate"></td>
+                <td ng-bind="joinPorts(vlan.PortsU)"></td>
+                <td ng-bind="joinPorts(vlan.PortsT)"></td>
+                <td ng-bind="joinVidRange(vlan) | translate"></td>
+                <td ng-bind="vlan.Enable ? 'yes' : 'no' | translate"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

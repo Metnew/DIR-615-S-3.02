@@ -1,0 +1,100 @@
+<div class="main-card">
+	<form name="form" class="css-form" novalidate
+		nw-form
+		ng-submit="urlfilter.apply()"
+		unsaved-warning-form
+		unsaved-backup-status="{{!urlfilter.wasModified()}}"
+	>
+
+		<div ng-if="urlfilter.isActivate">
+
+			<div class="card-content">
+
+				<div ng-if="!urlfilter.isRLX819XFilter">
+
+					<div class="row-grid bottom-space">
+
+						<div class="col-md-12">
+
+							<div class="card-title" ng-bind="'navUrlFilter' | translate"></div>
+							<div class="card-desc" ng-bind="'urlfilterDesc' | translate"></div>
+
+						</div>
+
+					</div>
+
+					<div class="row-grid">
+						<div class="col-md-6 block-left">
+							<div class="card-title" ng-bind="'urlfilterCommonSettings' | translate"></div>
+
+							<div class="note"
+								ng-bind="'urlfilter_broadcom_warning' | translate"
+								ng-if="urlfilter.isBroadcom"
+							></div>
+
+							<div nw-labeled-switch
+								 nw-label="urlfilterEnable"
+								 nw-model="urlfilter.config.enable"
+							></div>
+
+							<div nw-field
+								 nw-label="urlfilterType"
+							>
+								<div class="custom-select">
+									<select ng-model="urlfilter.config.type"
+											ng-options="option.value as option.name|translate for option in urlfilter.getTypesList()"
+										></select>
+								</div>
+							</div>
+
+							<div nw-labeled-switch
+								 nw-label="urlfilterShowBlockPage"
+								 nw-model="urlfilter.config.show_block_page"
+								 ng-if="urlfilter.supportedParam('show_block_page')"
+							></div>
+						</div>
+
+						<div class="col-md-6 block-right">
+							<div class="card-title" ng-bind="'urlfilterListDesc' | translate"></div>
+
+							<div class="note" nw-bind-html-compile="'urlfilter_list_note' | translate"></div>
+							<div class="note"
+								nw-bind-html-compile="urlfilter.getHTTPSWarning()"
+								ng-if="!urlfilter.isBroadcom && !urlfilter.isRLX819XFilter"
+							></div>
+
+							<div ng-include="'/admin/pages/urlfilter/addrList.tpl.html'"></div>
+
+						</div>
+					</div>
+
+				</div>
+
+				<div ng-if="urlfilter.isRLX819XFilter"
+					 ng-include="'/admin/pages/urlfilter/dnsfilter.tpl.html'"
+				>
+				</div>
+
+			</div>
+
+			<div class="card-action">
+
+				<div class="row-grid">
+
+					<div class="col-md-12">
+
+						<button type="submit" class="colored"
+								ng-disabled="!urlfilter.wasModified()"
+								ng-bind="'apply' | translate"
+						></button>
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</form>
+</div>

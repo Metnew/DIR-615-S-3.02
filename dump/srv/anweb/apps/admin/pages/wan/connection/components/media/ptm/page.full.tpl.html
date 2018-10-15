@@ -1,0 +1,15 @@
+<div class="col-md-6">
+	<div class="card flat minH">
+		<h4 class="line">PTM</h4>
+		<div class="content_padding">
+			<div nw-field nw-label="macaddr">
+				<input type="text"
+					nw-mac-not-null-and-not-multicast
+					ng-model="media.data.DSL.PTM.MACAddress"
+					nw-mac-clone
+					nw-mac-restore="media.data.DSL.PTM.MACAddressDefault"
+				>
+			</div>
+		</div>
+	</div>
+</div>

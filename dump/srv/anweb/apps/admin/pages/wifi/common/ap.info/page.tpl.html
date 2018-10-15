@@ -1,0 +1,41 @@
+<div ng-controller="WifiCommonAPInfo">
+    <div class="card flat table"
+         nw-table
+         nw-table-title="ap_list"
+         nw-table-on-add="wifi.APInfo.add()"
+         nw-table-on-add-disable="wifi.APInfo.isAddDisabled()"
+         nw-table-on-delete="wifi.APInfo.remove(items, keys)"
+         nw-table-on-edit="wifi.APInfo.edit(item, key)"
+         nw-table-selected
+    >
+        <table>
+            <thead>
+                <tr>
+                    <th ng-bind="'wifi_name' | translate"></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="(inx, ap) in wifi.APInfo.list()"
+                    ng-if="wifi.APInfo.isShowAP(inx)"
+                    nw-mini-table
+                    nw-mini-table-caption="getCaption(ap)"
+                    nw-mini-table-short="getShort(ap)"
+                >
+                    <td ng-bind="ap.SSID" ng-class="{disabled: !ap.Broadcast}"></td>
+                    <td class="text-right">
+                        <img name="lock_img" src="/general/img/icon-lock.png" ng-if="!isOpen(ap)">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card flat"
+         alert="info"
+         ng-if="wifi.APInfo.existDeletedAP()"
+    >
+         {{'wifi_need_save_for_remove_ap' | translate}}
+    </div>
+</div>
+

@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="app" ng-controller="AppMobileCtrl">
+<head>
+
+<title ng-bind="deviceInfo.modelName"></title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="content-style-type" content="text/css" />
+<meta http-equiv="content-script-type" content="text/javascript" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link type="image/x-icon" rel="shortcut icon" ng-href="{{ '../general/img/favicon.ico' | nocache }}" href />
+<script>window.iamMobile = true</script>
+
+<link type="text/css" rel="stylesheet" href="/admin/css/concat?type=css&path=admin/css_list&_=756e0c3ae71202c252fb8dc85730b6da">
+<link type="text/css" rel="stylesheet" href="/general/css/concat?type=css&path=admin/general_css_list&_=756e0c3ae71202c252fb8dc85730b6da">
+<script type="text/javascript" src="/cookies"></script>
+<script type="text/javascript" src="/concat?type=js&path=admin/js_list&_=756e0c3ae71202c252fb8dc85730b6da"></script>
+
+</head>
+<body class="disable_transitions">
+
+<div class="mmain" ng-class="{'mobile_menu_is_show': mobileMenuShow, 'page-loading': !pageReady}">
+	<div id="header" class="mheader_bg">
+        <nw-progress-bar class="page-preloader" pb-type="'indeter'"></nw-progress-bar>
+    </div>
+
+	<div id="wrapper" ng-swipe-left="collapseMobileMenu()" ng-swipe-right="expandMobileMenu()">
+
+		<div id="lblock" class="{{mobileViewStyle}} fixed_navigation">
+
+            <div class="menu_logo"></div>
+
+			<div class="mmenu">
+<ul class="main_navigation">
+	<li ng-repeat="menu in menuList"
+        class="fl_menu_block"
+	    ng-class="{opened: menu.id === openedMenu || menu.id === selectedMenu}"
+	>
+		<span 
+           ng-click="selectFirstLevelMenu(menu)"
+           class="menu_item fl_menu_item coloring_icon_inside"
+        >
+            <svg svg-icon="{{!!menu.langIcon ? (menu.langIcon | translate) : menu.icon}}" ng-show="menu.icon || menu.langIcon" ng-class="icon"></svg>
+            {{menu.name | translate}}
+        </span>
+		<ul ng-show="menu.id === openedMenu || menu.id === selectedMenu" class="sl_menu_block">
+		    <li ng-repeat="el in menu.submenu">
+		        <a ng-if="!el.external" ui-sref="{{el.sref}}"
+		           ui-sref-active="active"
+                   class="menu_item sl_menu_item"
+                   ng-click="selectSecondLevelMenu(el)"
+                >{{el.name | translate}}</a>
+                <a href="{{el.url}}"
+                   ng-if="el.external"
+                   target="_blank"
+                   class="menu_item sl_menu_item"
+                >{{el.name | translate}}</a>
+		    </li>
+		</ul>
+	</li>
+</ul>
+
+<ul class="main_navigation">
+	<li class="fl_menu_block">
+		<a ng-click="logout($event)" 
+            class="menu_item fl_menu_item coloring_icon_inside">
+            <svg svg-icon="exit"></svg>
+		    {{'logout' | translate}}
+        </a>
+	</li>
+</ul>
+
+			</div>
+
+		</div>
+
+		<div id="mblock" class="{{mobileViewStyle}}">
+
+				<div class="fixed_header">
+                    <div class="header-navigation-row">
+                        <a  class="go_to_menu" ng-click="toggleMobileMenu(); $event.stopPropagation();"></a>
+                        <a class="back_level" ng-click="goBackState()">
+                            <span class="back_icon"></span>
+                            <span id="back_anchor"></span> <!-- {{backState().title | translate}} -->
+                        </a>
+                        <a class="alarm" ui-sref="notice">
+                            <div class="notice_count" ng-hide="notice.count==0"><span>{{notice.count}}</span></div>
+                        </a>
+    <!--
+                        <a class="search_icon" ng-click="toggleSearchForm()"></a>
+    -->
+    
+                        <div class="title_center"> 
+                            <div class="title_padding">
+                                <span id="title_anchor"></span>
+                            </div>
+    <!--
+                            {{state().title | translate}}
+    -->
+                        </div>
+                    </div>
+                    <div class="popup-notification-container">
+                        <div ng-if="appEvents && appEvents.trayNotification">
+                            <!-- Этот блок появляется только когда уведомления рулятся через сервис app-events (прошивки с dsysinit) -->
+                            <div class="nw-popup-notification" nw-notification="appEvents.trayNotification"></div>
+                        </div>
+                    </div>
+				</div>
+                
+				<div class="float_search_form" nw-click-anywhere>
+					<form>
+						<input type="text" id="search_input" value="{{'navSearch' | translate}}" title="{{'navSearch' | translate}}" nw-click-clear-input>
+					</form>
+				</div>
+
+				<div class="mobile_content_contener" ng-mouseup="collapseMobileMenu()">
+					<div class="mcontent" ui-view>
+					</div>
+				</div>
+                <div class="loading-stub">
+                    {{ 'please_wait' | translate }}...
+                </div>
+
+		</div>
+
+	</div>
+
+</div>
+
+
+</body>
+</html>
+

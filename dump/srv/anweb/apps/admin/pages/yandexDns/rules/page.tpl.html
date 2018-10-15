@@ -1,0 +1,84 @@
+<div class="card" alert="info"
+    ng-if="!loading && !yandexDns.enabled"
+>
+            <div nw-bind-html-compile="'yandex_dns_need_enable_alert'| translate"></div>
+</div>
+<form
+    ng-if="!loading"
+    unsaved-warning-form
+    unsaved-backup-status="{{!saveEnabled()}}">
+    <div class="card table yandex devices"
+        nw-table
+        nw-table-title="yandex_dns_known_addresses"
+    >
+        <table>
+            <thead>
+                <tr>
+                    <th ng-bind="'IPAddress' | translate"></th>
+                    <th ng-bind="'MACaddress' | translate"></th>
+                    <th ng-bind="'name' | translate"></th>
+                    <th ng-bind="'rule' | translate"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in yandexDns.clients"
+                    nw-mini-table
+                    nw-mini-table-caption="(isNotEmpty(item.hostname))?item.hostname:item.ip"
+                    nw-mini-table-short="item.rule.modeName"
+                    nw-mini-table-click="editRuleForClient(item)"
+                >
+                    <td ng-bind="item.ip"></td>
+                    <td ng-bind="item.mac" class="not_break"></td>
+                    <td ng-bind="(isNotEmpty(item.hostname)) ? item.hostname : '-'"></td>
+                    <td ng-click="editRuleForClient(item)">
+                        <span class="mode_name" ng-class="{'default': !item.rule}">{{item.rule? item.rule.modeName : getDefaultModeString()}}</span>
+                        <span class="ml-10 yandex_mode_icon {{!item.rule? yandexDns.default : item.rule.mode}}_mode"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card table yandex"
+        nw-table
+        nw-table-title="yandex_dns_rules"
+        nw-table-on-edit="editRule(item)"
+        nw-table-on-delete="removeRules(items, indexes)"
+        nw-table-on-add="createRule()"
+        nw-table-selected
+    >
+        <table>
+            <thead>
+                <tr>
+                    <th ng-bind="'IPAddress' | translate"></th>
+                    <th ng-bind="'MACaddress' | translate"></th>
+                    <th ng-bind="'name' | translate"></th>
+                    <th ng-bind="'mode' | translate"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in yandexDns.rules track by $index"
+                    nw-mini-table
+                    nw-mini-table-caption="(isNotEmpty(item.hostname))?item.hostname:item.ip"
+                    nw-mini-table-short="item.modeName"
+                    nw-table-row-action
+                >
+                    <td ng-bind="item.ip"></td>
+                    <td ng-bind="item.mac" class="not_break"></td>
+                    <td ng-bind="(isNotEmpty(item.hostname)) ? item.hostname : '-'"></td>
+                    <td>
+                        {{item.modeName}}
+                        <span class="ml-10 yandex_mode_icon {{item.mode}}_mode"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="button_block center" ng-hide="loading">
+        <button class="colored" 
+            ng-bind="'applyButton'| translate" 
+            ng-click="saveRules()" 
+            ng-disabled="!saveEnabled()"></button>
+    </div>
+
+</form>

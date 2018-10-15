@@ -1,0 +1,56 @@
+
+<div nw-field 
+	 nw-label="wanIPv6Address"
+	 nw-required 
+	 ng-if="statipv6.supported.StaticIP.Address"
+>
+	<input type="text" 
+		nw-type="ipv6" 
+		ng-model="statipv6.data.StaticIPAddress0"
+	>
+</div>
+
+<div nw-field 
+	 nw-label="wanIPv6Prefix"
+	 nw-required 
+	 ng-if="statipv6.supported.StaticIP.Prefix"
+>
+	<input type="text" 
+		nw-type="prefixv6" 
+		ng-model="statipv6.data.StaticIPPrefix0"
+	>
+</div>
+
+<div nw-field 
+	 nw-label="wanIPv6GatewayIP" 
+	 nw-required
+	 ng-if="statipv6.supported.GatewayIPAddress"
+>
+	<input type="text" 
+		nw-type="ipv6" 
+		ng-model="statipv6.data.GatewayIPAddress"
+	>
+</div>
+
+<div nw-field 
+	 nw-label="wanIPv6DNSServer1" 
+	 nw-required
+	 ng-if="statipv6.supported.DNSServer1"
+>
+	<input type="text" 
+		nw-type="ipv6" 
+		ng-model="statipv6.data.DNSServer1"
+		nw-custom-valid="statipv6.validation(value, 'DNSServer1')"
+	>
+</div>
+
+<div nw-field 
+	 nw-label="wanIPv6DNSServer2" 
+	 ng-if="statipv6.supported.DNSServer2"
+>
+	<input type="text" 
+		nw-type="ipv6" 
+		ng-model="statipv6.data.DNSServer2"
+		nw-custom-valid="statipv6.validation(value, 'DNSServer1')"
+	>
+</div>

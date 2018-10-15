@@ -1,0 +1,35 @@
+<form nw-form
+      unsaved-warning-form
+      unsaved-backup-status="{{!wasModified()}}"
+      ng-submit="apply()"
+      name="redirectForm"
+      class="redirect_form"
+>
+    <div class="card_columns">
+        <div class="card">
+            <h4 ng-bind="'redirect_common' | translate"></h4>
+
+            <div nw-labeled-switch
+                 nw-label="redirect_enable"
+                 nw-model="redirect.enable"
+            ></div>
+        </div>
+
+        <div class="card" ng-show="redirect.enable">
+            <h4 ng-bind="'redirect_reasons' | translate"></h4>
+
+            <div ng-repeat="module in modules"
+                 ng-if="redirect.modules[module]"
+                 nw-labeled-switch
+                 nw-label="redirect_{{module}}"
+                 nw-model="redirect.modules[module].enable"
+            ></div>
+        </div>
+    </div>
+
+    <div class="button_block center">
+        <button type="submit" class="colored" ng-disabled="!wasModified()">
+            {{'apply' | translate}}
+        </button>
+    </div>
+</form>

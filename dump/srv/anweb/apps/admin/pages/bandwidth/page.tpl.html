@@ -1,0 +1,25 @@
+<div class="card table"
+    nw-table
+    nw-table-title="navBandwidthControl"
+>
+    <table>
+        <thead>
+            <tr>
+                <th ng-bind="'port' | translate"></th>
+                <th ng-bind="'bandwidth_max_value' | translate"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="(key, value) in ports" 
+                class="clickable"
+                ng-click="editBandwidth(key, value)"
+                nw-mini-table
+                nw-mini-table-caption="key"
+                nw-mini-table-short="getShort(value)"
+            >
+                <td ng-bind="key"></td>
+                <td ng-bind="getPortRate(value)"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

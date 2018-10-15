@@ -1,0 +1,95 @@
+<div class="dialog_top_line">
+    <div class="dialog_close_mobile" ng-click="closeThisDialog()"></div>
+    <div class="dialog_title_text">
+        {{getHeader()}}
+    </div>
+    <div class="dialog_close" ng-click="closeThisDialog()">
+        <svg svg-icon="cross-medium"></svg>
+    </div>
+</div>
+<div class="dialog_content_wrapper">
+    <div class="dialog_content">
+        <div class="nw-static row" ng-if="!isEmpty(model.name)">
+            <span class="title" ng-bind="'name' | translate"></span>
+            <span class="info" ng-bind="model.name" ng-class="{'red': model.state == 'down', 'green': model.state == 'up'}"></span>
+        </div>
+        <div class="nw-static row" ng-if="!isEmpty(model.connection_status)">
+			<span class="title" ng-bind="'statConnStatus' | translate"></span>
+            <span class="info" ng-bind="model.constatus | translate"></span>
+		</div>
+        <div class="nw-static row" ng-if="!isEmpty(model.portStatus)">
+            <span class="title" ng-bind="'statPortStatus' | translate"></span>
+            <span class="info" ng-bind="model.portStatus | translate"></span>
+            <span class="icon status-circle {{ model.state == 'up' ? 'on' : 'off'}}"></span>
+        </div>
+        <div class="nw-static row" ng-if="!isEmpty(model.ipv4)">
+			<span class="title" ng-bind="'IPAddress' | translate"></span>
+            <span class="info" ng-bind="model.ip"></span>
+		</div>
+		<div class="nw-static row" ng-if="!isEmpty(model.mask)">
+			<span class="title" ng-bind="'IPSubnetMask' | translate"></span>
+            <span class="info" ng-bind="model.mask"></span>
+		</div>
+		<div class="nw-static row" ng-if="!isEmpty(model.gw)">
+			<span class="title" ng-bind="'wanGatewayIP' | translate"></span>
+            <span class="info" ng-bind="model.gw"></span>
+		</div>
+		<div class="nw-static row" ng-if="!isEmpty(model.dns_prim)">
+			<span class="title" ng-bind="'dns_prim' | translate"></span>
+            <span class="info" ng-bind="model.dns_prim"></span>
+		</div>
+		<div class="nw-static row" ng-if="!isEmpty(model.dns_sec)">
+			<span class="title" ng-bind="'dns_sec' | translate"></span>
+            <span class="info" ng-bind="model.dns_sec"></span>
+		</div>
+		<div class="nw-static row" ng-if="!isEmpty(model.ipv6)">
+			<span class="title" ng-bind="'wanIPv6Address' | translate"></span>
+            <span class="info" ng-bind="model.ipv6"></span>
+		</div>
+		<div class="nw-static row" ng-if="!isEmpty(model.gwipv6)">
+			<span class="title" ng-bind="'wanIPv6GatewayIP' | translate"></span>
+            <span class="info" ng-bind="model.gwipv6"></span>
+		</div>
+		<div class="nw-static row" ng-if="!isEmpty(model.dns_primv6)">
+			<span class="title" ng-bind="'wanIPv6DNSServer1' | translate"></span>
+            <span class="info" ng-bind="model.dns_primv6"></span>
+		</div>
+		<div class="nw-static row" ng-if="!isEmpty(model.dns_secv6)">
+			<span class="title" ng-bind="'wanIPv6DNSServer2' | translate"></span>
+            <span class="info" ng-bind="model.dns_secv6"></span>
+		</div>
+		<div class="nw-static row" ng-if="!isEmpty(model.mac)">
+			<span class="title" ng-bind="'MAC' | translate"></span>
+            <span class="info" ng-bind="model.mac" class="upper"></span>
+		</div>
+		<div class="nw-static row" ng-if="!isEmpty(model.mtu)">
+			<span class="title" ng-bind="'MTU' | translate"></span>
+            <span class="info" ng-bind="model.mtu"></span>
+		</div>
+		<div class="nw-static row" ng-if="!isEmpty(model.servicename)">
+			<span class="title" ng-bind="'wanVPNServiceName' | translate"></span>
+            <span class="info" ng-bind="model.servicename"></span>
+		</div>
+		<div class="nw-static row" ng-if="!isEmpty(model.rxtx)">
+			<span class="title" ng-bind="'Rx/Tx' | translate"></span>
+            <span class="info" ng-bind="model.rxtx"></span>
+		</div>
+		<div class="nw-static row" ng-if="!isEmpty(model.rxtx_pkt)">
+			<span class="title" ng-bind="'statsRxTxPkt' | translate"></span>
+            <span class="info" ng-bind="model.rxtx_pkt"></span>
+		</div>
+		<div class="nw-static row" ng-if="!isEmpty(model.rxtx_errs)">
+			<span class="title" ng-bind="'rxtx_errors' | translate"></span>
+			<span class="info" ng-bind="model.rxtx_errs"></span>
+		</div>
+		<div class="nw-static row" ng-if="!isEmpty(model.duration_s)">
+			<span class="title" ng-bind="'durationConn' | translate"></span>
+            <span class="info" nw-time="model.duration_s"></span>
+		</div>
+		<div class="nw-static row" ng-if="!!model.leasetime">
+			<span class="title" ng-bind="'DHCPLeaseTime' | translate"></span>
+            <span class="info" nw-time="model.leasetime"></span>
+		</div>
+    </div>
+</div>
+<div>

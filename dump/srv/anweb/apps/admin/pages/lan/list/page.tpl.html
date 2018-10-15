@@ -1,0 +1,31 @@
+<div ng-controller="lanListCtrl">
+	<div class="card table"
+         nw-table
+         nw-table-title="lanInterfaces"
+         nw-table-on-add-disable="lan.ifacesInfo.disableCreateNewInterface()"
+         nw-table-on-add-hide="lan.ifacesInfo.hideCreateNewInterface()"
+         nw-table-on-add="lan.ifacesInfo.add()"
+         nw-table-on-edit="lan.ifacesInfo.edit(item, key)"
+    >
+        <table>
+            <thead>
+                <tr>
+                    <th ng-bind="'lanName' | translate"></th>
+                    <th ng-bind="'IPv4'" ng-if="lan.ifacesInfo.supported.IPv4"></th>
+                    <th ng-bind="'IPv6'" ng-if="lan.ifacesInfo.supported.IPv6"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in lan.ifacesInfo.list"
+                    nw-mini-table
+                    nw-mini-table-caption="item.name"
+                    nw-mini-table-short="lan.ifacesInfo.getShort(item)"
+                >
+                    <td ng-bind="item.name"></td>
+                    <td ng-bind="item.ipv4" ng-if="lan.ifacesInfo.supported.IPv4"></td>
+                    <td ng-bind="item.ipv6" ng-if="lan.ifacesInfo.supported.IPv6"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

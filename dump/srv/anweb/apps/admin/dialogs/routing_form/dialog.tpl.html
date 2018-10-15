@@ -1,0 +1,105 @@
+<div class="dialog_top_line">
+    <div class="dialog_close_mobile" ng-click="closeThisDialog()"></div>
+    <div class="dialog_title_text"  ng-bind="header | translate">
+    </div>
+    <div class="dialog_close" ng-click="closeThisDialog()">
+        <svg svg-icon="cross-medium"></svg>
+    </div>
+</div>
+<form name="routing_form" id="routing_form" class="dialog_content_wrapper" nw-form ng-submit="save()">
+	<div class="dialog_content">
+        <div nw-field
+             nw-label="routing_protocol"
+             nw-required
+             ng-if="isSupportIPv6"
+         >
+             <select ng-model="protocol.value"
+                     ng-options="name | translate for name in protocol.list"
+             >
+             </select>
+         </div>
+         <div nw-field
+             nw-label="iface"
+             nw-required
+         >
+             <select ng-model="route.iface"
+                     ng-options="iface.iface as iface.name for iface in ifacesList"
+             >
+             </select>
+         </div>
+         <div ng-if="protocol.value == 'ipv4'">
+            <div nw-field
+                 nw-label="routing_network"
+                 nw-required
+            >
+                <input ng-model="route.ip"
+                       nw-network-validation="address"
+                >
+            </div>
+
+            <div nw-field
+                 nw-label="routing_netmask"
+                 nw-required
+            >
+                <input ng-model="route.netmask"
+                    nw-network-validation="subnetMask"
+                    nw-autocomplete-network-ip-address-value="{{route.ip}}"
+                    nw-autocomplete-network-subnet-mask
+                    nw-autocomplete-network-subnet-mask-min-hosts="0"
+                    nw-autocomplete-use-end-address
+                >
+            </div>
+
+            <div nw-field
+                 nw-label="routing_gateway"
+                 nw-required="gatewayRequired()"
+            >
+                <input type="text"
+                    ng-model="route.gw"
+                    nw-network-validation="gwip"
+                    nw-autocomplete-network-gwip
+                >
+            </div>
+         </div>
+
+         <div ng-if="protocol.value == 'ipv6'">
+            <div nw-field
+                 nw-label="routing_network"
+                 nw-required
+            >
+                <input ng-model="route.ip"
+                       nw-type="ipv6"
+                >
+            </div>
+
+            <div nw-field
+                 nw-label="routing_gateway"
+                 nw-required="gatewayRequired()"
+            >
+                <input type="text"
+                    ng-model="route.gw"
+                    nw-type="ipv6"
+                >
+            </div>
+         </div>
+       
+         <div nw-field
+              nw-label="routing_metric"
+         >
+             <input nw-number
+                    nw-min="1"
+                    ng-model="route.met">
+         </div>
+
+         <div class="dialog_alarm_message">
+            <span ng-bind="'routing_conflict_msg' | translate" ng-if="isConfict()"></span>
+        </div>
+	</div>
+    <div class="dialog_button_panel button_block right">
+        <button class="colored flat"
+                type="submit"
+                ng-bind="'save'|translate"
+                ng-disabled="isSavingDisabled()"
+        ></button>
+    </div>
+</form>

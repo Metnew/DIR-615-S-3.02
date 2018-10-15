@@ -1,0 +1,24 @@
+<form name="form" class="css-form" novalidate onsubmit="return false;"
+      nw-form
+      nw-form-autocomplete-off
+      ng-submit="wan.apply()"
+      unsaved-warning-form
+      unsaved-backup-status="{{wan.backup.check(wan.model.connection)}}"
+>
+    <div ng-if="wan.isActivate">
+        <div ui-view="header@add"></div>
+		<div class="card no_padding">
+			<div ui-view="content@add"></div>
+			<div class="row-grid">
+				<div class="button_block left">
+					<button
+						ng-bind="'back'|translate"
+						ng-click="wan.back()"
+						ng-if="wan.isAdditional"
+					></button>
+					<button type="submit" class="colored" ng-bind="'apply'|translate"></button>
+				</div>
+			</div>
+		</div>
+    </div>
+</form>

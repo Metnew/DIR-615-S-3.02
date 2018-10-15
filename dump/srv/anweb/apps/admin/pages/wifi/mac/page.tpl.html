@@ -1,0 +1,93 @@
+<div class="card no_padding" ng-if="isReady">
+    <div class="row-grid" ng-if="!isEmptyNetwork()">
+        <div class="col-md-6" ng-repeat="(band, bandNetworks) in networks">
+            <div class="card flat table"
+                 nw-table
+                 nw-table-title="{{isMoreThanOneBand() ? bandNetworks.Band + 'ghz' : 'navWIFIMac'}}"
+                 nw-table-on-edit="editNetwork(item, key, band)"
+
+            >
+                <table>
+                    <tbody>
+                        <tr ng-repeat="(inx, network) in bandNetworks.List"
+                            nw-mini-table
+                            nw-mini-table-caption="network.SSID"
+                            nw-mini-table-short="getNetworkShort(network)"
+                        >
+                            <td>
+                                <div class="title" ng-bind="network.SSID"></div>
+                                <div class="note" ng-bind="network.AccessPolicy | translate"></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-grid" ng-show="!isEmptyNetwork()">
+        <div class="col-md-12">
+            <div class="card flat table"
+                 nw-table
+
+                 nw-table-empty-status="isEmptyRules()"
+                 nw-table-empty-title="wifi_mac_rules_empty"
+                 nw-table-empty-subtitle="wifi_mac_rules_empty_message"
+                 nw-table-empty-button="addButton"
+                 nw-table-empty-button-click="add()"
+
+                 nw-table-title="wifi_mac_list"
+                 nw-table-on-add="add()"
+                 nw-table-on-delete="remove(items, keys)"
+                 nw-table-on-edit="edit(item, inx)"
+                 nw-table-selected
+            >
+                <table>
+                    <thead>
+                        <tr>
+                            <th ng-bind="'wifi_mac_mac' | translate"></th>
+                            <th ng-bind="'wifi_mac_hostname' | translate"></th>
+                            <th ng-bind="'ssid' | translate"></th>
+                            <th ng-bind="'band' | translate" ng-if="isMoreThanOneBand()"></th>
+                            <th ng-bind="'wifi_mac_active' | translate"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="(inx, rule) in rules"
+                            nw-mini-table
+                            nw-mini-table-caption="rule.MAC"
+                            nw-mini-table-short="rule.Hostname"
+                        >
+                            <td ng-bind="rule.MAC"
+                                ng-class="{disabled: isRuleOfDisabledNetwork(rule)}"
+                            ></td>
+                            <td ng-bind="rule.Hostname || '-'"
+                                ng-class="{disabled: isRuleOfDisabledNetwork(rule)}"
+                            ></td>
+                            <td ng-bind="networks[rule.Band].List[rule.Network].SSID || '-'"
+                                ng-class="{disabled: isRuleOfDisabledNetwork(rule)}"
+                            ></td>
+                            <td ng-bind="networks[rule.Band].Band + 'ghz' | translate"
+                                ng-if="isMoreThanOneBand()"
+                                ng-class="{disabled: isRuleOfDisabledNetwork(rule)}"
+                            ></td>
+                            <td ng-bind="rule.Enable ? 'yes' : 'no' | translate"
+                                ng-class="{disabled: isRuleOfDisabledNetwork(rule)}"
+                            ></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row-grid">
+        <div class="col-md-12">
+            <div class="card flat"
+                 alert="info"
+                 ng-if="isEmptyNetwork()"
+            >
+                <div nw-bind-html-compile="'wifi_mac_networks_not_found' | translate"></div>
+            </div>
+        </div>
+    </div>
+</div>

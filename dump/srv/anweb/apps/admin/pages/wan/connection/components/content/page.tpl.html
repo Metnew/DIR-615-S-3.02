@@ -1,0 +1,15 @@
+<div class="row-grid">
+	<div ng-class="{'col-md-6': wan.mode == 'basic'}">
+		<div ng-class="{'card flat': wan.mode == 'basic'}">
+			<div ui-view="general"></div>
+			<div ui-view="media"></div>
+			<div ui-view="kabinet"></div>
+			<div ui-view="auth8012x"></div>
+			<div ui-view="addition"></div>
+			<div ui-view="connection"></div>
+			<div ui-view="health_check"></div>
+			<div ui-view="flags"></div>
+			<div ui-view="vlan"></div>
+		</div>
+	</div>
+</div>

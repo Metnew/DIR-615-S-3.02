@@ -1,0 +1,31 @@
+<div class="dialog_top_line">
+    <div class="dialog_close_mobile" ng-click="closeThisDialog()"></div>
+    <div class="dialog_title_text"  ng-bind="'wifiChannel' | translate">
+    </div>
+    <div class="dialog_close" ng-click="closeThisDialog()">
+        <svg svg-icon="cross-medium"></svg>
+    </div>
+</div>
+<form name="wifi_wmm_edit_form" id="wifi_wmm_edit" class="dialog_content_wrapper">
+	<div class="dialog_content">
+        <nw-progress-circular ng-if="loading"></nw-progress-circular>
+        <table ng-if="!loading">
+            <thead>
+                <tr>
+                    <th ng-bind="'wifiChannel' | translate"></th>
+                    <th ng-bind="'workload' | translate"></th>
+                </tr>
+            </thead>
+            <tbody>
+				<tr ng-repeat="channel in channelsWorkload"
+						ng-class="getChannelClass(channel)"
+						ng-click="selectChannel(channel.number)"
+						class="clickable"
+				>
+					<td>{{channel.number}}</td>
+					<td><nw-progress-bar pb-value="channel.workload"/></td>
+				</tr>
+            </tbody>
+        </table>
+	</div>
+</form>

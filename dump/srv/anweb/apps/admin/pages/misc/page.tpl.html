@@ -1,0 +1,111 @@
+<div class="main-card">
+<form nw-form
+      unsaved-warning-form
+      unsaved-backup-status="{{!wasModified()}}"
+      ng-submit="save()"
+      name="miscForm"
+      class="misc_form"
+>
+    <div class="card-content">
+        <div class="row-grid">
+        <div class="col-md-6 block-left" ng-if="settings.igmp || settings.netfilter">
+            <div ng-if="settings.igmp">
+                <div nw-field
+                     nw-label="IGMP"
+                >
+                    <select ng-model="settings.igmpFn.name"
+                            ng-options="fn as fn | translate for fn in igmpOptions"
+                    >
+                    </select>
+                </div>
+                
+                <div ng-if="supportZeroSrcAddr()"
+					 nw-labeled-switch
+                     nw-label="igmpZeroAddr"
+                     nw-model="settings.igmp.zeroSrcAddr"
+                ></div>
+            </div>
+
+			<div ng-if="settings.mld">
+				<div nw-field
+					nw-label="MLD"
+				>
+					<select ng-model="settings.mldFn.name"
+						ng-options="fn as fn | translate for fn in mldOptions"
+					>
+					</select>
+				</div>
+			</div>
+
+			<div ng-if="supportRlxIptvQos()">
+                <div nw-labeled-switch
+                     nw-label="miscRlxIptvQos"
+                     nw-model="settings.rlxIptvQos.iptv_enable"
+                     ng-if="constants.SUPPORT_RLX_IPTV_QOS"
+                ></div>
+
+				<div nw-labeled-switch
+					 nw-label="miscDhcpHighPriority"
+					 nw-model="settings.rlxIptvQos.dhcp_lcp_echo_enable"
+					 ng-if="constants.SUPPORT_RLX_DHCP_LCP_ECHO_QOS"
+				></div>
+				<div class="note" ng-bind="'miscDhcpHighPriorityDesc' | translate"></div>
+
+				<div nw-labeled-switch
+					 nw-label="miscHttpHighPriority"
+					 nw-model="settings.rlxIptvQos.http_telnet_enable"
+					 ng-if="constants.SUPPORT_RLX_HTTP_TELNET_QOS"
+				></div>
+				<div class="note" ng-bind="'miscHttpHighPriorityDesc' | translate"></div>
+            </div>
+            
+            <div ng-if="settings.netfilter">
+                <div nw-labeled-switch
+                     nw-label="SIP"
+                     nw-model="settings.netfilter.netfilter.sip"
+                ></div>
+
+                <div nw-labeled-switch
+                     nw-label="RTSP"
+                     nw-model="settings.netfilter.netfilter.rtsp"
+                ></div>
+            </div>
+        </div>
+        <div class="col-md-6 block-right" ng-if="settings.passThrough">
+
+            <div nw-labeled-switch
+                 nw-label="wanPppoePassThrough"
+                 nw-model="settings.passThrough.enabled"
+                 ng-click="setIface()"
+                 ng-if="settings.passThrough.enabled !== void(0)"
+            ></div>
+
+			<div nw-field
+				 nw-label="interface"
+				 ng-if="settings.passThrough.enabled && constants.PPPOE_PASS_THROUGH_OVER_IFACE"
+			>
+				<div class="custom-select">
+					<select ng-model="settings.passThrough.pppoe_over_iface"
+						ng-options="iface.iface as iface.name for iface in ifaces"
+					></select>
+				</div>
+			</div>
+
+            <div ng-repeat="(key, label) in passThroughs"
+                 nw-labeled-switch
+                 nw-label="{{label}}"
+                 nw-model="settings.passThrough[key]"
+                 ng-if="settings.passThrough[key] !== void(0)"
+            ></div>
+        </div>
+        </div>
+    </div>
+
+    <div class="card-action">
+        <button type="submit"
+               class="colored"
+               ng-disabled="!wasModified()"
+        >{{'apply' | translate}}</button>
+    </div>
+</form>
+</div>

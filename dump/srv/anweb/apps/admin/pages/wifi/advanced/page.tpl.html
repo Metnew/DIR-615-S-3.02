@@ -1,0 +1,195 @@
+
+<form name="form" class="css-form" novalidate
+      nw-form
+      ng-submit="wifi.apply()"
+      unsaved-warning-form
+      unsaved-backup-status="{{!wifi.wasModified()}}"
+      novalidate
+>
+	
+	<div ng-if="wifi.isActivate">
+	
+		<div class="view-general-line" ng-show="wifi.band.list.length > 1">
+			<span class="view-general-tabs"
+				ng-repeat="key in wifi.band.list"
+				ng-click="wifi.band.load(key)"
+				ng-class="{'view-general-tabs--active': key == wifi.band.state}"
+				ng-bind="key"
+			></span>
+		</div>
+
+        <div class="card no_padding">
+
+        <div class="row-grid">
+            <div class="col-md-6">
+                <div class="card flat">
+                    <div nw-field
+                         nw-label="wifiBandwidth"
+                         ng-if="wifi.supportedParam('OperatingChannelBandwidth')"
+                    >
+                        <div class="custom-select">
+                            <select ng-model="wifi.radio.OperatingChannelBandwidth"
+                                    ng-options="opt for opt in wifi.getChannelBandwidthList()"
+                            ></select>
+                        </div>
+                    </div>
+
+					<div class="note" ng-if="wifi.supportedParam('CurrentChannelBandwidth')">
+						<span ng-bind="( 'wifiCurrentBandwidth' | translate )  + ': ' + ( wifi.radio.CurrentChannelBandwidth | translate )"></span>
+						</br ng-if="wifi.supportedParam('CurrentChannelBandwidthDetail')">
+						<span ng-bind="( wifi.radio.CurrentChannelBandwidthDetail | translate )"
+							  ng-if="wifi.supportedParam('CurrentChannelBandwidthDetail')">
+						</span>
+					</div>
+
+					<div nw-labeled-switch
+						 nw-label="wifiCoexistence"
+						 nw-model="wifi.radio.Coexistence"
+						 ng-if="wifi.supportedParam('Coexistence') && wifi.showCoexistence(wifi.radio.OperatingChannelBandwidth)"
+					></div>
+
+					<div wifi-transmit-power
+						 wifi-transmit-power-value="wifi.radio.TransmitPower"
+						 wifi-transmit-power-options="wifi.getTransmitPowerList()"
+						 ng-if="wifi.supportedParam('TransmitPower')"
+					></div>
+
+					<div nw-field
+						nw-label="wifiTransmitPreamble"
+						nw-required
+						ng-if="wifi.supportedParam('TxPreamble')"
+					>
+						<div class="custom-select">
+							<select ng-model="wifi.radio.TxPreamble"
+									ng-options="option.value as option.name | translate for option in wifi.getTxPreambleList()"
+							></select>
+						</div>
+
+					</div>
+
+                   <div nw-field
+                         nw-label="wifiBGProtection"
+                         ng-if="wifi.supportedParam('BGProtection')"
+                    >
+                        <div class="custom-select">
+                            <select ng-model="wifi.radio.BGProtection"
+                                    ng-options="option.value as option.name | translate for option in wifi.getBGProtectionList()"
+                            ></select>
+                        </div>
+                    </div>
+
+                    <div nw-field
+                         nw-label="wifiHTGI"
+                         ng-if="wifi.supportedParam('HTGI')"
+                    >
+                        <div class="custom-select">
+                            <select ng-model="wifi.radio.HTGI"
+                                    ng-options="option.value as option.name | translate for option in wifi.getHTGIList()"
+                            ></select>
+                        </div>
+                    </div>
+
+                    <div nw-labeled-switch
+                         nw-label="wifiIgmpdrop"
+                         nw-model="wifi.radio.Igmpdrop"
+                         ng-if="wifi.supportedParam('Igmpdrop')"
+                    ></div>
+
+                    <div nw-labeled-switch
+                         nw-label="wifiTxBeamforming"
+                         nw-model="wifi.radio.TxBeamforming"
+                         ng-if="wifi.supportedParam('TxBeamforming')"
+                    ></div>
+
+                    <div nw-labeled-switch
+                         nw-label="wifiAdaptivityMode"
+                         nw-model="wifi.radio.AdaptivityMode"
+                         ng-if="wifi.supportedParam('AdaptivityMode')"
+                    ></div>
+
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card flat">
+                    <div nw-field
+                         nw-label="wifiBeaconPeriod"
+                         nw-required
+                         ng-if="wifi.supportedParam('BeaconPeriod')"
+                    >
+                        <input nw-number
+                            nw-min="{{wifi.constants.BeaconPeriod.min}}" 
+                            nw-max="{{wifi.constants.BeaconPeriod.max}}"
+                            ng-model="wifi.radio.BeaconPeriod"
+                        >
+                    </div>
+
+                    <div nw-field
+                         nw-label="wifiRTSThreshold"
+                         nw-required
+                         ng-if="wifi.supportedParam('RTSThreshold')"
+                    >
+                        <input nw-number
+                            nw-min="{{wifi.constants.RTSThreshold.min}}" 
+                            nw-max="{{wifi.constants.RTSThreshold.max}}"
+                            ng-model="wifi.radio.RTSThreshold"
+                        >
+                    </div>
+
+                    <div nw-field
+                         nw-label="wifiFragmentationThreshold"
+                         nw-required
+                         ng-if="wifi.supportedParam('FragmentationThreshold')"
+                    >
+                        <input nw-number
+                            nw-min="{{wifi.constants.FragmentationThreshold.min}}"
+                            nw-max="{{wifi.constants.FragmentationThreshold.max}}" 
+                            ng-model="wifi.radio.FragmentationThreshold"
+                        >
+                    </div>
+
+                    <div nw-field
+                         nw-label="wifiDTIMPeriod"
+                         nw-required
+                         ng-if="wifi.supportedParam('DTIMPeriod')"
+                    >
+                        <input nw-number
+                            nw-min="{{wifi.constants.DTIMPeriod.min}}"
+                            nw-max="{{wifi.constants.DTIMPeriod.max}}" 
+                            ng-model="wifi.radio.DTIMPeriod"
+                        >
+                    </div>
+
+                    <div nw-field
+                         nw-label="wifiStationKeepAlive"
+                         nw-required
+                         ng-if="wifi.supportedParam('StationKeepAlive')"
+                    >
+                        <input nw-number
+                            nw-min="{{wifi.constants.StationKeepAlive.min}}" 
+                            nw-max="{{wifi.constants.StationKeepAlive.max}}"
+                            ng-model="wifi.radio.StationKeepAlive"
+                        >
+                    </div>
+                </div>
+            </div>
+
+        </div>
+	
+        <div class="button_block left">
+            <button type="submit" class="colored"
+                ng-disabled="!wifi.wasModified()"
+                ng-bind="'apply' | translate"
+            ></button>
+        </div>
+        </div>
+    </div>
+
+</form>
+
+    
+
+    
+
+    
+

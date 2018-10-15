@@ -1,0 +1,21 @@
+<div ng-if="wan.info.isActivate && wanCore.mode.isAdvancedMode()">
+	<div class="card no_padding">
+		<div class="row-grid">
+			<div class="col-md-6">
+				<div ui-view="gwif@info"></div>
+			</div>
+			<div class="col-md-6" ng-if="!wan.info.supported.dsysinit">
+				<div ui-view="igmp@info"></div>
+			</div>
+		</div>
+		<div class="row-grid">
+			<div class="col-md-12">
+				<div ui-view="connections@info"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div ng-if="wan.info.isActivate && !wanCore.mode.isAdvancedMode()">
+	<div ui-view="connections_simple@info"></div>
+</div>

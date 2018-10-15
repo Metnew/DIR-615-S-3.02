@@ -1,0 +1,216 @@
+<div class="main-card">
+
+	<form class="css-form" name="form" novalidate
+		nw-form
+		ng-submit="form.$valid && apply()"
+		unsaved-warning-form
+		unsaved-backup-status="{{ isNotModified() }}"
+	>
+
+		<div class="card-content">
+
+			<div class="row-grid bottom-space">
+
+				<div class="col-md-12">
+
+					<div class="card-title" ng-bind="'wifiRoamingTitle' | translate"></div>
+					<div class="card-desc" ng-bind="'wifiRoamingDesc' | translate"></div>
+
+					<div nw-flat-switch
+						 nw-state="roaming.enable"
+						 nw-text-enable="enable"
+						 nw-text-disable="disable"
+						 nw-action="apply()"
+					></div>
+
+				</div>
+
+			</div>
+
+			<div class="row-grid bottom-space" ng-if="backup.enable">
+
+				<div class="col-md-6 block-left">
+
+					<div nw-field
+						 nw-label="wifiRoamingPort"
+						 nw-required
+					>
+						<input nw-number
+							   nw-min="1"
+							   nw-max="65535"
+							   ng-model="roaming.portno"
+						>
+					</div>
+
+					<div ng-repeat="band in bands" ng-if="bands.length == 1">
+
+						<div nw-field
+							 nw-label="wifiRoamingMaxTimeout"
+							 nw-required
+						>
+							<input nw-number
+								   nw-min="1"
+								   nw-max="65535"
+								   ng-model="roaming['max_timeout' + band.prefix]"
+							>
+						</div>
+						<div class="note" ng-bind="'wifiRoamingMaxTimeoutDesc' | translate"></div>
+
+						<div nw-field
+							 nw-label="wifiRoamingMinQuality"
+							 nw-required
+						>
+							<input nw-number
+								   nw-min="1"
+								   nw-max="99"
+								   ng-model="roaming['quality_limit' + band.prefix]"
+							>
+						</div>
+
+						<div nw-field
+							 nw-label="wifiRoamingQualityWidth"
+							 nw-required
+						>
+							<input nw-number
+								   nw-min="-50"
+								   nw-max="50"
+								   ng-model="roaming['quality_width' + band.prefix]"
+							>
+						</div>
+
+					</div>
+
+				</div>
+
+				<div class="col-md-6 block-right">
+
+					<div nw-labeled-switch
+						 nw-label="wifiRoamingMulticast"
+						 nw-model="roaming.mc_switch"
+					></div>
+					<div class="note" ng-bind="'wifiRoamingMulticastNote' | translate"></div>
+
+					<div ng-if="roaming.mc_switch && backup.enable">
+						<div nw-field
+							 nw-label="wifiRoamingMulticastTTL"
+							 nw-required
+						>
+							<input nw-number
+								   nw-min="1"
+								   nw-max="64"
+								   ng-model="roaming.mc_ttl"
+							>
+						</div>
+
+						<div nw-field
+							 nw-required
+							 nw-label="wifiRoamingMulticastAddr"
+						>
+							<input ng-model="roaming.mc_groupaddr"
+								   nw-type="ipv4"
+							>
+						</div>
+						<div class="note" ng-bind="'wifiRoamingMulticastAddrComment' | translate"></div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<div class="row-grid" ng-if="backup.enable && bands.length > 1">
+
+				<div class="col-md-6 block-left">
+
+					<div class="card-subtitle" ng-bind="(bands[0].name + 'ghz') | translate" ng-if="supportMultiBand()"></div>
+
+					<div nw-field
+						 nw-label="wifiRoamingMaxTimeout"
+						 nw-required
+					>
+						<input nw-number
+							   nw-min="1"
+							   nw-max="65535"
+							   ng-model="roaming['max_timeout' + bands[0].prefix]"
+						>
+					</div>
+					<div class="note" ng-bind="'wifiRoamingMaxTimeoutDesc' | translate"></div>
+
+					<div nw-field
+						 nw-label="wifiRoamingMinQuality"
+						 nw-required
+					>
+						<input nw-number
+							   nw-min="1"
+							   nw-max="99"
+							   ng-model="roaming['quality_limit' + bands[0].prefix]"
+						>
+					</div>
+
+					<div nw-field
+						 nw-label="wifiRoamingQualityWidth"
+						 nw-required
+					>
+						<input nw-number
+							   nw-min="-50"
+							   nw-max="50"
+							   ng-model="roaming['quality_width' + bands[0].prefix]"
+						>
+					</div>
+
+				</div>
+
+				<div class="col-md-6 block-right">
+
+					<div class="card-subtitle" ng-bind="(bands[1].name + 'ghz') | translate" ng-if="supportMultiBand()"></div>
+
+					<div nw-field
+						 nw-label="wifiRoamingMaxTimeout"
+						 nw-required
+					>
+						<input nw-number
+							   nw-min="1"
+							   nw-max="65535"
+							   ng-model="roaming['max_timeout' + bands[1].prefix]"
+						>
+					</div>
+					<div class="note" ng-bind="'wifiRoamingMaxTimeoutDesc' | translate"></div>
+
+					<div nw-field
+						 nw-label="wifiRoamingMinQuality"
+						 nw-required
+					>
+						<input nw-number
+							   nw-min="1"
+							   nw-max="99"
+							   ng-model="roaming['quality_limit' + bands[1].prefix]"
+						>
+					</div>
+
+					<div nw-field
+						 nw-label="wifiRoamingQualityWidth"
+						 nw-required
+					>
+						<input nw-number
+							   nw-min="-50"
+							   nw-max="50"
+							   ng-model="roaming['quality_width' + bands[1].prefix]"
+						>
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+		<div class="card-action" ng-if="backup.enable">
+			<button type="submit" class="colored"
+				ng-disabled="isNotModified()"
+				ng-bind="'apply' | translate"
+			></button>
+		</div>
+
+	</form>
+
+</div>

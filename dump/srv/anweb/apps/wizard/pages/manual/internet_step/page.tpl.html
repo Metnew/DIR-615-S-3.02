@@ -1,0 +1,179 @@
+<div class="content_block title2">
+    {{ 'wizard_internet_connection' | translate }}
+</div>
+<div class="content_block" ng-hide="internetStep.isUSBModem() && !internetStep.modemFields">
+    <div nw-field nw-label="wizard_conn_method">
+        <select ng-model="internetStep.profile.$InternetStep.WANType" ng-options="obj.type as obj.name | translate for obj in internetStep.availableTypes()">
+            <option style="display:none" value="">{{ 'wizard_notype' | translate }}</option>
+        </select>
+    </div>
+    <div class="note" ng-if="!!internetStep.profile.$InternetStep.WANType">
+        {{ internetStep.connTypeDesc[internetStep.profile.$InternetStep.WANType] | translate }}
+    </div>
+</div>
+<div class="content_block"
+	 ng-if="(!!internetStep.profile.$InternetStep.WANType && isATM())">
+    
+	<div nw-field nw-label="atmVPI" nw-required >
+		<input type="text" nw-number nw-number-type="string" nw-min="0" nw-max="255" ng-model="internetStep.profile.$InternetStep.VPI">
+	</div>
+
+	<div nw-field nw-label="atmVCI" nw-required >
+		<input type="text" nw-number nw-number-type="string" nw-min="32" nw-max="65535" ng-model="internetStep.profile.$InternetStep.VCI">
+	</div>
+	
+</div>
+<div class="content_block"
+	 ng-if="internetStep.wanTypeIs('pppoe', 'dynpppoe', 'statpppoe', 'pppoedual', 'pppoev6', 'dynl2tp', 'statl2tp',
+			'dynpptp', 'statpptp', 'statip', 'statipv6', 'dynipv6', 'ipoa', 'pppoa') || (internetStep.wanTypeIs('3g', 'lte') && internetStep.modemFields)"
+>
+    <div nw-field nw-label="wizard_ipv6by" ng-if="internetStep.wanTypeIs('dynipv6')">
+        <select ng-model="internetStep.profile.$InternetStep.Origin" ng-options="obj.type as obj.name | translate for obj in internetStep.originList" tabindex="101">
+        </select>
+    </div>
+    <div class="checkbox_wrap"
+		 ng-if="internetStep.wanTypeIs('pppoe', 'dynpppoe', 'statpppoe', 'pppoedual', 'pppoev6', 'dynl2tp', 'statl2tp', 'dynpptp', 'statpptp', 'pppoa')"
+	>
+        <div nw-wizard-checkbox ng-model="internetStep.profile.$InternetStep.WitoutAuth" ng-change="internetStep.onWitoutAuthChange(value)"></div> {{'wanPppNoAuth' | translate}}
+    </div>
+    <div nw-field 
+        nw-label="pppUsername" 
+        nw-required="!internetStep.profile.$InternetStep.WitoutAuth && !internetStep.wanTypeIs('lte')" 
+        ng-if="internetStep.wanTypeIs('pppoe', 'dynpppoe', 'statpppoe', 'pppoedual', 'pppoev6', 'dynl2tp', 'statl2tp', 'dynpptp', 'statpptp', 'pppoa') || 
+			  (internetStep.wanTypeIs('3g', 'lte') && internetStep.modemFields)"
+    >
+        <input type="text" name="InternetStep_Username" ng-model="internetStep.profile.$InternetStep.Username" nw-type="notCyrillicChar" tabindex="102">
+    </div>
+    <div nw-field 
+        nw-label="pppPassword" 
+        nw-required="!internetStep.profile.$InternetStep.WitoutAuth && !internetStep.wanTypeIs('lte')"  
+        nw-disabled="internetStep.profile.$InternetStep.WitoutAuth"
+        ng-if="internetStep.wanTypeIs('pppoe', 'dynpppoe', 'statpppoe', 'pppoedual', 'pppoev6', 'dynl2tp', 'statl2tp', 'dynpptp', 'statpptp', 'pppoa') ||
+			  (internetStep.wanTypeIs('3g', 'lte') && internetStep.modemFields)"
+    >
+        <input type="password" name="InternetStep_Password" 
+            ng-model="internetStep.profile.$InternetStep.Password" 
+            nw-type="pppPassword"
+            tabindex="103" 
+            nw-eye>
+    </div>
+    <div nw-field nw-label="APN" ng-if="internetStep.wanTypeIs('3g', 'lte') && internetStep.modemFields">
+        <input type="text" name="InternetStep_APN" ng-model="internetStep.profile.$InternetStep.APN" tabindex="104">
+    </div>
+    <div nw-field nw-label="wanDialNumber" nw-required ng-if="internetStep.wanTypeIs('3g') && internetStep.modemFields">
+        <input type="text" name="InternetStep_DialNumber" ng-model="internetStep.profile.$InternetStep.DialNumber" tabindex="105">
+    </div>
+    <div nw-field nw-label="wanServiceName" ng-if="internetStep.wanTypeIs('pppoe', 'dynpppoe', 'statpppoe', 'pppoedual', 'pppoev6', 'pppoa')">
+        <input type="text" name="InternetStep_VPN" ng-model="internetStep.profile.$InternetStep.ServiceName" tabindex="106">
+    </div>
+    <div nw-field nw-label="wanVPNServiceName" nw-required ng-if="internetStep.wanTypeIs('dynl2tp', 'statl2tp', 'dynpptp', 'statpptp')">
+        <input type="text" name="InternetStep_VPN" ng-model="internetStep.profile.$InternetStep.ServiceName" nw-type="host" ng-required tabindex="106">
+    </div>
+    <div nw-field nw-label="wanAddress" nw-required ng-if="internetStep.wanTypeIs('statip', 'statpppoe', 'statl2tp', 'statpptp', 'ipoa')">
+        <input type="text" name="InternetStep_Address" ng-model="internetStep.profile.$InternetStep.Address" nw-network-validation="address" tabindex="107"
+			   nw-network-validation-subnet-mask-value="{{internetStep.profile.$InternetStep.SubnetMask}}"
+        >
+    </div>
+    <div nw-field nw-label="wanAddress" nw-required ng-if="internetStep.wanTypeIs('statipv6')">
+        <input type="text" name="InternetStep_Address" ng-model="internetStep.profile.$InternetStep.Address" nw-type="ipv6" tabindex="108">
+    </div>
+    <div nw-field nw-label="wanIPv6Prefix" nw-required ng-if="internetStep.wanTypeIs('statipv6')">
+        <input type="text" name="InternetStep_Prefix" ng-model="internetStep.profile.$InternetStep.Prefix" tabindex="108">
+    </div>    
+    <div nw-field nw-label="wanNetmask" nw-required ng-if="internetStep.wanTypeIs('statip', 'statpppoe', 'statl2tp', 'statpptp', 'ipoa')">
+        <input type="text" name="InternetStep_SubnetMask" ng-model="internetStep.profile.$InternetStep.SubnetMask" nw-network-validation="subnetMask"
+        nw-autocomplete-network-ip-address-value="{{internetStep.profile.$InternetStep.Address}}" nw-autocomplete-network-subnet-mask tabindex="109"
+        nw-network-address="internetStep.profile.$InternetStep.Address" nw-network-subnet-mask="internetStep.profile.$InternetStep.SubnetMask"
+        >
+    </div>
+    <div nw-field nw-label="wanGatewayIP" nw-required ng-if="internetStep.wanTypeIs('statip', 'statpppoe', 'statl2tp', 'statpptp', 'ipoa')">
+        <input type="text" name="InternetStep_GatewayIP" ng-model="internetStep.profile.$InternetStep.GatewayIPAddress" nw-network-validation="gwip"
+        nw-network-address="internetStep.profile.$InternetStep.Address" nw-network-subnet-mask="internetStep.profile.$InternetStep.SubnetMask"
+        tabindex="110">
+    </div>
+    <div nw-field nw-label="wanGatewayIP" nw-required ng-if="internetStep.wanTypeIs('statipv6')">
+        <input type="text" name="InternetStep_GatewayIP" ng-model="internetStep.profile.$InternetStep.GatewayIPAddress" nw-type="ipv6" tabindex="111">
+    </div>
+    <div nw-field nw-label="wizard_dns" nw-required ng-if="internetStep.wanTypeIs('statip', 'statpppoe', 'statl2tp', 'statpptp', 'ipoa') && !constants.CUSTOM_2KOM_21535"
+    >
+        <input type="text" name="InternetStep_DNSServer1" ng-model="internetStep.profile.$InternetStep.DNSServer1" nw-type="ipv4" tabindex="112">
+    </div>
+    <div nw-field nw-label="wizard_dns" ng-if="internetStep.wanTypeIs('statipv6')" ng-if="!constants.CUSTOM_2KOM_21535 && !constants.CUSTOM_2KOM_21535">
+        <input type="text" name="InternetStep_DNSServer1" ng-model="internetStep.profile.$InternetStep.DNSServer1" nw-type="ipv6" tabindex="113">
+    </div>
+    
+<!--
+    2KOM
+-->
+	<div ng-if="constants.CUSTOM_2KOM_21535">
+    <div nw-field nw-label="wizard_dns_pri" nw-required ng-if="internetStep.wanTypeIs('statip', 'statpppoe', 'statl2tp', 'statpptp', 'ipoa')"
+    >
+        <input type="text" name="InternetStep_DNSServer1" ng-model="internetStep.profile.$InternetStep.DNSServer1" nw-type="ipv4" tabindex="112"
+			   nw-custom-valid="internetStep.validDns_2KOM(value)"
+		>
+    </div>
+    <div nw-field nw-label="wizard_dns_sec" nw-required ng-if="internetStep.wanTypeIs('statip', 'statpppoe', 'statl2tp', 'statpptp', 'ipoa')"
+    >
+        <input type="text" name="InternetStep_DNSServer2" ng-model="internetStep.profile.$InternetStep.DNSServer2" nw-type="ipv4" tabindex="112"
+			   nw-custom-valid="internetStep.validDns_2KOM(value)"
+		>
+    </div>
+    <div nw-field nw-label="wizard_dns_pri" ng-if="internetStep.wanTypeIs('statipv6')">
+        <input type="text" name="InternetStep_DNSServer1" ng-model="internetStep.profile.$InternetStep.DNSServer1" nw-type="ipv6" tabindex="113">
+    </div>
+    <div nw-field nw-label="wizard_dns_sec" ng-if="internetStep.wanTypeIs('statipv6')">
+        <input type="text" name="InternetStep_DNSServer2" ng-model="internetStep.profile.$InternetStep.DNSServer2" nw-type="ipv6" tabindex="113">
+    </div>
+    </div>
+<!--
+    2KOM
+-->
+</div>
+
+<div class="content_block" ng-if="(!!internetStep.profile.$InternetStep.WANType && isATM())">
+	<div class="note">{{ 'wizard_params_help' | translate }}</div> 
+</div>
+
+<div ng-if="internetStep.wanTypeIs('dynip', 'statip') && constants.SUPPORT_WAN_AUTH_KABINET">
+	<div class="content_block">
+        <div class="checkbox_wrap">
+            <div nw-wizard-checkbox ng-model="internetStep.profile.$InternetStep.Kabinet.Enable"></div> {{'wanKabinetEnable' | translate}}
+        </div>
+    </div>
+	<div class="content_block" ng-if="internetStep.profile.$InternetStep.Kabinet.Enable">
+			<div nw-field
+				nw-label="password"
+				nw-required
+			>
+				<input type="password" name="InternetStep_Kabinet_Password"
+					ng-model="internetStep.profile.$InternetStep.Kabinet.Password"
+					nw-type="pppPassword"
+					tabindex="103"
+					nw-eye>
+			</div>
+	</div>
+</div>
+
+<div ng-if="!internetStep.wanTypeIs('3g', 'lte') || (internetStep.wanTypeIs('3g', 'lte') && internetStep.modemFields)">
+    <div class="content_block" ng-if="(!isDSL || (isDSL && isEthernet()) || isPTM() || isEtherwan()) && !internetStep.isGoodline()">
+        <div class="checkbox_wrap">
+            <div nw-wizard-checkbox ng-model="internetStep.profile.$InternetStep.CloneMac"></div> {{'wizard_clone_mac' | translate}}
+        </div>
+        <div class="note">{{ 'wizard_clone_mac_desc' | translate }}</div>
+    </div>
+    <div class="content_block" ng-if="!isDSL || (isDSL && isEthernet()) || isPTM() || isEtherwan()">
+        <div class="checkbox_wrap">
+            <div nw-wizard-checkbox ng-model="internetStep.profile.$InternetStep.UseVLAN" ng-change="internetStep.useVLANChange()"></div> {{'wizard_use_vlan' | translate}}
+        </div>
+        <div class="note">{{ 'wizard_use_vlan_desc' | translate }}</div>
+    </div>
+    <div class="content_block" ng-if="internetStep.profile.$InternetStep.UseVLAN && !isATM()">
+        <div class="inline_input_wrap">
+            <div nw-field nw-label="VLAN ID" nw-required class="hide_error">
+                <input tabindex="114" type="text" class="vlanid_field" ng-model="internetStep.profile.$InternetStep.VID" name="InternetStep_VID" nw-number
+                nw-minvalue="{{vlanIDMin}}" nw-maxvalue="4095" ng-required>
+            </div>
+        </div>
+        <div class="note">{{ 'wizard_vlanid_desc' | translate }}</div>
+    </div>
+</div>

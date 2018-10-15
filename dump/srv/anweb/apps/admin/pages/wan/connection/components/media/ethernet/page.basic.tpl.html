@@ -1,0 +1,10 @@
+<div nw-field 
+	 nw-label="macaddr"
+>
+	<input type="text" 
+		nw-mac-not-null-and-not-multicast
+		ng-model="media.data.Ethernet.MACAddress"
+		nw-mac-clone
+		nw-mac-restore="media.data.Ethernet.MACAddressDefault"
+	>
+</div>

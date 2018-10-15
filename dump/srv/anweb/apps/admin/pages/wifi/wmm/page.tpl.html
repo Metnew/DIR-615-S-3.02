@@ -1,0 +1,100 @@
+<div class="card no_padding">
+    <div class="row-grid">
+		<div class="card flat">
+			<div class="col-md-12">
+				<div class="title_card"ng-bind="'titleWMM' | translate"></div>
+				<div class="descript" ng-bind="'WMMDescript' | translate"></div>
+			</div>
+			<div class="col-md-6" ng-if="mode.support">
+				<div nw-field nw-label="wifiWmmMode">
+					<div class="custom-select">
+						<select ng-model="mode.value"
+							ng-options="option.value as option.name | translate for option in getModeList()"
+							ng-change="mode.change()"
+						></select>
+					</div>
+				</div>
+			</div>		
+			<div class="col-md-6" ng-if="!mode.support">
+				<div nw-flat-switch
+					nw-state="data.settings.Enable"
+					nw-text-enable="enable"
+					nw-text-disable="disable"
+					nw-action="apply()"
+				></div>
+			</div>
+		</div>
+    </div>
+
+    <div class="row-grid" ng-if="mode.value == 'Manual' || (!mode.support && data.settings.Enable)">
+        <div class="col-md-6">
+            <div class="card flat table"
+                 nw-table
+                 nw-table-title="access_point"
+                 nw-table-on-edit="edit(item, key, 'ap')"
+            >
+                <table>
+                    <thead>
+                        <tr>
+                            <th ng-bind="'AC' | translate"></th>
+                            <th ng-bind="'AIFSN' | translate" class="numeric"></th>
+                            <th ng-bind="'CWMin' | translate" class="numeric"></th>
+                            <th ng-bind="'CWMax' | translate" class="numeric"></th>
+                            <th ng-bind="'TXOP' | translate" class="numeric"></th>
+                            <th ng-bind="'ACM' | translate"></th>
+                            <th ng-bind="'ACK' | translate"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="(key, point) in data.ap"
+                            nw-mini-table
+                            nw-mini-table-caption="transcripts[point.AccessCategory]"
+                        >
+                            <td ng-bind="point.AccessCategory"></td>
+                            <td ng-bind="point.AIFSN" class="numeric"></td>
+                            <td ng-bind="getCWValue(point.ECWMin)" class="numeric"></td>
+                            <td ng-bind="getCWValue(point.ECWMax)" class="numeric"></td>
+                            <td ng-bind="point.TxOpMax" class="numeric"></td>
+                            <td ng-bind="point.AcmPolicy ? 'on' : 'off'"></td>
+                            <td ng-bind="point.AckPolicy ? 'on' : 'off'"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card flat table"
+                 nw-table
+                 nw-table-title="station"
+                 nw-table-on-edit="edit(item, key, 'ep')"
+            >
+                <table>
+                    <thead>
+                        <tr>
+                            <th ng-bind="'AC' | translate"></th>
+                            <th ng-bind="'AIFSN' | translate" class="numeric"></th>
+                            <th ng-bind="'CWMin' | translate" class="numeric"></th>
+                            <th ng-bind="'CWMax' | translate" class="numeric"></th>
+                            <th ng-bind="'TXOP' | translate" class="numeric"></th>
+                            <th ng-bind="'ACM' | translate"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="(key, point) in data.ep"
+                            nw-mini-table
+                            nw-mini-table-caption="transcripts[point.AccessCategory]"
+                        >
+                            <td ng-bind="point.AccessCategory"></td>
+                            <td ng-bind="point.AIFSN" class="numeric"></td>
+                            <td ng-bind="getCWValue(point.ECWMin)" class="numeric"></td>
+                            <td ng-bind="getCWValue(point.ECWMax)" class="numeric"></td>
+                            <td ng-bind="point.TxOpMax" class="numeric"></td>
+                            <td ng-bind="point.AcmPolicy ? 'on' : 'off'"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

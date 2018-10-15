@@ -1,0 +1,41 @@
+<div class="content_block title2">
+    {{ 'wizard_interface_type_step' | translate }}
+</div>
+
+<div class="sub-step-title-loader ">
+    <nw-progress-bar pb-type="'indeter'" pb-hidden="!infoLoading"></nw-progress-bar>
+</div>
+
+<div class="content_block iface-mode">
+    <div class="iface-mode__selects">
+
+        <div nw-field nw-label="connection_method">
+            <select ng-model="interfaceStep.profile.$InterfaceStep.IfaceType"
+                    ng-change="interfaceStep.onInterfaceChange()"
+                    ng-options="iface as interfaceInfo[iface].name | translate for iface in interfaceStep.getIfaceTypes()"
+            >
+                <option style="display:none" value="">
+                    {{ 'wizard_select_connect_method' | translate}}
+                </option>
+            </select>
+            <div class="note" ng-bind="interfaceStep.ifaceNotes[interfaceStep.profile.$InterfaceStep.IfaceType] | translate" ng-if="!interfaceStep.needHideIfaceDescription()"></div>
+        </div>
+
+        <div nw-field
+            nw-label="wizard_work_mode"
+            ng-show="isShowModes()"
+            nw-disabled="isDisableModes()"
+        >
+            <select ng-change="interfaceStep.onDeviceModeChange()"
+                    ng-model="interfaceStep.profile.$InterfaceStep.WiFiMode"
+                    ng-options="key as value.Note | translate for (key, value) in getAvailModes()"
+            ></select>
+        </div>
+    </div>
+    <div class="iface-mode__pictures">
+        <img class="mode_img"
+             src="/wizard/img/svg/{{interfaceStep.getModeImage(interfaceStep.profile.$InterfaceStep.WiFiMode)}}.svg"
+             ng-if="interfaceStep.profile.$InterfaceStep.WiFiMode"
+        >
+    </div>
+</div>

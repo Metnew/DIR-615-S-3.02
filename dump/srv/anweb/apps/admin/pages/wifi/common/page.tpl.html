@@ -1,0 +1,56 @@
+<form name="form" class="css-form" novalidate
+      nw-form
+      ng-submit="wifi.apply()"
+      unsaved-warning-form
+      unsaved-backup-status="{{!wifi.wasModified()}}" 
+>
+
+	<div ng-if="wifi.isActivate">
+		
+		<div class="view-general-line" ng-show="wifi.band.list.length > 1">
+			<span class="view-general-tabs"
+				ng-repeat="key in wifi.band.list"
+				ng-click="wifi.band.load(key)"
+				ng-class="{'view-general-tabs--active': key == wifi.band.state}"
+				ng-bind="key"
+			></span>
+		</div>
+
+		<div class="card no_padding">
+			<div class="row-grid">
+				<div class="col-md-6">
+					<div ng-include="'pages/wifi/common/general/page.tpl.html'"
+					></div>
+				</div>
+
+				<div class="col-md-6" ng-if="wifi.radio.AccessPointNumberOfEntries > 1">
+					<div ng-include="'pages/wifi/common/ap.info/page.tpl.html'"></div>
+				</div>
+
+			<div class="col-md-6" ng-if="wifi.radio.AccessPointNumberOfEntries <= 1">
+					<div ng-include="'pages/wifi/common/ap/ap.tpl.html'"
+				>
+					</div>
+			</div>
+			</div>
+
+			<div class="row-grid">
+				<div class="col-md-12">
+					<div class="button_block left">
+						<button type="submit" class="colored"
+								ng-disabled="!wifi.wasModified()"
+								ng-bind="'apply' | translate"
+						></button>
+
+						<div ng-controller="WifiCommonAPInfo" ng-if="wifi.radio.AccessPointNumberOfEntries <= 1 && wifi.radio.AccessPointMax > 1">
+							<button class="colored flat"
+									ng-click="wifi.APInfo.add()"
+									ng-bind="'addWifi' | translate"
+							></button>
+						</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+</form>

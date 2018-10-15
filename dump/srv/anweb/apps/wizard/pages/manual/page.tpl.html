@@ -1,0 +1,26 @@
+
+<div class="page defstyle" ng-cloak>
+	<div class="wrap">
+		<div class="caption">
+			<div class="caption_logo"></div>
+		</div>
+		
+        <form nw-form nw-form-autocomplete-off novalidate name="manualStepForm" ng-class="{ 'nw-form-apply': applyed }">
+            <div ng-repeat="item in steps">
+				<div ng-if="!item.dummyCtrl" nw-include-cache="item.template"></div>
+                <div ng-show="item === step" ng-controller="item.controller">
+					<div ng-if="item === step" ng-include="item.template"></div>
+                </div>
+            </div>
+        </form>
+		<div class="navs">
+			<a class="prev" ng-click="prevStep()">
+				{{ 'wizard_prev' | translate }}
+			</a>
+			<a class="next" ng-click="!nextDisabled() && nextStep()" ng-class="{ 'disabled': nextDisabled() }">
+				{{ 'wizard_next' | translate }}
+			</a>
+		</div>
+		
+	</div>
+</div> 

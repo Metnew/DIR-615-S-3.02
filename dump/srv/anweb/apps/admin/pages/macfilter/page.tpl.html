@@ -1,0 +1,88 @@
+<div class="main-card">
+	<form name="form" class="css-form" novalidate nw-form>
+
+	<div ng-if="macfilter.isActivate">
+
+		<div class="row-grid" ng-if="macfilter.config.BaseRule">
+			<div class="col-md-6">
+				<div class="card flat">
+					<div nw-field
+						 nw-label="macfilterDefaultMode"
+					>
+						<select ng-model="macfilter.config.BaseRule.Action"
+								ng-options="option.value as (option.name | translate) for option in macfilter.getActionList()"
+								ng-change="macfilter.changeBaseAction()"
+						></select>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row-grid">
+			<div class="col-md-12">
+				<div class="card-content">
+				<div class="table"
+					 nw-table
+
+					 nw-table-empty-status="!macfilter.config.Rules.length"
+					 nw-table-empty-title="macfilterRulesEmpty"
+					 nw-table-empty-subtitle="macfilterRulesEmptyMessage"
+					 nw-table-empty-button="addButton"
+					 nw-table-empty-button-click="macfilter.add()"
+
+					 nw-table-title="macfilterDesc"
+
+					 nw-table-on-add="macfilter.add()"
+					 nw-table-on-delete="macfilter.remove(items, indexes)"
+					 nw-table-on-edit="macfilter.edit(item, index)"
+					 nw-table-selected
+				>
+					<table>
+						<thead>
+							<tr>
+								<th ng-if="macfilter.isSupported('__id')">№</th>
+								<th ng-bind="'macfilterState' | translate"
+									ng-if="macfilter.isSupported('Enable')"
+								></th>
+								<th ng-bind="'macfilterAction' | translate"
+									ng-if="macfilter.isSupported('Action')"
+								></th>
+								<th ng-bind="'macfilterMac' | translate"
+									ng-if="macfilter.isSupported('MACAddress')"
+								></th>
+								<th ng-bind="'macfilterHostname' | translate"
+									ng-if="macfilter.isSupported('Hostname')"
+								></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="item in macfilter.config.Rules"
+								nw-mini-table
+								nw-mini-table-caption="macfilter.getMiniCaption(item)"
+								nw-mini-table-short="macfilter.getMiniInfo(item)"
+							>
+								<td ng-bind="item.__id"
+									ng-if="macfilter.isSupported('__id')"
+								></td>
+								<td nw-bind-html-compile="macfilter.getState(item.Enable)"
+									ng-if="macfilter.isSupported('Enable')"
+								></td>
+								<td ng-bind="macfilter.getActionName(item.Action)"
+									ng-if="macfilter.isSupported('Action')"
+								></td>
+								<td ng-bind="item.MACAddress"
+									ng-if="macfilter.isSupported('MACAddress')"
+								></td>
+								<td ng-bind="item.Hostname"
+									ng-if="macfilter.isSupported('Hostname')"
+								></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	</form>
+</div>

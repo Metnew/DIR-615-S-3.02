@@ -1,0 +1,27 @@
+<form name="form" class="css-form" novalidate
+      nw-form
+      nw-form-autocomplete-off
+      ng-submit="wan.apply()"
+      unsaved-warning-form
+      unsaved-backup-status="{{wan.backup.check(wan.model.connection)}}"
+>
+    <div ng-if="wan.isActivate">
+        <div ui-view="header@edit"></div>
+
+		<div class="card no_padding">
+			<div ui-view="content@edit"></div>
+				<div class="button_block left">
+					<button type="button"
+						ng-click="wan.remove()"
+						ng-bind="'deleteButton' | translate"
+						ng-show="wan.has('ButtonRemove')"
+					></button>
+					<button type="submit" class="colored"
+						ng-disabled="wan.backup.check(wan.model.connection)"
+						ng-bind="'apply' | translate"
+					></button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>

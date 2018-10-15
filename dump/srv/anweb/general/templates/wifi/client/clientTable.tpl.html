@@ -1,0 +1,59 @@
+<div ng-controller="WifiClientTableCtrl">
+
+	<div ng-class="getTableClass()"
+		 nw-table
+		 nw-table-title="wifiClientListTitle"
+		 nw-table-on-custom-event="wifiClient.updateScanList()"
+		 nw-table-custom-event-name="wifiClientUpdateScanList"
+		 nw-table-on-custom-event-disable="isLoadingList()"
+		 nw-table-limit
+		 ng-if="wifiClient.isSelectMode()"
+	>
+
+	<div class="table-loader">
+		<nw-progress-bar pb-type="'indeter'" pb-hidden="!wifiClient.scanLoading"></nw-progress-bar>
+	</div>
+
+	<table>
+		<thead>
+			<tr>
+				<th>
+					<span ng-bind="'wifiSSID' | translate"></span>
+				</th>
+				<th>
+					<span ng-bind="'wifiSecurity' | translate"></span>
+				</th>
+				<th  class="td_center">
+					<span ng-bind="'wifiChannel' | translate"></span>
+				</th>
+				<th ng-if="showClientBand() && supportedBroadcast('5GHz')">
+					<span ng-bind="'wifiFrequence' | translate"></span>
+				</th>
+			</tr>
+		</thead>
+		<tbody ng-if="!wifiClient.scanLoading && !wifiClient.changingBand">
+			<tr ng-repeat="item in wifiClient.scanList track by $index" class="clickable" ng-click="wifiClient.selectEndpoint($index)"
+
+				nw-mini-table
+				nw-mini-table-caption="getCaption(item)"
+				nw-mini-table-short="getShort(item)"
+				nw-mini-table-class="getSelectedClass(item)"
+				ng-class="wifiClient.getSelectedClass(item)"
+			>
+				<td>
+					<span title="{{ ('wifiRSSI' | translate) + ' - ' + item.SignalStrength + '%' }}"
+						  class = "client-table-signal-level"
+						  svg-icon="{{ getImgSignal(item) }}">
+					</span>
+						{{ " " + item.SSID }}
+				</td>
+				<td>{{ getSecurity(item) + " " }}</td>
+				<td class="td_center">{{ item.Channel }}</td>
+				<td ng-if="showClientBand() && supportedBroadcast('5GHz')">{{ getFreq(item.Band) }}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	</div>
+
+</div>

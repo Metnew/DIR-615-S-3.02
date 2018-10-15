@@ -1,0 +1,46 @@
+
+<div class="page tr defstyle">
+	<div class="wrap">
+		
+		<div class="caption">
+			<div class="caption_logo"></div>
+		</div>
+		
+		<div>
+			
+			<div style="margin: 40px 0; font-size: 20px; text-align: center;">
+				{{ translatePhase(phase) | translate }}
+			</div>
+			
+			<div style="text-align: center;" ng-show="showManualy()">
+				{{ 'wizard_state_go_manually' | translate }}
+			</div>
+			
+			<div style="text-align: center;" ng-show="showOK()">
+				{{ 'wizard_state_go_ok' | translate }}
+			</div>
+			
+			<div style="margin-bottom: 20px; text-align: center;" ng-show="showWarn()">
+				{{ 'wizard_state_cable_check' | translate }}
+			</div>
+			
+			<div class="circle_bar" style="margin-bottom: 20px;" ng-show="showCircles()">
+				<div ng-repeat="n in [1,2,3,4,5,6,7,8,9,10]" class="circle" ng-class="{'filled': ( checkCount % 10 ) >= $index}"></div>
+			</div>
+			
+		</div>
+		
+		<div class="navs" ng-show="phase == 'tr_failed'">
+			<a class="next" ng-click="startBigWizard()">
+				{{'wizard_next' | translate}}
+			</a>
+		</div>
+		
+		<div class="navs" ng-show="phase == 'tr_finished'">			
+			<a class="next" ng-click="startSmallWizard()">
+				{{'wizard_next' | translate}}
+			</a>
+		</div>
+		
+	</div>
+</div>

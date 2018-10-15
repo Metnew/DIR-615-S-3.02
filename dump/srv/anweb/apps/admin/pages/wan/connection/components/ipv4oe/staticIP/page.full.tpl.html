@@ -1,0 +1,70 @@
+<div class="col-md-6">
+	<div class="card flat minH">
+		<h4>{{'ipv4'|translate}}</h4>
+		<div nw-field 
+			 nw-label="wanAddress" 
+			 nw-required
+			 ng-if="statip.supported.StaticIP.Address"
+		>
+			<input type="text" 
+				ng-model="statip.data.StaticIPAddress0"
+				nw-network-validation="address"
+			>
+		</div>
+
+		<div nw-field 
+			 nw-label="wanNetmask"
+			 nw-required
+			 ng-if="statip.supported.StaticIP.SubnetMask"
+		>
+			<input type="text" 
+				ng-model="statip.data.StaticIPSubnetMask0"
+				nw-network-validation="subnetMask"
+				nw-autocomplete-network-ip-address-value="{{statip.data.StaticIPAddress0}}"
+				nw-autocomplete-network-subnet-mask
+				nw-network-address="statip.data.StaticIPAddress0"
+				nw-network-subnet-mask="statip.data.StaticIPSubnetMask0"
+			>
+		</div>
+
+		<div nw-field 
+			 nw-label="wanGatewayIP" 
+			 nw-required
+			 ng-if="statip.supported.GatewayIPAddress"
+		>
+			<input type="text" 
+				ng-model="statip.data.GatewayIPAddress" 
+				nw-network-validation="gwip"
+				nw-network-address="statip.data.StaticIPAddress0"
+				nw-network-subnet-mask="statip.data.StaticIPSubnetMask0"
+			>
+		</div>
+
+		<div nw-field 
+			 nw-label="wanDNSServer1" 
+			 nw-required
+			 ng-if="statip.supported.DNSServer1"
+		>
+			<input type="text" 
+				ng-model="statip.data.DNSServer1"
+				nw-strict-ip-validation
+				nw-network-validation="dnsServer1"
+				nw-network-dns-server-two="statip.data.DNSServer2"
+			>
+		</div>
+
+		<div nw-field 
+			 nw-label="wanDNSServer2"
+			 nw-required="statip.isDefined('CUSTOM_2KOM_21535')"
+			 ng-if="statip.supported.DNSServer2"
+		>
+			<input type="text" 
+				ng-model="statip.data.DNSServer2"
+				nw-strict-ip-validation
+				nw-network-validation="dnsServer2"
+				nw-network-dns-server-one="statip.data.DNSServer1"
+			>
+		</div>
+		<div class="note" ng-bind="'wanNoteForIPTVInStaticIPv4' | translate"></div>
+	</div>
+</div>

@@ -1,0 +1,34 @@
+<div class="card table page_routing"
+     nw-table
+     nw-table-title="navStatsRoute"
+>
+    <table>
+        <thead>
+            <tr>
+                <th ng-bind="'iface' | translate"></th>
+                <th ng-bind="'stat_route_dest' | translate"></th>
+                <th ng-bind="'routing_gateway' | translate"></th>
+                <th ng-bind="'IPSubnetMask' | translate"></th>
+                <th ng-bind="'stat_route_flags' | translate"></th>
+                <th ng-bind="'routing_metric' | translate"></th>
+                <th ng-bind="'policyRoutRulesTable' | translate" ng-if="needTable()"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in routingStats"
+                nw-mini-table
+                nw-mini-table-caption="getDestString(item)"
+                nw-mini-table-short="item.name"
+                nw-mini-table-click="showDetails(item, key)"
+            >
+                <td ng-bind="item.name" class="name row_truncate" title="{{item.name}}"></td>
+                <td ipv6cut="item.dest" class="row_ip" title="{{item.dest}}"></td>
+                <td ipv6cut="item.gw" class="row_ip" title="{{item.gw}}"></td>
+                <td ng-bind="item.mask" class="row_ip" title="{{item.mask}}"></td>
+                <td ng-bind="item.flags"></td>
+                <td ng-bind="item.metric" ></td>
+                <td ng-bind="item.table" ng-if="needTable()"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

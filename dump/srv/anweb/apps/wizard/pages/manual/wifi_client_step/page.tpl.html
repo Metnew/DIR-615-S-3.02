@@ -1,0 +1,131 @@
+<div class="content_block title2">
+    {{ 'wizard_wifi_client_step' | translate }}
+</div>
+<div class="content_block">
+	<div ng-if="wifiClient.supportedMacAddressClone()">
+		<div nw-field
+			 nw-label="wifiClientMCMode"
+		>
+			<div class="custom-select">
+				<select ng-model="wifiClient.profile.$WifiClientStep.MacAddressClone.Mode">
+					<option value="off">{{ 'wifiClientMCModeOff' | translate }}</option>
+					<option value="auto">{{ 'wifiClientMCModeAuto' | translate }}</option>
+					<option value="manual">{{ 'wifiClientMCModeManual' | translate }}</option>
+				</select>
+			</div>
+		</div>
+
+		<div nw-field
+			 nw-label="MACaddress"
+			 ng-if="wifiClient.profile.$WifiClientStep.MacAddressClone.Mode == 'manual'"
+			 nw-required
+		>
+			<input type="text"
+				ng-model="wifiClient.profile.$WifiClientStep.MacAddressClone.Address"
+				nw-type="mac"
+			>
+		</div>
+
+		<div class="note" ng-if="wifiClient.profile.$WifiClientStep.MacAddressClone.Mode == 'auto'">
+			{{'wifiClientMCModeAutoCommite' | translate}}
+		</div>
+	</div>
+
+
+    <div nw-field nw-label="wifiConnectMode">
+        <select ng-model="wifiClient.profile.$WifiClientStep.ConnectMode" ng-change="wifiClient.onConnectTypeChange()">
+            <option value="select">{{ 'wifiSelectNetwork' | translate }}</option>
+            <option value="manual">{{ 'wifiSelectHideNetwork' | translate }}</option>
+        </select>
+    </div>
+</div>
+
+<div class="content_block" 
+>
+	<div nw-field
+		nw-label="wifiBand"
+		ng-show="rootIsSupport5G && !wifiClient.isSelectMode()"
+	>
+		<select ng-model="wifiClient.profile.$WifiClientStep.Band"
+			ng-options="obj.value as obj.name | translate for obj in wifiClient.getAvailBands()"
+		></select>
+	</div>
+
+    <div nw-field nw-label="wifiSSID" nw-required nw-disabled="wifiClient.isSelectMode()">
+        <input type="text"  nw-type="notCyrillicChar" ng-model="wifiClient.profile.$WifiClientStep.SSID" >
+    </div>
+
+    <div nw-field nw-label="wifiBSSID" nw-disabled="wifiClient.isSelectMode()">
+        <input type="text" nw-type="mac" ng-model="wifiClient.profile.$WifiClientStep.BSSID">
+    </div>
+
+    <div nw-field nw-label="wifiMode" ng-hide="wifiClient.isSelectMode()">
+        <select ng-model="wifiClient.profile.$WifiClientStep.Security.ModeEnabled" ng-options="option.value as option.name | translate for option in wifiClient.supportedModes()">
+        </select>
+    </div>
+
+    <div ng-if="wifiClient.showSecurity('enableWEP')" ng-hide="wifiClient.isSelectMode()">
+        
+        <div class="checkbox_wrap">
+            <div nw-wizard-checkbox ng-model="wifiClient.profile.$WifiClientStep.Security.OpenWEP"></div> {{ 'wifiOpenWEP' | translate }}
+        </div>
+
+        <div nw-field nw-label="wifiWEPType" ng-if="wifiClient.profile.$WifiClientStep.Security.OpenWEP">
+            <div class="custom-select">
+                <select ng-model="wifiClient.profile.$WifiClientStep.Security.OpenWEPType" ng-options="opt for opt in wifiClient.getWEPTypes()"></select>
+            </div>
+        </div>
+
+    </div>
+
+    <div ng-if="wifiClient.showSecurity('WEP')">
+
+        <div nw-field nw-label="wifiWEPKeyID">
+            <div class="custom-select">
+                <select ng-model="wifiClient.profile.$WifiClientStep.Security.DefaultKeyID" ng-options="opt for opt in wifiClient.getDefaultKeysID()"></select>
+            </div>
+        </div>
+        
+        <div class="checkbox_wrap">
+            <div nw-wizard-checkbox ng-model="wifiClient.profile.$WifiClientStep.Security.WEPasHEX"></div> {{ 'wifiWEPasHEX' | translate }}
+        </div>
+        <div class="note">
+            {{wifiClient.getWEPKeyLenMessage() | translate}}
+        </div>
+
+        <div nw-field nw-label="wifiWEPKey1" nw-required>
+            <input type="password" ng-model="wifiClient.profile.$WifiClientStep.Security.WEPKey1" nw-custom-valid="wifiClient.validWEPKey(wepKey)" nw-eye>
+        </div>
+
+        <div nw-field nw-label="wifiWEPKey2" nw-required>
+            <input type="password" ng-model="wifiClient.profile.$WifiClientStep.Security.WEPKey2" nw-custom-valid="wifiClient.validWEPKey(wepKey)" nw-eye>
+        </div>
+
+        <div nw-field nw-label="wifiWEPKey3" nw-required>
+            <input type="password" ng-model="wifiClient.profile.$WifiClientStep.Security.WEPKey3" nw-custom-valid="wifiClient.validWEPKey(wepKey)" nw-eye>
+        </div>
+
+        <div nw-field nw-label="wifiWEPKey4" nw-required>
+            <input type="password" ng-model="wifiClient.profile.$WifiClientStep.Security.WEPKey4" nw-custom-valid="wifiClient.validWEPKey(wepKey)" nw-eye>
+        </div>
+
+    </div>
+
+    <div ng-if="wifiClient.showSecurity('PSK')">
+        <div nw-field nw-label="wifiPSKKey" nw-required>
+            <input type="password" ng-model="wifiClient.profile.$WifiClientStep.Security.PreSharedKey" nw-custom-valid="wifiClient.validPSKKey(pskKey)" nw-eye>
+        </div>
+        <div class="note">
+            {{'invalid_psk' | translate}}
+        </div>
+
+        <div nw-field nw-label="wifiWPAEncryption"  ng-hide="wifiClient.isSelectMode()" nw-required>
+            <div class="custom-select">
+                <select ng-model="wifiClient.profile.$WifiClientStep.Security.EncryptionType" ng-options="opt for opt in wifiClient.getEncrypTypes()"></select>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div ng-include="'../general/templates/wifi/client/clientTable.tpl.html'"></div>

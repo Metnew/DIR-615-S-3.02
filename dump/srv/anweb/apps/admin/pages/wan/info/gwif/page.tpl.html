@@ -1,0 +1,46 @@
+<div class="card flat"
+    ng-if="wan.info.gwif.has()"
+>
+    <div class="title_card" ng-bind="wan.info.gwif.getLabel()"></div>
+    
+    <div ng-if="wan.info.gwif.checkStyle('single')">
+        <div ng-repeat="elem in wan.info.gwif.list"
+             ng-if="elem.has()"
+        >
+            <div class="error_message"
+                 ng-if="!elem.isSelect()"
+                 ng-bind="elem.error() | translate"
+            ></div>
+            <div nw-radio-group
+                 nw-model="elem.value"
+                 nw-options="elem.list"
+                 nw-change="elem.update()"
+            ></div>
+        </div>
+    </div>
+
+    <div class="table-list__container" ng-if="wan.info.gwif.checkStyle('table')">
+        <div class="table-list__column" 
+             ng-repeat="elem in wan.info.gwif.list"
+             ng-if="elem.has()"
+        >
+            <div class="table-list__header-item" ng-if="wan.info.gwif.checkStyle('table')">
+                <div class="table-list__header-col" ng-bind="elem.title | translate"></div>
+            </div>
+
+            <div class="table-list__row-item">
+                <div class="table-list__row-col" ng-class="{'table-list__row-col--single': wan.info.gwif.checkStyle('single')}">
+                    <div class="error_message"
+                         ng-if="!elem.isSelect()"
+                         ng-bind="elem.error() | translate"
+                    ></div>
+                    <div nw-radio-group
+                         nw-model="elem.value"
+                         nw-options="elem.list"
+                         nw-change="elem.update()"
+                    ></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

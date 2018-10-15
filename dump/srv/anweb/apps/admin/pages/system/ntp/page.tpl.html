@@ -1,0 +1,137 @@
+<form name="ntpSettings"
+      ng-submit="systemTime.apply()"
+      nw-form
+      unsaved-warning-form
+      unsaved-backup-status="{{!systemTime.wasModified()}}" 
+>
+    <div class="card_columns">
+        <div class="card">
+            <div class="row nw-static">
+                <span class="title">{{'ntp_date' | translate}}:</span>
+                <span class="info">{{systemTime.timeStamp | date: 'dd.MM.yyyy'}}</span>
+            </div>
+
+            <div class="row nw-static last">
+                <span class="title">{{'ntp_time' | translate}}:</span>
+                <span class="info">{{systemTime.timeStamp | date: 'HH:mm'}}</span>
+            </div>
+
+            <div nw-labeled-switch
+                 nw-label="ntp_enable"
+                 nw-model="systemTime.data.ntp.Enable"
+            ></div>
+        </div>
+
+        <div class="card" ng-if="!systemTime.data.ntp.Enable">
+            <h4 ng-bind="'ntp_manual_title' | translate"></h4>
+
+            <div nw-field nw-label="ntp_manual_year">
+                <select ng-model="systemTime.data.time.Year"
+                        ng-options="year for year in systemTime.options.years"
+                ></select>
+            </div>
+
+            <div nw-field nw-label="ntp_manual_month">
+                <select ng-model="systemTime.data.time.Month"
+                        ng-options="month as 'ntp_month_' + month | translate for month in systemTime.options.months"
+                ></select>
+            </div>
+
+            <div nw-field nw-label="ntp_manual_day">
+                <select ng-model="systemTime.data.time.Day"
+                        ng-options="day for day in systemTime.options.days"
+                ></select>
+            </div>
+
+            <div nw-field nw-label="ntp_manual_hour">
+                <select ng-model="systemTime.data.time.Hour"
+                        ng-options="hour for hour in systemTime.options.hours"
+                ></select>
+            </div>
+
+            <div nw-field nw-label="ntp_manual_min">
+                <select ng-model="systemTime.data.time.Minute"
+                        ng-options="min for min in systemTime.options.mins"
+                ></select>
+            </div>
+        </div>
+
+        <div class="card changing_list"
+             ng-if="systemTime.isShowServerList()"
+        >
+            <h4 ng-bind="'ntp_servers' | translate"></h4>
+            <div class="input_with_action"
+                 ng-repeat="(inx, elem) in systemTime.data.ntp.Server track by inx"
+            >
+                <div nw-field>
+                    <input ng-model="elem.address"
+                           nw-type="host"
+                           placeholder="{{'ntp_example' | translate}}"
+                           nw-set-focus="{{systemTime.focus == true}}"
+                    >
+                </div>
+
+                <div class="input_action"
+                     ng-click="systemTime.removeServer(inx)"
+                >
+                    ×
+                </div>
+            </div>
+
+            <div class="button_block right">
+                <input type="button" ng-click="systemTime.addServer()" value="{{'add_server_button' | translate}}" class="colored flat">
+            </div>
+        </div>
+
+        <div class="card" ng-if="systemTime.data.ntp.Enable">
+            <h4 ng-bind="'ntp_ntp_title' | translate"></h4>
+
+            <div nw-field nw-label="ntp_timezone">
+                <select ng-model="systemTime.data.ntp.TimeZoneOffset"
+                        ng-options="timezone.value as timezone.name | translate for timezone in systemTime.options.timezones"
+                ></select>
+            </div>
+
+            <div nw-labeled-switch
+                 nw-label="ntp_saving_time"
+                 nw-model="systemTime.data.ntp.DST"
+                 ng-if="systemTime.isSupportedNtp('DST')"
+            ></div>
+
+            <div nw-labeled-switch
+                 nw-label="ntp_use_dhcp"
+                 nw-model="systemTime.data.ntp.UseDHCP"
+                 ng-if="systemTime.isSupportedNtp('UseDHCP')"
+            ></div>
+
+            <div nw-labeled-switch
+                 nw-label="ntp_use_local_server"
+                 nw-model="systemTime.data.ntp.RunAsServer"
+                 ng-if="systemTime.isSupportedNtp('RunAsServer')"
+            ></div>
+        </div>
+    </div>
+
+    <div class="button_block center">
+        <button type="submit"
+                class="colored"
+                ng-disabled="!systemTime.wasModified()"
+        >
+            {{'applyButton' | translate}}
+        </button>
+
+        <button type="button"
+                ng-click="systemTime.deteremineTimezone()"
+                ng-if="systemTime.data.ntp.Enable"
+        >
+            {{'ntp_determine_timezone' | translate}}
+        </button>
+
+        <button type="button"
+                ng-click="systemTime.setLocalTime()"
+                ng-if="!systemTime.data.ntp.Enable"
+        >
+            {{'ntp_set_local_time' | translate}}
+        </button>
+    </div>
+</form>
